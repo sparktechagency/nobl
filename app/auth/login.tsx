@@ -1,3 +1,4 @@
+import { IconEmail, IconPassword } from "@/icons/Icon";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -59,6 +60,7 @@ const login = () => {
                   textInputProps={{
                     placeholder: "Enter your email",
                   }}
+                  svgFirstIcon={IconEmail}
                   value={values.email}
                   onChangeText={handleChange("email")}
                   onBlur={handleBlur("email")}
@@ -69,6 +71,7 @@ const login = () => {
                   textInputProps={{
                     placeholder: "Enter your password",
                   }}
+                  svgFirstIcon={IconPassword}
                   value={values.password}
                   onChangeText={handleChange("password")}
                   onBlur={handleBlur("password")}
