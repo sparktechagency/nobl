@@ -2,12 +2,12 @@ import { Text, View } from "react-native";
 
 import React from "react";
 
-const not_found = () => {
+const otp_verify = () => {
   return (
     <View>
-      <Text>not</Text>
+      <Text>otp_verify</Text>
     </View>
   );
 };
 
-export default not_found;
+export default otp_verify;

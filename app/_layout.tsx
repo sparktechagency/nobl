@@ -1,39 +1,22 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+import { Stack } from "expo-router";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="auth/login" />
+      <Stack.Screen name="auth/forget_password" />
+      <Stack.Screen name="auth/otp_verify" />
+      <Stack.Screen name="auth/new_password" />
+      <Stack.Screen name="auth/password_change_successful" />
+      <Stack.Screen name="home/photos" />
+      <Stack.Screen name="home/videos" />
+      <Stack.Screen name="home/documents" />
+      <Stack.Screen name="home/links" />
+      <Stack.Screen name="settings/my_profile" />
+      <Stack.Screen name="settings/edit_profile" />
+      <Stack.Screen name="settings/terms_and_conditions" />
+      <Stack.Screen name="settings/about_us" />
+    </Stack>
   );
 }

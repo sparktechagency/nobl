@@ -2,12 +2,12 @@ import { Text, View } from "react-native";
 
 import React from "react";
 
-const not_found = () => {
+const links = () => {
   return (
     <View>
-      <Text>not</Text>
+      <Text>links</Text>
     </View>
   );
 };
 
-export default not_found;
+export default links;

@@ -2,12 +2,12 @@ import { Text, View } from "react-native";
 
 import React from "react";
 
-const not_found = () => {
+const new_password = () => {
   return (
     <View>
-      <Text>not</Text>
+      <Text>new_password</Text>
     </View>
   );
 };
 
-export default not_found;
+export default new_password;
