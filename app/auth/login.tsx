@@ -6,8 +6,8 @@ import React, { useState } from "react";
 import { Checkbox } from "react-native-ui-lib";
 import { Formik } from "formik";
 import InputText from "@/lib/inputs/InputText";
-import IwtButton from "@/lib/buttons/IwtButton";
 import { PrimaryColor } from "@/utils/utils";
+import TButton from "@/lib/buttons/TButton";
 import tw from "@/lib/tailwind";
 
 const login = () => {
@@ -103,14 +103,14 @@ const login = () => {
                   Forgot Password?
                 </Link>
               </View>
-              <IwtButton
+              <TButton
                 title="Login"
                 onPress={() => {
                   //   handleSubmit();
                   router.push("/home");
                 }}
                 containerStyle={tw`w-full bg-white`}
-                titleStyle={tw`text-primary font-PoppinsSemiBold`}
+                titleStyle={tw`text-primary text-base font-PoppinsSemiBold`}
               />
             </>
           )}

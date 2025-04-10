@@ -1,7 +1,7 @@
-import { Dialog, PanningProvider } from "react-native-ui-lib";
+import { Dialog, DialogProps, PanningProvider } from "react-native-ui-lib";
 
-import React from "react";
 import { Pressable } from "react-native";
+import React from "react";
 import tw from "../tailwind";
 
 interface SideModalProps {
@@ -13,6 +13,7 @@ interface SideModalProps {
   scrollable?: boolean;
   headerOff?: boolean;
   closeBTN?: boolean;
+  props?: DialogProps;
 }
 
 const SideModal = ({
@@ -22,25 +23,27 @@ const SideModal = ({
   visible,
   headerOff,
   closeBTN,
+  layerContainerStyle,
+  scrollable,
+  props,
 }: SideModalProps) => {
   return (
     <>
-      {visible && (
-        <Dialog
-          width={"100%"}
-          // height={Ios ? height - height * 0.4 : '100%'}
-          ignoreBackgroundPress={false}
-          visible={visible || false}
-          bottom={true}
-          onDismiss={() => setVisible && setVisible(false)}
-          panDirection={PanningProvider.Directions.DOWN}
-          containerStyle={tw` bg-base rounded-t-2xl`}
-        >
-          <Pressable disabled style={[tw`bg-white py-1 `, containerStyle]}>
-            {children}
-          </Pressable>
-        </Dialog>
-      )}
+      <Dialog
+        {...props}
+        width={"100%"}
+        // height={Ios ? height - height * 0.4 : '100%'}
+        ignoreBackgroundPress={false}
+        visible={visible || false}
+        bottom={true}
+        onDismiss={() => setVisible && setVisible(false)}
+        panDirection={PanningProvider.Directions.DOWN}
+        containerStyle={[tw` bg-base rounded-t-2xl `, layerContainerStyle]}
+      >
+        <Pressable disabled style={[tw`bg-white py-1 `, containerStyle]}>
+          {children}
+        </Pressable>
+      </Dialog>
     </>
   );
 };

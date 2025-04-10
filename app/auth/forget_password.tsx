@@ -1,13 +1,12 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
-import { Link, useRouter } from "expo-router";
+import { Image, Text, View } from "react-native";
 import React, { useState } from "react";
 
-import { Checkbox } from "react-native-ui-lib";
 import { Formik } from "formik";
+import { IconEmail } from "@/icons/Icon";
 import InputText from "@/lib/inputs/InputText";
-import IwtButton from "@/lib/buttons/IwtButton";
-import { PrimaryColor } from "@/utils/utils";
+import TButton from "@/lib/buttons/TButton";
 import tw from "@/lib/tailwind";
+import { useRouter } from "expo-router";
 
 const forget_password = () => {
   const router = useRouter();
@@ -22,9 +21,7 @@ const forget_password = () => {
     if (!values.email.includes("@")) {
       errors.email = "Invalid email";
     }
-    if (!values.password) {
-      errors.password = "Password is required";
-    }
+
     return errors;
   };
   return (
@@ -36,12 +33,16 @@ const forget_password = () => {
           source={require("@/assets/images/logo.png")}
         />
         <Text style={tw`text-xl font-PoppinsSemiBold text-primary`}>
-          Login to your account
+          Forgot your password ?
+        </Text>
+        <Text style={tw`text-sm font-PoppinsRegular text-black px-4 mt-8`}>
+          Enter your email here. We will send you a 6 digit OTP via your email
+          address.
         </Text>
       </View>
       <View style={tw`bg-primary w-full p-4 rounded-t-[3rem] pt-12 pb-16`}>
         <Formik
-          initialValues={{ email: "", password: "" }}
+          initialValues={{ email: "" }}
           onSubmit={(values) => console.log(values)}
           validate={validate}
         >
@@ -54,60 +55,28 @@ const forget_password = () => {
             errors,
           }) => (
             <>
-              <View style={tw`gap-5`}>
+              <View style={tw`gap-5 mb-8 mt-3`}>
                 <InputText
                   textInputProps={{
                     placeholder: "Enter your email",
                   }}
+                  svgFirstIcon={IconEmail}
                   value={values.email}
                   onChangeText={handleChange("email")}
                   onBlur={handleBlur("email")}
                   touched={touched.email}
                   errorText={errors.email}
                 />
-                <InputText
-                  textInputProps={{
-                    placeholder: "Enter your password",
-                  }}
-                  value={values.password}
-                  onChangeText={handleChange("password")}
-                  onBlur={handleBlur("password")}
-                  touched={touched.password}
-                  errorText={errors.password}
-                />
               </View>
 
-              <View
-                style={tw`gap-4 py-8 flex-row items-center justify-between`}
-              >
-                <TouchableOpacity style={tw`flex-row items-center gap-2`}>
-                  <Checkbox
-                    color="white"
-                    iconColor={PrimaryColor}
-                    value={value}
-                    size={20}
-                    containerStyle={tw` rounded`}
-                    onValueChange={setValue}
-                  />
-                  <Text style={tw`text-white text-sm font-PoppinsRegular`}>
-                    Remember me
-                  </Text>
-                </TouchableOpacity>
-                <Link
-                  href="/auth/forget_password"
-                  style={tw`text-white text-sm underline font-PoppinsRegular`}
-                >
-                  Forgot Password?
-                </Link>
-              </View>
-              <IwtButton
-                title="Login"
+              <TButton
+                title="Send"
                 onPress={() => {
                   //   handleSubmit();
-                  router.push("/home");
+                  router.push("/auth/otp_verify");
                 }}
                 containerStyle={tw`w-full bg-white`}
-                titleStyle={tw`text-primary font-PoppinsSemiBold`}
+                titleStyle={tw`text-primary text-base font-PoppinsSemiBold`}
               />
             </>
           )}
