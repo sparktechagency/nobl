@@ -53,7 +53,7 @@ const BackWithComponent = ({
           )}
           <Text
             numberOfLines={1}
-            style={[tw`text-black font-NunitoSansBold text-base`, titleStyle]}
+            style={[tw`text-black font-PoppinsBold text-base`, titleStyle]}
           >
             {title}
           </Text>

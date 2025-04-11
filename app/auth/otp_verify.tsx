@@ -79,8 +79,8 @@ const otp_verify = () => {
                   theme={{
                     containerStyle: tw`rounded-full px-4 mb-4`,
                     pinCodeContainerStyle: tw`h-16 w-16 justify-center items-center bg-white rounded-full `,
-                    pinCodeTextStyle: tw`text-primary text-2xl font-NunitoSansBold `,
-                    placeholderTextStyle: tw`text-primary text-2xl font-NunitoSansBold`,
+                    pinCodeTextStyle: tw`text-primary text-2xl font-PoppinsBold `,
+                    placeholderTextStyle: tw`text-primary text-2xl font-PoppinsBold`,
                   }}
                 />
               </View>

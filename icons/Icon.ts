@@ -15,6 +15,8 @@ export const IconCheck = `<svg width="186" height="186" viewBox="0 0 186 186" fi
 </svg>
 
 `;
+export const IconNoVideo = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 48 48" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M44 37c.55 0 1-.45 1-1V12c0-.55-.45-1-1-1h-2.15l2.77-2.22c.43-.34.5-.97.16-1.41-.35-.43-.97-.5-1.41-.16L38.65 11H4c-.55 0-1 .45-1 1v24c0 .55.45 1 1 1h2.15l-2.77 2.22c-.43.34-.5.97-.16 1.41.2.24.49.37.78.37.22 0 .44-.07.62-.22L9.35 37zm-4.65-24H43v22H11.85L19 29.28V30a.999.999 0 0 0 1 1c.15 0 .31-.04.45-.11l12-6c.34-.16.55-.51.55-.89s-.21-.73-.55-.89l-3.53-1.76zM27.2 22.72 29.76 24 21 28.38v-.7zm-6.2 2.4v-5.5l4.23 2.12zM5 35V13h31.15l-9.2 7.36-6.5-3.25c-.31-.15-.68-.14-.97.04-.3.18-.48.5-.48.85v8.72L8.65 35z" fill="#4B5320" opacity="1" data-original="#4B5320" class=""></path></g></svg>
+`;
 export const IconActiveHome = `<svg width="25" height="20" viewBox="0 0 25 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M10.1 20V12.9412H14.9V20H20.9V10.5882H24.5L12.5 0L0.5 10.5882H4.1V20H10.1Z" fill="white"/>
 </svg>
@@ -69,6 +71,11 @@ export const IconArrowDown = `<svg width="14" height="11" viewBox="0 0 14 11" fi
 export const IconClose = `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="0.5" y="0.5" width="31" height="31" rx="15.5" stroke="white"/>
 <path d="M11.2 22L10 20.8L14.8 16L10 11.2L11.2 10L16 14.8L20.8 10L22 11.2L17.2 16L22 20.8L20.8 22L16 17.2L11.2 22Z" fill="white"/>
+</svg>
+
+`;
+export const IconDownload = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 12L3 7L4.4 5.55L7 8.15V0H9V8.15L11.6 5.55L13 7L8 12ZM2 16C1.45 16 0.979333 15.8043 0.588 15.413C0.196666 15.0217 0.000666667 14.5507 0 14V11H2V14H14V11H16V14C16 14.55 15.8043 15.021 15.413 15.413C15.0217 15.805 14.5507 16.0007 14 16H2Z" fill="#4B5320"/>
 </svg>
 
 `;

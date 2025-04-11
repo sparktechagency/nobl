@@ -5,7 +5,7 @@
       "image": "https://picsum.photos/800/450?random=1",
       "title": "Getting Started with React Native",
       "category": "Beginner Tutorials",
-      "video": "https://example.com/videos/react-native-intro.mp4",
+      "video": "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4",
       "lang": "en",
       "duration": "12:30"
     },
@@ -14,7 +14,7 @@
       "image": "https://picsum.photos/800/450?random=2",
       "title": "Advanced State Management",
       "category": "Redux Toolkit",
-      "video": "https://example.com/videos/redux-advanced.mp4",
+      "video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
       "lang": "en",
       "duration": "18:45"
     },
@@ -23,7 +23,7 @@
       "image": "https://picsum.photos/800/450?random=3",
       "title": "Diseño de UI con Tailwind",
       "category": "Frontend",
-      "video": "https://example.com/videos/tailwind-ui-es.mp4",
+      "video": "https://sample-videos.com/video123/mp4/480/cooking_with_fire_480p_1mb.mp4",
       "lang": "es",
       "duration": "15:20"
     },
@@ -32,7 +32,7 @@
       "image": "https://picsum.photos/800/450?random=4",
       "title": "Animationen in Flutter",
       "category": "Mobile Entwicklung",
-      "video": "https://example.com/videos/flutter-animations-de.mp4",
+      "video": "https://sample-videos.com/video123/mp4/360/earth_360p_1mb.mp4",
       "lang": "de",
       "duration": "22:10"
     },
@@ -41,7 +41,7 @@
       "image": "https://picsum.photos/800/450?random=5",
       "title": "API REST avec Node.js",
       "category": "Backend",
-      "video": "https://example.com/videos/node-api-fr.mp4",
+      "video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
       "lang": "fr",
       "duration": "25:00"
     }

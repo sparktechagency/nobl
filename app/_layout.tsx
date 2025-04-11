@@ -7,6 +7,7 @@ export default function RootLayout() {
       <Stack.Screen name="home" />
       <Stack.Screen name="auth" />
       <Stack.Screen name="setting" />
+      <Stack.Screen name="video_details/[id]" />
     </Stack>
   );
 }

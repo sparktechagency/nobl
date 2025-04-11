@@ -178,7 +178,7 @@ const InputText = ({
           onBlur={(e) => {
             onBlur && onBlur(e);
           }}
-          style={tw`flex-1 px-2 text-base font-NunitoSansSemiBold`}
+          style={tw`flex-1 px-2 text-base font-PoppinsSemiBold`}
           {...textInputProps}
           value={value || text}
           onChangeText={(text) => {

@@ -1,0 +1,128 @@
+import { ActivityIndicator, ScrollView, Text, View } from "react-native";
+import { IconDownload, IconNoVideo } from "@/icons/Icon";
+import { VideoView, useVideoPlayer } from "expo-video";
+import { useLocalSearchParams, useRouter } from "expo-router";
+
+import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
+import IwtButton from "@/lib/buttons/IwtButton";
+import React from "react";
+import { SvgXml } from "react-native-svg";
+import VideoCard from "@/components/VideoCard";
+import tutorialData from "@/assets/data/tutorials.json";
+import tw from "@/lib/tailwind";
+import { useEvent } from "expo";
+
+const VideoDetails = () => {
+  const router = useRouter();
+  const [tutorials, setTutorials] = React.useState(tutorialData.tutorials);
+  const [selectedTutorial, setSelectedTutorial] = React.useState(null);
+
+  const { id } = useLocalSearchParams();
+
+  const videoSource = selectedTutorial?.video;
+
+  const player = useVideoPlayer(videoSource, (player) => {
+    console.log("player", player);
+    player.play();
+  });
+
+  React.useEffect(() => {
+    const tutorial = tutorials.find((tutorial) => tutorial.id === Number(id));
+
+    if (tutorial) {
+      setSelectedTutorial(tutorial);
+    }
+    return () => {};
+  }, [id]);
+
+  const keyId = Array.isArray(id) ? id.join("-") : id;
+
+  const { status, error } = useEvent(player, "statusChange", {
+    status: player.status,
+  });
+
+  return (
+    <View key={keyId} style={tw`flex-1 bg-white`}>
+      {/* Header Parts  */}
+      <View
+        style={tw`flex-row py-3 justify-between items-center bg-primary pr-4`}
+      >
+        <BackWithComponent onPress={() => router.back()} />
+        <IwtButton
+          title="Download"
+          svg={IconDownload}
+          disabled={status === "loading"}
+          containerStyle={tw`bg-white p-1 h-9 px-3 rounded-md`}
+          titleStyle={tw`text-primary font-PoppinsRegular`}
+          onPress={() => {
+            console.log("Download");
+          }}
+        />
+      </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={tw`bg-base `}
+      >
+        <View style={tw`px-4 gap-4 mt-5 mb-5`}>
+          {/* VIdeo Player */}
+          <View style={tw`rounded-md `}>
+            <View
+              style={tw`w-full h-52 justify-center items-center rounded-md `}
+            >
+              {status === "idle" || status === "loading" ? (
+                <View
+                  style={tw`flex-1 w-full border-opacity-15 rounded-md justify-center items-center border border-primary`}
+                >
+                  <ActivityIndicator size="large" color="#4B5320" />
+                </View>
+              ) : status === "readyToPlay" ? (
+                <VideoView
+                  style={tw` h-52 w-full rounded-md`}
+                  player={player}
+                  allowsFullscreen
+                  contentFit="fill"
+                />
+              ) : status === "error" && error ? (
+                <View
+                  style={tw`flex-1 w-full rounded-md justify-center items-center border border-primary border-opacity-15`}
+                >
+                  <SvgXml width={100} height={100} xml={IconNoVideo} />
+                  <Text
+                    style={tw`text-center text-base font-PoppinsMedium text-primary`}
+                  >
+                    No video found
+                  </Text>
+                </View>
+              ) : null}
+            </View>
+          </View>
+          {/* Video Details */}
+          <View
+            style={tw`gap-1.5 flex-1 flex-row justify-between items-center `}
+          >
+            <Text style={tw`font-PoppinsSemiBold text-base flex-1`}>
+              Trainging video part 1
+            </Text>
+            <Text
+              style={tw`bg-primary text-white text-center text-xs py-1 self-start px-2 rounded-md font-PoppinsMedium `}
+            >
+              Welcome to Node.js
+            </Text>
+          </View>
+        </View>
+        <View style={tw`flex-row pt-6 pb-2 px-4 gap-3 items-center `}>
+          <Text style={tw`font-PoppinsSemiBold text-lg`}>Related Videos</Text>
+        </View>
+        <View style={tw`bg-white py-10 rounded-t-3xl px-4`}>
+          <View style={tw`border border-gray-300 rounded-lg py-4 px-2 gap-5 `}>
+            {tutorials?.map((tutorial) => (
+              <VideoCard key={tutorial.id} tutorial={tutorial} />
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+    </View>
+  );
+};
+
+export default VideoDetails;

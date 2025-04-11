@@ -5,8 +5,10 @@ import IButton from "@/lib/buttons/IButton";
 import IwtButton from "@/lib/buttons/IwtButton";
 import React from "react";
 import tw from "@/lib/tailwind";
+import { useRouter } from "expo-router";
 
 const VideoCard = ({ tutorial }: { tutorial: any }) => {
+  const router = useRouter();
   return (
     <View style={tw`bg-white shadow-md rounded-md `}>
       <View>
@@ -21,6 +23,7 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
           style={tw`absolute bottom-0 h-full justify-center items-center left-0 right-0 bg-black/10 p-2`}
         >
           <IButton
+            onPress={() => router.push(`/video_details/${tutorial?.id}`)}
             svg={IconPlayButton}
             containerStyle={tw`bg-transparent rounded-full p-2`}
           />
@@ -42,6 +45,7 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
         <IwtButton
           svg={IconPlayButtonSmall}
           title={tutorial?.duration}
+          onPress={() => router.push(`/video_details/${tutorial?.id}`)}
           containerStyle={tw`px-4 rounded-md h-8`}
           titleStyle={tw`text-xs`}
         />
