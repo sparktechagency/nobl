@@ -10,7 +10,7 @@ import tw from "@/lib/tailwind";
 import { useEvent } from "expo";
 import { useVideoPlayer } from "expo-video";
 
-const Document = () => {
+const DocumentDetails = () => {
   const router = useRouter();
   const [tutorials, setTutorials] = React.useState(tutorialData.tutorials);
   const [selectedTutorial, setSelectedTutorial] = React.useState(null);
@@ -58,10 +58,10 @@ const Document = () => {
         />
       </View>
       <View style={tw`flex-1 bg-white`}>
-        <Text>Document</Text>
+        <Text>Document {id}</Text>
       </View>
     </View>
   );
 };
 
-export default Document;
+export default DocumentDetails;
