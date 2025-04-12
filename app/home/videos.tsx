@@ -78,7 +78,7 @@ const video = () => {
         }}
       >
         <ScrollView
-          style={tw`h-[40rem]`}
+          style={tw`h-[35rem]`}
           // showsVerticalScrollIndicator={false}
         >
           <View style={tw`bg-white  p-4 gap-3`}>

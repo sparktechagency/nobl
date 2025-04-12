@@ -48,5 +48,130 @@
     "id": 10,
     "category": "abstract",
     "image": "https://picsum.photos/seed/abstract10/250/400"
+  },
+  {
+    "id": 11,
+    "category": "nature",
+    "image": "https://picsum.photos/seed/nature11/300/200"
+  },
+  {
+    "id": 12,
+    "category": "animals",
+    "image": "https://picsum.photos/seed/animals12/250/250"
+  },
+  {
+    "id": 13,
+    "category": "technology",
+    "image": "https://picsum.photos/seed/tech13/400/300"
+  },
+  {
+    "id": 14,
+    "category": "architecture",
+    "image": "https://picsum.photos/seed/arch14/350/280"
+  },
+  {
+    "id": 15,
+    "category": "fashion",
+    "image": "https://picsum.photos/seed/fashion15/270/350"
+  },
+  {
+    "id": 16,
+    "category": "sports",
+    "image": "https://picsum.photos/seed/sports16/320/180"
+  },
+  {
+    "id": 17,
+    "category": "food",
+    "image": "https://picsum.photos/seed/food17/360/260"
+  },
+  {
+    "id": 18,
+    "category": "travel",
+    "image": "https://picsum.photos/seed/travel18/420/320"
+  },
+  {
+    "id": 19,
+    "category": "people",
+    "image": "https://picsum.photos/seed/people19/300/300"
+  },
+  {
+    "id": 20,
+    "category": "abstract",
+    "image": "https://picsum.photos/seed/abstract20/250/400"
+  },
+  {
+    "id": 21,
+    "category": "nature",
+    "image": "https://picsum.photos/seed/nature21/300/200"
+  },
+  {
+    "id": 22,
+    "category": "animals",
+    "image": "https://picsum.photos/seed/animals22/250/250"
+  },
+  {
+    "id": 23,
+    "category": "technology",
+    "image": "https://picsum.photos/seed/tech23/400/300"
+  },
+  {
+    "id": 24,
+    "category": "architecture",
+    "image": "https://picsum.photos/seed/arch24/350/280"
+  },
+  {
+    "id": 25,
+    "category": "fashion",
+    "image": "https://picsum.photos/seed/fashion25/270/350"
+  },
+  {
+    "id": 26,
+    "category": "sports",
+    "image": "https://picsum.photos/seed/sports26/320/180"
+  },
+  {
+    "id": 27,
+    "category": "food",
+    "image": "https://picsum.photos/seed/food27/360/260"
+  },
+  {
+    "id": 28,
+    "category": "travel",
+    "image": "https://picsum.photos/seed/travel28/420/320"
+  },
+  {
+    "id": 29,
+    "category": "people",
+    "image": "https://picsum.photos/seed/people29/300/300"
+  },
+  {
+    "id": 30,
+    "category": "abstract",
+    "image": "https://picsum.photos/seed/abstract30/250/400"
+  },
+  {
+    "id": 31,
+    "category": "nature",
+    "image": "https://picsum.photos/seed/nature31/300/200"
+  },
+  {
+    "id": 32,
+    "category": "animals",
+    "image": "https://picsum.photos/seed/animals32/250/250"
+  },
+  {
+    "id": 33,
+    "category": "technology",
+    "image": "https://picsum.photos/seed/tech33/400/300"
+  },
+  {
+    "id": 34,
+    "category": "architecture",
+    "image": "https://picsum.photos/seed/arch34/350/280"
+  },
+  {
+    "id": 35,
+    "category": "fashion",
+    "image": "https://picsum.photos/seed/fashion35/270/350"
   }
 ]

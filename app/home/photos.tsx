@@ -1,7 +1,9 @@
 import { IconArrowDown, IconClose, IconFilter } from "@/icons/Icon";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
+import { Galeria } from "@nandorojo/galeria";
 import IButton from "@/lib/buttons/IButton";
+import { MasonryFlashList } from "@shopify/flash-list";
 import PhotoCard from "@/components/PhotoCard";
 import Photos from "../../assets/data/photos.json";
 import React from "react";
@@ -42,13 +44,23 @@ const photos = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={tw`bg-base `}
       >
-        <View style={tw`flex-row pt-6 pb-2 px-4 gap-3 items-center `}></View>
-        <View style={tw`bg-white py-10 rounded-t-3xl px-4`}>
-          <View style={tw`border border-gray-300 rounded-lg py-4 px-2 gap-5 `}>
-            {photos?.map((photo) => (
-              <PhotoCard key={photo.id} photo={photo} />
-            ))}
-          </View>
+        <View style={tw`flex-row pt-4 pb-2 px-4 gap-3 items-center `}></View>
+        <View style={tw`flex-1 bg-white pb-10 pt-4 rounded-t-3xl px-4`}>
+          <Galeria urls={photos.map((photo) => photo.image)}>
+            <MasonryFlashList
+              scrollEnabled={false}
+              data={photos}
+              numColumns={2}
+              renderItem={({ item }) => (
+                <Galeria.Image index={photos.indexOf(item)}>
+                  <PhotoCard photo={item} />
+                </Galeria.Image>
+              )}
+              estimatedItemSize={200}
+              keyExtractor={(item) => item.id.toString()}
+            />
+            <Galeria.Popup disableTransition="web" />
+          </Galeria>
         </View>
       </ScrollView>
 

@@ -30,7 +30,7 @@ const VideoDetails = () => {
     const tutorial = tutorials.find((tutorial) => tutorial.id === Number(id));
 
     if (tutorial) {
-      setSelectedTutorial(tutorial);
+      setSelectedTutorial(tutorial as any);
     }
     return () => {};
   }, [id]);
