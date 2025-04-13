@@ -1,3 +1,4 @@
+import { PrimaryColor } from "@/utils/utils";
 import { Stack } from "expo-router";
 
 export default function RootLayout() {
@@ -5,8 +6,8 @@ export default function RootLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        statusBarStyle: "dark",
-        statusBarBackgroundColor: "white",
+        statusBarStyle: "light",
+        statusBarBackgroundColor: PrimaryColor,
         statusBarAnimation: "fade",
       }}
     >

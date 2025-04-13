@@ -3,11 +3,12 @@
     "name": "nobl",
     "slug": "nobl",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "com.arifbiswas.nobl",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.arifbiswas.nobl",

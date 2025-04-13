@@ -35,7 +35,7 @@ export default function App() {
     });
     SplashScreen.hideAsync();
     setTimeout(() => {
-      route?.replace("/home");
+      route?.replace("/auth/login");
     }, 1000);
   }, []);
 

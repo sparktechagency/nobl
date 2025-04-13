@@ -9,7 +9,6 @@ export default function RootLayout() {
       <Stack.Screen name="setting" />
       <Stack.Screen name="details/video/[id]" />
       <Stack.Screen name="details/doc/[id]" />
-      <Stack.Screen name="details/link/[id]" />
     </Stack>
   );
 }

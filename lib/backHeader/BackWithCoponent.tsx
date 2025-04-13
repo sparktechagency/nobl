@@ -41,9 +41,11 @@ const BackWithComponent = ({
                 style={tw`bg-[#FFF1EC] w-10 h-10 justify-center items-center rounded-lg`}
               >
                 <SvgXml
-                  xml={`<svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0.397603 8.88875L8.07979 16L10 14.2225L3.27791 8L10 1.7775L8.07979 0L0.397603 7.11125C0.143018 7.34699 0 7.66667 0 8C0 8.33333 0.143018 8.65301 0.397603 8.88875Z" fill="black"/>
+                  xml={`<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="36" height="36" rx="6" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M13.3976 18.8888L21.0798 26L23 24.2225L16.2779 18L23 11.7775L21.0798 10L13.3976 17.1113C13.143 17.347 13 17.6667 13 18C13 18.3333 13.143 18.653 13.3976 18.8888Z" fill="#4B5320"/>
 </svg>
+
 `}
                 />
               </View>
@@ -53,7 +55,7 @@ const BackWithComponent = ({
           )}
           <Text
             numberOfLines={1}
-            style={[tw`text-black font-PoppinsBold text-base`, titleStyle]}
+            style={[tw`text-white font-PoppinsBold text-base`, titleStyle]}
           >
             {title}
           </Text>
@@ -63,16 +65,26 @@ const BackWithComponent = ({
           {!offBack ? (
             <TouchableOpacity
               onPress={onPress}
-              style={tw`flex-row items-center gap-2 pr-4`}
+              style={tw`flex-row items-center gap-4 pr-4`}
             >
               <View
                 style={tw`bg-white w-10 h-10 justify-center items-center rounded-lg`}
               >
-                <SvgXml xml={IconArrayRight} />
+                <SvgXml
+                  xml={`<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="36" height="36" rx="6" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M13.3976 18.8888L21.0798 26L23 24.2225L16.2779 18L23 11.7775L21.0798 10L13.3976 17.1113C13.143 17.347 13 17.6667 13 18C13 18.3333 13.143 18.653 13.3976 18.8888Z" fill="#4B5320"/>
+</svg>
+
+`}
+                />
               </View>
               <Text
                 numberOfLines={1}
-                style={[tw`text-black font- text-base`, titleStyle]}
+                style={[
+                  tw`text-white  font-PoppinsSemiBold text-base`,
+                  titleStyle,
+                ]}
               >
                 {title ? title : "Back"}
               </Text>

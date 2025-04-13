@@ -1,12 +1,37 @@
-import { IconActiveHome, IconDoc, IconPdf } from "@/icons/Icon";
+import { IconDoc, IconExcel, IconPdf } from "@/icons/Icon";
 import { Text, TouchableOpacity, View } from "react-native";
 
 import { Image } from "expo-image";
+import RNFetchBlob from "react-native-blob-util";
 import React from "react";
 import { SvgXml } from "react-native-svg";
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
+import { viewDocument } from "@react-native-documents/viewer";
 
+const getMimeType = (filePath) => {
+  const extension = filePath.split(".").pop().toLowerCase();
+
+  switch (extension) {
+    case "xls":
+      return "application/vnd.ms-excel";
+    case "xlsx":
+      return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    case "doc":
+      return "application/msword";
+    case "docx":
+      return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    case "pdf":
+      return "application/pdf";
+    case "jpg":
+    case "jpeg":
+      return "image/jpeg";
+    case "png":
+      return "image/png";
+    default:
+      return "application/octet-stream"; // fallback for unknown types
+  }
+};
 const DocumentCard = ({
   document,
 }: {
@@ -17,12 +42,45 @@ const DocumentCard = ({
     image: string;
     type: string;
     page: number;
+    url: string;
   };
 }) => {
   const router = useRouter();
+  const [localPath, setLocalPath] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (
+      document?.type === "pdf" ||
+      document?.type === "doc" ||
+      document?.type === "excel"
+    ) {
+      const downloadFile = async () => {
+        try {
+          const res = await RNFetchBlob.config({
+            fileCache: true,
+          }).fetch("GET", document?.url);
+          console.log();
+          setLocalPath(res.path());
+        } catch (error) {}
+      };
+      downloadFile();
+    }
+  }, []);
   return (
     <TouchableOpacity
-      onPress={() => router.push(`/details/doc/${document?.id}`)}
+      onPress={() => {
+        if (document?.type == "pdf") {
+          router.push(`/details/doc/${document?.id}`);
+        } else {
+          console.log(localPath);
+          viewDocument({
+            uri: `file://${localPath}`,
+            headerTitle: document?.title,
+            mimeType: getMimeType(localPath),
+            presentationStyle: "fullScreen",
+          });
+        }
+      }}
       style={tw` rounded-lg bg-white shadow `}
     >
       <Image
@@ -55,7 +113,7 @@ const DocumentCard = ({
         ) : document?.type === "doc" ? (
           <SvgXml xml={IconDoc} />
         ) : document?.type === "excel" ? (
-          <SvgXml xml={IconActiveHome} />
+          <SvgXml xml={IconExcel} />
         ) : (
           <SvgXml xml={IconPdf} />
         )}
