@@ -2,12 +2,10 @@ import { IconDoc, IconExcel, IconPdf } from "@/icons/Icon";
 import { Text, TouchableOpacity, View } from "react-native";
 
 import { Image } from "expo-image";
-import RNFetchBlob from "react-native-blob-util";
 import React from "react";
 import { SvgXml } from "react-native-svg";
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
-import { viewDocument } from "@react-native-documents/viewer";
 
 const getMimeType = (filePath) => {
   const extension = filePath.split(".").pop().toLowerCase();
@@ -48,38 +46,38 @@ const DocumentCard = ({
   const router = useRouter();
   const [localPath, setLocalPath] = React.useState<string | null>(null);
 
-  React.useEffect(() => {
-    if (
-      document?.type === "pdf" ||
-      document?.type === "doc" ||
-      document?.type === "excel"
-    ) {
-      const downloadFile = async () => {
-        try {
-          const res = await RNFetchBlob.config({
-            fileCache: true,
-          }).fetch("GET", document?.url);
-          console.log();
-          setLocalPath(res.path());
-        } catch (error) {}
-      };
-      downloadFile();
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   if (
+  //     document?.type === "pdf" ||
+  //     document?.type === "doc" ||
+  //     document?.type === "excel"
+  //   ) {
+  //     const downloadFile = async () => {
+  //       try {
+  //         const res = await RNFetchBlob.config({
+  //           fileCache: true,
+  //         }).fetch("GET", document?.url);
+  //         console.log();
+  //         setLocalPath(res.path());
+  //       } catch (error) {}
+  //     };
+  //     downloadFile();
+  //   }
+  // }, []);
   return (
     <TouchableOpacity
       onPress={() => {
-        if (document?.type == "pdf") {
-          router.push(`/details/doc/${document?.id}`);
-        } else {
-          console.log(localPath);
-          viewDocument({
-            uri: `file://${localPath}`,
-            headerTitle: document?.title,
-            mimeType: getMimeType(localPath),
-            presentationStyle: "fullScreen",
-          });
-        }
+        // if (document?.type == "pdf") {
+        router.push(`/details/doc/${document?.id}`);
+        // } else {
+        //   console.log(localPath);
+        //   viewDocument({
+        //     uri: `file://${localPath}`,
+        //     headerTitle: document?.title,
+        //     mimeType: getMimeType(localPath),
+        //     presentationStyle: "fullScreen",
+        //   });
+        // }
       }}
       style={tw` rounded-lg bg-white shadow `}
     >

@@ -1,0 +1,81 @@
+[
+  {
+    "id": 1,
+    "title": "Sample PDF Document",
+    "category": "Reference",
+    "image": "https://picsum.photos/seed/pdf1/300/200",
+    "type": "pdf",
+    "url": "https://www.antennahouse.com/hubfs/xsl-fo-sample/pdf/basic-link-1.pdf",
+    "description": "Simple one-page PDF for testing",
+    "size": "45 KB",
+    "pages": 1
+  },
+  {
+    "id": 2,
+    "title": "Word Document Sample",
+    "category": "Templates",
+    "image": "https://picsum.photos/seed/doc1/300/200",
+    "type": "doc",
+    "url": "https://file-examples.com/wp-content/storage/2017/02/file-sample_100kB.doc",
+    "description": "Basic Word document with sample text",
+    "size": "28 KB",
+    "pages": 2
+  },
+  {
+    "id": 3,
+    "title": "Excel Document Sample",
+    "category": "Spreadsheets",
+    "image": "https://picsum.photos/seed/excel1/300/200",
+    "type": "excel",
+    "url": "https://file-examples.com/wp-content/storage/2017/02/file_example_XLS_10.xls",
+    "description": "Basic Excel document with sample text",
+    "size": "28 KB",
+    "pages": 2
+  },
+
+  {
+    "id": 4,
+    "title": "Multi-page PDF",
+    "category": "Reports",
+    "image": "https://picsum.photos/seed/pdf2/300/200",
+    "type": "pdf",
+    "url": "https://www.africau.edu/images/default/sample.pdf",
+    "description": "PDF with multiple pages and images",
+    "size": "550 KB",
+    "pages": 3
+  },
+  {
+    "id": 5,
+    "title": "Modern Word Document",
+    "category": "Contracts",
+    "image": "https://picsum.photos/seed/docx1/300/200",
+    "type": "docx",
+    "url": "https://file-examples.com/wp-content/storage/2017/02/file-sample_100kB.docx",
+    "description": "DOCX format with modern formatting",
+    "size": "100 KB",
+    "pages": 5
+  },
+
+  {
+    "id": 7,
+    "title": "Technical Manual",
+    "category": "Documentation",
+    "image": "https://picsum.photos/seed/pdf3/300/200",
+    "type": "pdf",
+    "url": "http://www.pdf995.com/samples/pdf.pdf",
+    "description": "Longer PDF with technical content",
+    "size": "1.2 MB",
+    "pages": 20
+  },
+  {
+    "id": 8,
+    "title": "Resume Template",
+    "category": "Templates",
+    "image": "https://picsum.photos/seed/doc2/300/200",
+    "type": "doc",
+    "url": "https://file-examples.com/wp-content/storage/2017/02/file-sample_100kB.doc",
+    "description": "Professional resume format",
+    "size": "35 KB",
+    "pages": 2
+  }
+]
