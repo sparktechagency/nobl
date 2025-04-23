@@ -1,14 +1,14 @@
 import { IconEmail, IconPassword } from "@/icons/Icon";
-import { Image, Text, TouchableOpacity, View } from "react-native";
 import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
-import { Checkbox } from "react-native-ui-lib";
-import { Formik } from "formik";
-import InputText from "@/lib/inputs/InputText";
-import { PrimaryColor } from "@/utils/utils";
 import TButton from "@/lib/buttons/TButton";
+import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
+import { PrimaryColor } from "@/utils/utils";
+import { Formik } from "formik";
+import { Checkbox } from "react-native-ui-lib";
 
 const login = () => {
   const router = useRouter();
@@ -30,9 +30,9 @@ const login = () => {
   };
   return (
     <View style={tw`flex-1 bg-white justify-end`}>
-      <View style={tw`items-center gap-2 my-12`}>
+      <View style={tw`items-center gap-0 mb-52`}>
         <Image
-          style={tw`w-60 h-20`}
+          style={tw`w-72 h-20`}
           resizeMode="cover"
           source={require("@/assets/images/logo.png")}
         />
@@ -40,7 +40,7 @@ const login = () => {
           Login to your account
         </Text>
       </View>
-      <View style={tw`bg-primary w-full p-4 rounded-t-[3rem] pt-12 pb-16`}>
+      <View style={tw`bg-primary w-full p-4 rounded-t-[2rem] pt-8 pb-5`}>
         <Formik
           initialValues={{ email: "", password: "" }}
           onSubmit={(values) => console.log(values)}

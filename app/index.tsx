@@ -1,11 +1,12 @@
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
-import { Image, View } from "react-native";
+import { ActivityIndicator, Image, View } from "react-native";
 
 import tw from "@/lib/tailwind";
-import { useEffect } from "react";
+import { PrimaryColor } from "@/utils/utils";
 import { useRouter } from "expo-router";
+import { useEffect } from "react";
 
 SplashScreen.preventAutoHideAsync(); // Prevent Expo's splash screen from auto-hiding
 
@@ -43,13 +44,13 @@ export default function App() {
     <View style={tw`flex-1 justify-center items-center bg-white pb-[10%]`}>
       <Image
         source={require("@/assets/images/logo.png")}
-        style={tw`h-32 aspect-square `}
+        style={tw`h-52 aspect-square `}
       />
-      {/* <ActivityIndicator
+      <ActivityIndicator
         size="large"
         color={PrimaryColor}
         style={tw`absolute bottom-16`}
-      /> */}
+      />
     </View>
   );
 }
