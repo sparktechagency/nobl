@@ -1,11 +1,11 @@
 import { IconDoc, IconExcel, IconPdf } from "@/icons/Icon";
 import { Text, TouchableOpacity, View } from "react-native";
 
+import tw from "@/lib/tailwind";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
-import tw from "@/lib/tailwind";
-import { useRouter } from "expo-router";
 
 const getMimeType = (filePath) => {
   const extension = filePath.split(".").pop().toLowerCase();
@@ -79,7 +79,7 @@ const DocumentCard = ({
         //   });
         // }
       }}
-      style={tw` rounded-lg bg-white shadow `}
+      style={tw` rounded-lg bg-deepBlue50 shadow `}
     >
       <Image
         source={{ uri: document.image }}

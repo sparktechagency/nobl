@@ -8,7 +8,6 @@
     "scheme": "com.arifbiswas.nobl",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.arifbiswas.nobl",
@@ -21,12 +20,14 @@
       "permissions": [
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE",
-        "ACCESS_MEDIA_LOCATION"
+        "ACCESS_MEDIA_LOCATION",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_MEDIA_LOCATION"
       ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
-        
       },
       "package": "com.arifbiswas.nobl"
     },
@@ -55,7 +56,7 @@
       [
         "expo-screen-orientation",
         {
-          "initialOrientation": "PORTRAIT" // Default screen orientation
+          "initialOrientation": "PORTRAIT"
         }
       ],
       [
@@ -76,6 +77,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "474fd837-84ad-4823-bcf8-8e3dd334020f"
+      }
     }
   }
 }

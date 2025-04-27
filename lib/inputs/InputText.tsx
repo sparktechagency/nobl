@@ -1,3 +1,4 @@
+import React, { useCallback } from "react";
 import {
   Animated,
   Easing,
@@ -10,7 +11,6 @@ import {
   View,
 } from "react-native";
 
-import React from "react";
 import { SvgXml } from "react-native-svg";
 import tw from "../tailwind";
 
@@ -77,7 +77,7 @@ const InputText = ({
 
   const textY = React.useRef(new Animated.Value(0));
 
-  const handleFocus = () => {
+  const handleFocus = useCallback(() => {
     setFocus(true);
     Animated.timing(textY.current, {
       toValue: -28,
@@ -86,9 +86,9 @@ const InputText = ({
       easing: Easing.ease,
     }).start();
     textInputRef.current?.focus(); // Focus the TextInput
-  };
+  }, []);
 
-  const handleBlur = () => {
+  const handleBlur = useCallback(() => {
     setFocus(false);
     Animated.timing(textY.current, {
       toValue: 0,
@@ -96,15 +96,17 @@ const InputText = ({
       useNativeDriver: true,
       easing: Easing.linear,
     }).start();
-  };
+  }, []);
 
-  React.useEffect(() => {
-    if (value?.trim().length) {
-      handleFocus();
-    } else {
-      handleBlur();
-    }
-  }, [value]);
+  // React.useEffect(() => {
+  //   if (value?.trim().length) {
+  //     if (!textInputRef.current?.focus()) {
+  //       handleFocus();
+  //     }
+  //   } else {
+  //     handleBlur();
+  //   }
+  // }, [value]);
 
   const textX = textY.current.interpolate({
     inputRange: [textXValue, 0],
@@ -139,16 +141,15 @@ const InputText = ({
 
       <View
         style={[
-          tw`flex-row w-full border items-center px-4 ${
+          tw`flex-row w-full border items-center  px-4 ${
             errorText && touched ? "border-red-500" : "border-gray-300"
           }  rounded-full h-12 bg-white`,
           // tw`${focus ? "bg-white" : "bg-gray-200"}`,
-
           containerStyle,
         ]}
       >
         {svgFirstIcon && <SvgXml xml={svgFirstIcon} />}
-        {placeholder && (
+        {placeholder?.trim() && (
           <Animated.Text
             numberOfLines={1}
             style={[
@@ -178,7 +179,7 @@ const InputText = ({
           onBlur={(e) => {
             onBlur && onBlur(e);
           }}
-          style={tw`flex-1 px-2 text-base font-PoppinsSemiBold`}
+          style={tw`flex-1 px-2 h-12 text-base  font-PoppinsSemiBold`}
           {...textInputProps}
           value={value || text}
           onChangeText={(text) => {

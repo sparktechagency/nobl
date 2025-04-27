@@ -1,7 +1,7 @@
 import { IconEmail, IconPassword } from "@/icons/Icon";
 import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
@@ -13,6 +13,7 @@ import { Checkbox } from "react-native-ui-lib";
 const login = () => {
   const router = useRouter();
   const [value, setValue] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const validate = (values: any) => {
     const errors: any = {};
@@ -28,9 +29,10 @@ const login = () => {
     }
     return errors;
   };
+
   return (
     <View style={tw`flex-1 bg-white justify-end`}>
-      <View style={tw`items-center gap-0 mb-52`}>
+      <View style={[tw`items-center gap-0 mt-52 mb-10`]}>
         <Image
           style={tw`w-72 h-20`}
           resizeMode="cover"
@@ -40,6 +42,7 @@ const login = () => {
           Login to your account
         </Text>
       </View>
+      <ScrollView />
       <View style={tw`bg-primary w-full p-4 rounded-t-[2rem] pt-8 pb-5`}>
         <Formik
           initialValues={{ email: "", password: "" }}

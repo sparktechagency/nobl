@@ -9,9 +9,11 @@ import {
   useWindowDimensions,
 } from "react-native";
 
+import { IconDownload } from "@/icons/Icon";
+import IButton from "@/lib/buttons/IButton";
+import tw from "@/lib/tailwind";
 import { Image } from "expo-image";
 import React from "react";
-import tw from "@/lib/tailwind";
 
 const PhotoCard = ({
   photo,
@@ -23,15 +25,12 @@ const PhotoCard = ({
   };
 }) => {
   const { width: screenWidth } = useWindowDimensions();
-  const cardPadding = 16;
-  const gap = 8;
-  const maxColumns = 2;
-  const availableWidth = screenWidth - cardPadding * 2 - gap;
-  const aspectRatio = 0.8 + Math.random() * 0.7;
-  const width = availableWidth / maxColumns;
-  const height = width * aspectRatio;
+
+  const [loading, setLoading] = React.useState(false);
+  const [height, setHeight] = React.useState(0);
 
   const downloadPhoto = async () => {
+    setLoading(true);
     try {
       // Request permissions (needed for Android)
       if (Platform.OS === "android") {
@@ -41,6 +40,7 @@ const PhotoCard = ({
             "Permission required",
             "Please grant storage permissions to download photos"
           );
+          setLoading(false);
           return;
         }
       }
@@ -59,6 +59,7 @@ const PhotoCard = ({
         await FileSystem.downloadAsync(uri, fileUri);
 
         // Save to media library to make it visible in gallery
+        setLoading(false);
         await MediaLibrary.saveToLibraryAsync(fileUri);
         Alert.alert(
           "Success",
@@ -70,40 +71,33 @@ const PhotoCard = ({
         const fileUri = `${FileSystem.cacheDirectory}${fileName}`;
         await FileSystem.downloadAsync(uri, fileUri);
         await MediaLibrary.saveToLibraryAsync(fileUri);
+        setLoading(false);
+        // Show success message
         Alert.alert("Success", "Photo saved to your camera roll");
       }
     } catch (error) {
+      setLoading(false);
+      // Handle error
       console.error("Error downloading photo:", error);
       Alert.alert("Error", "Failed to download photo");
     }
   };
 
+  React.useEffect(() => {
+    const cardPadding = 16;
+    const gap = 8;
+    const maxColumns = 2;
+    const availableWidth = screenWidth - cardPadding * 2 - gap;
+    const aspectRatio = 0.8 + Math.random() * 0.7;
+    const width = availableWidth / maxColumns;
+    const height = width * aspectRatio;
+    setHeight(height);
+    // Set the height of the card based on the screen width
+    // const newHeight = width * aspectRatio;
+  }, [screenWidth]);
+
   return (
-    <Pressable
-      onLongPress={() => {
-        Alert.alert(
-          "Download",
-          "Are you sure you want to download this photo?",
-          [
-            {
-              text: "Cancel",
-              style: "cancel",
-            },
-            {
-              text: "Download",
-              onPress: downloadPhoto,
-            },
-          ]
-        );
-      }}
-      style={[
-        tw`bg-white rounded-lg overflow-hidden mb-2`,
-        {
-          width: width,
-          marginRight: gap,
-        },
-      ]}
-    >
+    <Pressable style={tw`m-1 relative rounded-md overflow-hidden`}>
       <Image
         source={{ uri: photo?.image }}
         style={{
@@ -113,10 +107,16 @@ const PhotoCard = ({
         contentFit="cover"
       />
       <Text
-        style={tw`absolute px-2 py-1 bottom-2 left-2 rounded-md bg-primary text-white font-PoppinsRegular text-sm`}
+        style={tw`absolute px-2 py-1 bottom-2 left-2 rounded-md bg-primary text-white font-PoppinsRegular text-[0.56rem]`}
       >
         {photo.category}
       </Text>
+      <IButton
+        svg={IconDownload}
+        isLoading={loading}
+        onPress={downloadPhoto}
+        containerStyle={tw`absolute top-2 right-2 bg-deepBlue50 w-8 h-8 rounded-md p-2`}
+      />
     </Pressable>
   );
 };

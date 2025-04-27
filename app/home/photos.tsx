@@ -1,16 +1,16 @@
 import { IconArrowDown, IconClose, IconFilter } from "@/icons/Icon";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
-import { Galeria } from "@nandorojo/galeria";
-import IButton from "@/lib/buttons/IButton";
-import { MasonryFlashList } from "@shopify/flash-list";
 import PhotoCard from "@/components/PhotoCard";
-import Photos from "../../assets/data/photos.json";
-import React from "react";
+import IButton from "@/lib/buttons/IButton";
 import SideModal from "@/lib/modals/SideModal";
-import { SvgXml } from "react-native-svg";
 import tw from "@/lib/tailwind";
+import { Galeria } from "@nandorojo/galeria";
+import { MasonryFlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
+import React from "react";
+import { SvgXml } from "react-native-svg";
+import Photos from "../../assets/data/photos.json";
 
 const photos = () => {
   const router = useRouter();
@@ -42,10 +42,10 @@ const photos = () => {
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={tw`bg-base `}
+        contentContainerStyle={tw`bg-base gap-4`}
       >
         <View style={tw`flex-row pt-4 pb-2 px-4 gap-3 items-center `}></View>
-        <View style={tw`flex-1 bg-white pb-10 pt-4 rounded-t-3xl px-4`}>
+        <View style={tw`flex-1 bg-gray-100 pb-10 pt-4 rounded-t-3xl px-4`}>
           <Galeria urls={photos.map((photo) => photo.image)}>
             <MasonryFlashList
               scrollEnabled={false}

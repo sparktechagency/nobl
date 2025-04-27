@@ -3,12 +3,12 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import DocumentCard from "@/components/DocumentCard";
 import IButton from "@/lib/buttons/IButton";
-import React from "react";
 import SideModal from "@/lib/modals/SideModal";
-import { SvgXml } from "react-native-svg";
-import documentData from "../../assets/data/document.json";
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
+import React from "react";
+import { SvgXml } from "react-native-svg";
+import documentData from "../../assets/data/document.json";
 
 const documents = () => {
   const router = useRouter();

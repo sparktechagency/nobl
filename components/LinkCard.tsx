@@ -2,11 +2,11 @@ import { IconEarthLink, IconOuterArray } from "@/icons/Icon";
 import { Linking, Text, TouchableOpacity, View } from "react-native";
 
 import IButton from "@/lib/buttons/IButton";
+import tw from "@/lib/tailwind";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
-import tw from "@/lib/tailwind";
-import { useRouter } from "expo-router";
 
 const LinkCard = ({
   link,
@@ -25,7 +25,7 @@ const LinkCard = ({
       onPress={() => {
         Linking.openURL(link?.url);
       }}
-      style={tw` rounded-lg bg-base shadow p-2 border border-gray-200`}
+      style={tw` rounded-lg bg-deepBlue50 shadow p-2 border border-gray-200`}
     >
       <Image
         source={{ uri: link.image }}

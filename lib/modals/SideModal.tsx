@@ -1,7 +1,7 @@
 import { Dialog, DialogProps, PanningProvider } from "react-native-ui-lib";
 
-import { Pressable } from "react-native";
 import React from "react";
+import { Pressable } from "react-native";
 import tw from "../tailwind";
 
 interface SideModalProps {

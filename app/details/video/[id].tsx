@@ -1,21 +1,41 @@
-import { ActivityIndicator, ScrollView, Text, View } from "react-native";
-import { IconDownload, IconNoVideo } from "@/icons/Icon";
-import { VideoView, useVideoPlayer } from "expo-video";
+import {
+  IconCalendarMini,
+  IconClockMini,
+  IconClose,
+  IconDownload,
+  IconNoVideo,
+} from "@/icons/Icon";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { VideoView, useVideoPlayer } from "expo-video";
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
-import IwtButton from "@/lib/buttons/IwtButton";
-import React from "react";
-import { SvgXml } from "react-native-svg";
-import VideoCard from "@/components/VideoCard";
 import tutorialData from "@/assets/data/tutorials.json";
+import VideoCard from "@/components/VideoCard";
+import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
+import IButton from "@/lib/buttons/IButton";
+import IwtButton from "@/lib/buttons/IwtButton";
+import TButton from "@/lib/buttons/TButton";
+import SideModal from "@/lib/modals/SideModal";
 import tw from "@/lib/tailwind";
 import { useEvent } from "expo";
+import React from "react";
+import { SvgXml } from "react-native-svg";
+import { Avatar } from "react-native-ui-lib";
 
 const VideoDetails = () => {
   const router = useRouter();
   const [tutorials, setTutorials] = React.useState(tutorialData.tutorials);
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [selectedTutorial, setSelectedTutorial] = React.useState(null);
+  const [comment, setComment] = React.useState("");
 
   const { id } = useLocalSearchParams();
 
@@ -110,10 +130,35 @@ const VideoDetails = () => {
             </Text>
           </View>
         </View>
+        <TouchableOpacity
+          onPress={() => {
+            setIsModalVisible(true);
+          }}
+          style={tw`mx-4 bg-gray-50 rounded-md p-4 gap-2`}
+        >
+          <View style={tw`flex-row items-center gap-2`}>
+            <Text style={tw`font-PoppinsSemiBold text-base text-black `}>
+              Comment's
+            </Text>
+            <Text style={tw`font-PoppinsRegular text-gray-500 text-sm`}>
+              100
+            </Text>
+          </View>
+          <View style={tw`flex-row items-center gap-2`}>
+            <Avatar size={30} source={require("@/assets/images/avatar.png")} />
+            <Text
+              numberOfLines={2}
+              style={tw`flex-1 font-PoppinsRegular text-sm text-gray-600`}
+            >
+              Lorem ipsum dolor sit amet consectetur. Non egestas sagittis justo
+              convallis quis ut mauris.
+            </Text>
+          </View>
+        </TouchableOpacity>
         <View style={tw`flex-row pt-6 pb-2 px-4 gap-3 items-center `}>
           <Text style={tw`font-PoppinsSemiBold text-lg`}>Related Videos</Text>
         </View>
-        <View style={tw`bg-white py-10 rounded-t-3xl px-4`}>
+        <View style={tw`bg-gray-100 py-10 rounded-t-3xl px-4`}>
           <View style={tw`border border-gray-300 rounded-lg py-4 px-2 gap-5 `}>
             {tutorials?.map((tutorial) => (
               <VideoCard key={tutorial.id} tutorial={tutorial} />
@@ -121,6 +166,168 @@ const VideoDetails = () => {
           </View>
         </View>
       </ScrollView>
+
+      <SideModal
+        visible={isModalVisible}
+        setVisible={() => setIsModalVisible(false)}
+        containerStyle={tw`bg-base`}
+        scrollable
+        props={{
+          renderPannableHeader: () => (
+            <View
+              style={tw`flex-row justify-between items-center bg-primary p-2`}
+            >
+              <View style={tw`mx-3`} />
+              <View>
+                <Text style={tw`text-white font-PoppinsRegular text-base `}>
+                  Comments
+                </Text>
+              </View>
+              <IButton
+                svg={IconClose}
+                onPress={() => setIsModalVisible(false)}
+                containerStyle={tw`bg-transparent self-end`}
+              />
+            </View>
+          ),
+        }}
+      >
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={300}
+          behavior="height"
+          style={tw` bg-base`}
+        >
+          <ScrollView
+            automaticallyAdjustKeyboardInsets
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="interactive"
+            style={tw`h-[35rem]`}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={tw`bg-base px-4 pt-2 pb-20`}
+          >
+            <View>
+              <View style={tw`flex-row  gap-2 pt-2`}>
+                <View>
+                  <Avatar
+                    size={45}
+                    source={require("@/assets/images/avatar.png")}
+                  />
+                </View>
+
+                <View style={tw`flex-1`}>
+                  <Text
+                    numberOfLines={2}
+                    style={tw`flex-1 font-PoppinsRegular text-sm text-gray-600`}
+                  >
+                    Lorem ipsum dolor sit amet consectetur. Non egestas sagittis
+                    justo convallis quis ut mauris.
+                  </Text>
+                  <View
+                    style={tw`flex-row items-center justify-between gap-2 px-6`}
+                  >
+                    <IwtButton
+                      svg={IconCalendarMini}
+                      title="24-04-2025"
+                      titleStyle={tw`text-gray-500 font-PoppinsRegular text-sm`}
+                      containerStyle={tw`bg-transparent`}
+                    />
+                    <IwtButton
+                      svg={IconClockMini}
+                      title="10:20 AM"
+                      titleStyle={tw`text-gray-500 font-PoppinsRegular text-sm`}
+                      containerStyle={tw`bg-transparent`}
+                    />
+                  </View>
+                </View>
+              </View>
+              <View style={tw`flex-row  gap-2 pt-2`}>
+                <View>
+                  <Avatar
+                    size={45}
+                    source={require("@/assets/images/avatar.png")}
+                  />
+                </View>
+
+                <View style={tw`flex-1`}>
+                  <Text
+                    numberOfLines={2}
+                    style={tw`flex-1 font-PoppinsRegular text-sm text-gray-600`}
+                  >
+                    Lorem ipsum dolor sit amet consectetur. Non egestas sagittis
+                    justo convallis quis ut mauris.
+                  </Text>
+                  <View
+                    style={tw`flex-row items-center justify-between gap-2 px-6`}
+                  >
+                    <IwtButton
+                      svg={IconCalendarMini}
+                      title="24-04-2025"
+                      titleStyle={tw`text-gray-500 font-PoppinsRegular text-sm`}
+                      containerStyle={tw`bg-transparent`}
+                    />
+                    <IwtButton
+                      svg={IconClockMini}
+                      title="10:20 AM"
+                      titleStyle={tw`text-gray-500 font-PoppinsRegular text-sm`}
+                      containerStyle={tw`bg-transparent`}
+                    />
+                  </View>
+                </View>
+              </View>
+              <View style={tw`flex-row  gap-2 pt-2`}>
+                <View>
+                  <Avatar
+                    size={45}
+                    source={require("@/assets/images/avatar.png")}
+                  />
+                </View>
+
+                <View style={tw`flex-1`}>
+                  <Text
+                    numberOfLines={2}
+                    style={tw`flex-1 font-PoppinsRegular text-sm text-gray-600`}
+                  >
+                    Lorem ipsum dolor sit amet consectetur. Non egestas sagittis
+                    justo convallis quis ut mauris.
+                  </Text>
+                  <View
+                    style={tw`flex-row items-center justify-between gap-2 px-6`}
+                  >
+                    <IwtButton
+                      svg={IconCalendarMini}
+                      title="24-04-2025"
+                      titleStyle={tw`text-gray-500 font-PoppinsRegular text-sm`}
+                      containerStyle={tw`bg-transparent`}
+                    />
+                    <IwtButton
+                      svg={IconClockMini}
+                      title="10:20 AM"
+                      titleStyle={tw`text-gray-500 font-PoppinsRegular text-sm`}
+                      containerStyle={tw`bg-transparent`}
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+          </ScrollView>
+
+          <View
+            style={tw`absolute p-4 bg-base bottom-0 flex-row items-center gap-2`}
+          >
+            <View style={tw`flex-1`}>
+              <TextInput
+                style={tw`h-12 w-full bg-gray-300 rounded-full  text-black font-PoppinsMedium px-4`}
+                placeholder="Write a comment"
+                placeholderTextColor={tw.color(`gray-500`)}
+              />
+            </View>
+            <TButton
+              title="Post"
+              containerStyle={tw`h-10 p-0  w-20 rounded-md`}
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </SideModal>
     </View>
   );
 };

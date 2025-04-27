@@ -1,14 +1,14 @@
 import { IconArrowDown, IconClose, IconFilter } from "@/icons/Icon";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
-import IButton from "@/lib/buttons/IButton";
 import LinkCard from "@/components/LinkCard";
-import React from "react";
+import IButton from "@/lib/buttons/IButton";
 import SideModal from "@/lib/modals/SideModal";
-import { SvgXml } from "react-native-svg";
-import linksData from "../../assets/data/links.json";
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
+import React from "react";
+import { SvgXml } from "react-native-svg";
+import linksData from "../../assets/data/links.json";
 
 const Links = () => {
   const router = useRouter();
@@ -43,7 +43,7 @@ const Links = () => {
         contentContainerStyle={tw`bg-base `}
       >
         <View style={tw`flex-row pt-3 pb-2 px-3 gap-3 items-center `} />
-        <View style={tw`bg-white pb-10 pt-6 rounded-t-3xl px-4 gap-4`}>
+        <View style={tw`bg-gray-100 pb-10 pt-6 rounded-t-3xl px-4 gap-4`}>
           {links?.map((link) => (
             <LinkCard key={link.id} link={link} />
           ))}

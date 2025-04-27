@@ -3,14 +3,14 @@ import { Image, Text, View } from "react-native";
 
 import IButton from "@/lib/buttons/IButton";
 import IwtButton from "@/lib/buttons/IwtButton";
-import React from "react";
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
+import React from "react";
 
 const VideoCard = ({ tutorial }: { tutorial: any }) => {
   const router = useRouter();
   return (
-    <View style={tw`bg-white shadow-md rounded-md `}>
+    <View style={tw`bg-deepBlue50 shadow-md rounded-md `}>
       <View>
         <Image
           source={{

@@ -36,6 +36,7 @@ export default function App() {
     });
     SplashScreen.hideAsync();
     setTimeout(() => {
+      // route?.replace("/details/video/1");
       route?.replace("/auth/login");
     }, 1000);
   }, []);
