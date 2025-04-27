@@ -33,6 +33,7 @@ const SideModal = ({
         {...props}
         width={"100%"}
         // height={Ios ? height - height * 0.4 : '100%'}
+        // height={_HIGHT * 0.7}
         ignoreBackgroundPress={false}
         visible={visible || false}
         bottom={true}

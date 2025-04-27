@@ -15,7 +15,7 @@ const video = () => {
   const [tutorials, setTutorials] = React.useState(tutorialData.tutorials);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   return (
-    <View style={tw`flex-1 bg-white`}>
+    <View style={tw`flex-1 bg-base`}>
       {/* Header Parts  */}
       <View
         style={tw`flex-row justify-between items-start py-6 px-4 gap-5 bg-primary`}

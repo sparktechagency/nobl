@@ -15,7 +15,7 @@ const index = () => {
   const [tutorials, setTutorials] = React.useState(tutorialData.tutorials);
 
   return (
-    <View style={tw`flex-1 `}>
+    <View style={tw`flex-1 bg-base`}>
       {/* Header Parts  */}
       <View
         style={tw`flex-row justify-between items-start py-8 px-4 gap-3 bg-primary`}

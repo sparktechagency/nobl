@@ -9,7 +9,9 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { VideoView, useVideoPlayer } from "expo-video";
 import {
   ActivityIndicator,
+  Keyboard,
   KeyboardAvoidingView,
+  Platform,
   ScrollView,
   Text,
   TextInput,
@@ -169,7 +171,10 @@ const VideoDetails = () => {
 
       <SideModal
         visible={isModalVisible}
-        setVisible={() => setIsModalVisible(false)}
+        setVisible={() => {
+          Keyboard.dismiss();
+          setIsModalVisible(false);
+        }}
         containerStyle={tw`bg-base`}
         scrollable
         props={{
@@ -179,13 +184,16 @@ const VideoDetails = () => {
             >
               <View style={tw`mx-3`} />
               <View>
-                <Text style={tw`text-white font-PoppinsRegular text-base `}>
+                <Text style={tw`text-white font-PoppinsRegular text-base`}>
                   Comments
                 </Text>
               </View>
               <IButton
                 svg={IconClose}
-                onPress={() => setIsModalVisible(false)}
+                onPress={() => {
+                  Keyboard.dismiss();
+                  setIsModalVisible(false);
+                }}
                 containerStyle={tw`bg-transparent self-end`}
               />
             </View>
@@ -193,32 +201,24 @@ const VideoDetails = () => {
         }}
       >
         <KeyboardAvoidingView
-          keyboardVerticalOffset={300}
-          behavior="height"
-          style={tw` bg-base`}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={150}
         >
           <ScrollView
-            automaticallyAdjustKeyboardInsets
+            style={tw`min-h-[20rem] max-h-[30rem] bg-base`}
+            contentContainerStyle={tw`px-4 pt-2 `} // Extra padding for input
             keyboardShouldPersistTaps="handled"
-            keyboardDismissMode="interactive"
-            style={tw`h-[35rem]`}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={tw`bg-base px-4 pt-2 pb-20`}
           >
-            <View>
-              <View style={tw`flex-row  gap-2 pt-2`}>
-                <View>
-                  <Avatar
-                    size={45}
-                    source={require("@/assets/images/avatar.png")}
-                  />
-                </View>
-
+            {/* Your comments list */}
+            {[...Array(10)].map((_, i) => (
+              <View key={i} style={tw`flex-row gap-2 pt-2`}>
+                <Avatar
+                  size={45}
+                  source={require("@/assets/images/avatar.png")}
+                />
                 <View style={tw`flex-1`}>
-                  <Text
-                    numberOfLines={2}
-                    style={tw`flex-1 font-PoppinsRegular text-sm text-gray-600`}
-                  >
+                  <Text style={tw`font-PoppinsRegular text-sm text-gray-600`}>
                     Lorem ipsum dolor sit amet consectetur. Non egestas sagittis
                     justo convallis quis ut mauris.
                   </Text>
@@ -240,91 +240,22 @@ const VideoDetails = () => {
                   </View>
                 </View>
               </View>
-              <View style={tw`flex-row  gap-2 pt-2`}>
-                <View>
-                  <Avatar
-                    size={45}
-                    source={require("@/assets/images/avatar.png")}
-                  />
-                </View>
-
-                <View style={tw`flex-1`}>
-                  <Text
-                    numberOfLines={2}
-                    style={tw`flex-1 font-PoppinsRegular text-sm text-gray-600`}
-                  >
-                    Lorem ipsum dolor sit amet consectetur. Non egestas sagittis
-                    justo convallis quis ut mauris.
-                  </Text>
-                  <View
-                    style={tw`flex-row items-center justify-between gap-2 px-6`}
-                  >
-                    <IwtButton
-                      svg={IconCalendarMini}
-                      title="24-04-2025"
-                      titleStyle={tw`text-gray-500 font-PoppinsRegular text-sm`}
-                      containerStyle={tw`bg-transparent`}
-                    />
-                    <IwtButton
-                      svg={IconClockMini}
-                      title="10:20 AM"
-                      titleStyle={tw`text-gray-500 font-PoppinsRegular text-sm`}
-                      containerStyle={tw`bg-transparent`}
-                    />
-                  </View>
-                </View>
-              </View>
-              <View style={tw`flex-row  gap-2 pt-2`}>
-                <View>
-                  <Avatar
-                    size={45}
-                    source={require("@/assets/images/avatar.png")}
-                  />
-                </View>
-
-                <View style={tw`flex-1`}>
-                  <Text
-                    numberOfLines={2}
-                    style={tw`flex-1 font-PoppinsRegular text-sm text-gray-600`}
-                  >
-                    Lorem ipsum dolor sit amet consectetur. Non egestas sagittis
-                    justo convallis quis ut mauris.
-                  </Text>
-                  <View
-                    style={tw`flex-row items-center justify-between gap-2 px-6`}
-                  >
-                    <IwtButton
-                      svg={IconCalendarMini}
-                      title="24-04-2025"
-                      titleStyle={tw`text-gray-500 font-PoppinsRegular text-sm`}
-                      containerStyle={tw`bg-transparent`}
-                    />
-                    <IwtButton
-                      svg={IconClockMini}
-                      title="10:20 AM"
-                      titleStyle={tw`text-gray-500 font-PoppinsRegular text-sm`}
-                      containerStyle={tw`bg-transparent`}
-                    />
-                  </View>
-                </View>
-              </View>
-            </View>
+            ))}
           </ScrollView>
 
-          <View
-            style={tw`absolute p-4 bg-base bottom-0 flex-row items-center gap-2`}
-          >
-            <View style={tw`flex-1`}>
+          {/* Fixed input container at bottom */}
+          <View style={tw`p-4 bg-base border-t border-gray-200`}>
+            <View style={tw`flex-row items-center gap-2`}>
               <TextInput
-                style={tw`h-12 w-full bg-gray-300 rounded-full  text-black font-PoppinsMedium px-4`}
+                style={tw`flex-1 h-12 bg-gray-300 rounded-full text-black font-PoppinsMedium px-4`}
                 placeholder="Write a comment"
                 placeholderTextColor={tw.color(`gray-500`)}
               />
+              <TButton
+                title="Post"
+                containerStyle={tw`h-10 p-0 w-20 rounded-md`}
+              />
             </View>
-            <TButton
-              title="Post"
-              containerStyle={tw`h-10 p-0  w-20 rounded-md`}
-            />
           </View>
         </KeyboardAvoidingView>
       </SideModal>
