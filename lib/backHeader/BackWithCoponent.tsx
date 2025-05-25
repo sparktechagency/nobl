@@ -38,7 +38,7 @@ const BackWithComponent = ({
               style={tw`flex-row items-center gap-2 pr-4`}
             >
               <View
-                style={tw`bg-[#FFF1EC] w-10 h-10 justify-center items-center rounded-lg`}
+                style={tw`bg-primary w-10 h-10 justify-center items-center rounded-lg`}
               >
                 <SvgXml
                   xml={`<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
