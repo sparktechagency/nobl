@@ -1,14 +1,14 @@
 import { ScrollView, View } from "react-native";
 
-import { Avatar } from "react-native-ui-lib/src/components/avatar";
+import { IconCamera } from "@/icons/Icon";
 import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
 import IButton from "@/lib/buttons/IButton";
-import { IconCamera } from "@/icons/Icon";
-import InputText from "@/lib/inputs/InputText";
-import React from "react";
 import TButton from "@/lib/buttons/TButton";
-import { router } from "expo-router";
+import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
+import { router } from "expo-router";
+import React from "react";
+import { Avatar } from "react-native-ui-lib";
 
 const edit_profile = () => {
   return (

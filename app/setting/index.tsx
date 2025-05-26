@@ -8,10 +8,11 @@ import {
 import { Text, TouchableOpacity, View } from "react-native";
 
 import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
+import tw from "@/lib/tailwind";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
-import tw from "@/lib/tailwind";
-import { useRouter } from "expo-router";
 
 const index = () => {
   const router = useRouter();
@@ -58,7 +59,10 @@ const index = () => {
           <SvgXml xml={IconRightArray} />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => router.push("/auth/login")}
+          onPress={async () => {
+            await AsyncStorage.removeItem("token");
+            router.push("/auth/login");
+          }}
           style={tw`bg-[#FFF4F3] rounded-lg flex-row items-center justify-between gap-2`}
         >
           <View style={tw`flex-row items-center gap-2`}>

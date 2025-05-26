@@ -1,15 +1,15 @@
-import { ActivityIndicator, Platform, Text, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { ActivityIndicator, Platform, Text, View } from "react-native";
 
-import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
-import DocumentData from "@/assets/data/document.json";
 import { IconDownload } from "@/icons/Icon";
+import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
 import IwtButton from "@/lib/buttons/IwtButton";
-import Pdf from "react-native-pdf";
-import RNFetchBlob from "react-native-blob-util";
-import React from "react";
-import { WebView } from "react-native-webview";
 import tw from "@/lib/tailwind";
+import { PrimaryColor } from "@/utils/utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React from "react";
+import RNFetchBlob from "react-native-blob-util";
+import Pdf from "react-native-pdf";
 
 const DocumentDetails = () => {
   const router = useRouter();
@@ -17,59 +17,76 @@ const DocumentDetails = () => {
   const [localPath, setLocalPath] = React.useState<string | null>(null);
   const [error, setError] = React.useState<string | boolean>(false);
   const { id } = useLocalSearchParams();
-  const document = DocumentData.find((document) => document.id === Number(id));
+
+  const [data, setData] = React.useState<any>(null);
 
   // Get the correct file URL based on type
+  const handleLoadData = async () => {
+    const getNewData = await AsyncStorage.getItem("document");
+    try {
+      const finalData = JSON.parse(getNewData as any);
+      // console.log(finalData);
+      if (finalData) {
+        // console.log(newDocument);
+        setData(finalData);
+      }
+    } catch (error) {
+      // console.log(error);
+    }
+  };
 
   React.useEffect(() => {
-    if (
-      document?.type === "pdf" ||
-      document?.type === "doc" ||
-      document?.type === "excel"
-    ) {
+    handleLoadData();
+  }, [id]);
+
+  // console.log(data);
+
+  React.useEffect(() => {
+    setLoading(true);
+    if (data?.document_type === ".pdf") {
       const downloadFile = async () => {
-        setLoading(true);
         try {
           const res = await RNFetchBlob.config({
             fileCache: true,
-          }).fetch("GET", document?.url);
+            appendExt: "pdf",
+          }).fetch("GET", data?.file);
           setLocalPath(res.path());
           setLoading(false);
+          // console.log(res?.path());
         } catch (error) {
           setError(true);
-          setLoading(false);
         }
       };
       downloadFile();
     }
-  }, []);
+  }, [data]);
 
-  const getViewerUrl = (url: string, type: string) => {
-    const encodedUrl = encodeURIComponent(localPath);
-    switch (type) {
-      case "doc":
-        return `https://docs.google.com/gview?embedded=true&url=${"https://file-examples.com/index.php/sample-documents-download/sample-doc-download/"}`;
-      case "excel":
-        return `https://docs.google.com/gview?embedded=true&url=${encodedUrl}`;
-      default:
-        return url;
-    }
-  };
+  // const getViewerUrl = (url: string, type: string) => {
+  //   const encodedUrl = encodeURIComponent(Document?.data?.file);
+  //   switch (type) {
+  //     case "doc":
+  //       return `https://docs.google.com/gview?embedded=true&url=${"https://file-examples.com/index.php/sample-documents-download/sample-doc-download/"}`;
+  //     case "excel":
+  //       return `https://docs.google.com/gview?embedded=true&url=${encodedUrl}`;
+  //     default:
+  //       return url;
+  //   }
+  // };
 
   const handleDownload = async () => {
     setLoading(true);
     try {
       const res = await RNFetchBlob.config({
         fileCache: true,
-        appendExt: document?.type,
+        appendExt: data?.document_type,
         addAndroidDownloads: {
           useDownloadManager: true,
           notification: true,
-          title: `${document?.title}.${document?.type}`,
+          title: `${data?.title}.${data?.document_type}`,
           description: "File downloaded by download manager.",
-          path: `${RNFetchBlob.fs.dirs.DownloadDir}/${document?.title}.${document?.type}`,
+          path: `${RNFetchBlob.fs.dirs.DownloadDir}/${data?.title}.${data?.type}`,
         },
-      }).fetch("GET", document?.url);
+      }).fetch("GET", data?.file);
 
       if (Platform.OS === "ios") {
         RNFetchBlob.ios.previewDocument(res.path());
@@ -87,27 +104,11 @@ const DocumentDetails = () => {
   if (loading) {
     viewer = (
       <View style={tw`flex-1 justify-center items-center`}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color={PrimaryColor} />
       </View>
     );
-  } else if (document?.type === "pdf") {
+  } else if (data?.document_type === ".pdf") {
     viewer = <Pdf source={{ uri: `file://${localPath}` }} style={tw`flex-1`} />;
-  } else if (document?.type === "doc") {
-    viewer = (
-      <WebView
-        startInLoadingState={true}
-        source={{ uri: getViewerUrl(document?.url, document?.type) }}
-        style={tw`flex-1`}
-      />
-    );
-  } else if (document?.type === "excel") {
-    viewer = (
-      <WebView
-        startInLoadingState={true}
-        source={{ uri: getViewerUrl(document?.url, document?.type) }}
-        style={tw`flex-1`}
-      />
-    );
   }
   if (error) {
     viewer = (

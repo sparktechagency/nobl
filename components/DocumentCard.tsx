@@ -2,6 +2,7 @@ import { IconDoc, IconExcel, IconPdf } from "@/icons/Icon";
 import { Text, TouchableOpacity, View } from "react-native";
 
 import tw from "@/lib/tailwind";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -30,19 +31,7 @@ const getMimeType = (filePath) => {
       return "application/octet-stream"; // fallback for unknown types
   }
 };
-const DocumentCard = ({
-  document,
-}: {
-  document: {
-    id: number;
-    title: string;
-    category: string;
-    image: string;
-    type: string;
-    page: number;
-    url: string;
-  };
-}) => {
+const DocumentCard = ({ document }: { document: any }) => {
   const router = useRouter();
   const [localPath, setLocalPath] = React.useState<string | null>(null);
 
@@ -66,8 +55,9 @@ const DocumentCard = ({
   // }, []);
   return (
     <TouchableOpacity
-      onPress={() => {
+      onPress={async () => {
         // if (document?.type == "pdf") {
+        AsyncStorage.setItem("document", JSON.stringify(document));
         router.push(`/details/doc/${document?.id}`);
         // } else {
         //   console.log(localPath);
@@ -82,9 +72,9 @@ const DocumentCard = ({
       style={tw` rounded-lg bg-deepBlue50 shadow `}
     >
       <Image
-        source={{ uri: document.image }}
+        source={{ uri: document?.thumbnail }}
         style={tw`w-full h-44 border-b-0 border-t-2  border-r-2 border-l-2 border-gray-800 rounded-t-lg`}
-        contentFit="fill"
+        contentFit="cover"
       />
       <View
         style={tw` flex-row justify-between items-center mt-3 px-4 pb-4 gap-2`}
@@ -100,7 +90,7 @@ const DocumentCard = ({
           </Text>
         </View>
         <Text style={tw`text-primary text-xs font-PoppinsMedium`}>
-          {document?.page} P
+          {document?.no_of_page} P
         </Text>
       </View>
       <View

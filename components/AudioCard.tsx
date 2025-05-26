@@ -1,4 +1,4 @@
-import { IconPlayButton, IconPlayButtonSmall } from "@/icons/Icon";
+import { IconAudio, IconPlayButton } from "@/icons/Icon";
 import { Image, Text, View } from "react-native";
 
 import IButton from "@/lib/buttons/IButton";
@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import React from "react";
 
-const VideoCard = ({ tutorial }: { tutorial: any }) => {
+const AudioCard = ({ audio }: { audio: any }) => {
   const router = useRouter();
 
   // console.log(tutorial?.type);
@@ -17,7 +17,7 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
       <View>
         <Image
           source={{
-            uri: tutorial?.thumbnail,
+            uri: audio?.thumbnail,
           }}
           resizeMode="cover"
           style={tw`w-full h-40 rounded-md`}
@@ -27,8 +27,8 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
         >
           <IButton
             onPress={() => {
-              AsyncStorage.setItem("video", JSON.stringify(tutorial));
-              router.push(`/details/video/${tutorial?.id}`);
+              AsyncStorage.setItem("audio", JSON.stringify(audio));
+              router.push(`/details/audio/${audio?.id}`);
             }}
             svg={IconPlayButton}
             containerStyle={tw`bg-transparent rounded-full p-2`}
@@ -39,26 +39,26 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
         style={tw`flex-row justify-between items-center mt-3 px-4 pb-4 gap-2`}
       >
         <View style={tw`gap-1.5 flex-1`}>
-          {tutorial?.title && (
+          {audio?.title && (
             <Text style={tw`font-PoppinsSemiBold text-base flex-1`}>
-              {tutorial?.title}
+              {audio?.title}
             </Text>
           )}
 
           <Text
             style={tw`bg-primary text-white text-center text-xs py-1 self-start px-2 rounded-md font-PoppinsMedium `}
           >
-            {tutorial?.category}
+            {audio?.category}
           </Text>
         </View>
         <IButton
-          svg={IconPlayButtonSmall}
+          svg={IconAudio}
           svgProps={{
             height: 20,
             width: 20,
           }}
           // title={tutorial?.duration}
-          onPress={() => router.push(`/details/video/${tutorial?.id}`)}
+          onPress={() => router.push(`/details/audio/${audio?.id}`)}
           containerStyle={tw`p-2 rounded-md `}
           // titleStyle={tw`text-xs`}
         />
@@ -67,4 +67,4 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
   );
 };
 
-export default VideoCard;
+export default AudioCard;

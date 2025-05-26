@@ -1,7 +1,8 @@
-import { IconArrowDown, IconClose, IconFilter } from "@/icons/Icon";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
+import Header from "@/components/Header";
 import PhotoCard from "@/components/PhotoCard";
+import { IconClose } from "@/icons/Icon";
 import IButton from "@/lib/buttons/IButton";
 import SideModal from "@/lib/modals/SideModal";
 import tw from "@/lib/tailwind";
@@ -9,7 +10,6 @@ import { Galeria } from "@nandorojo/galeria";
 import { MasonryFlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
 import React from "react";
-import { SvgXml } from "react-native-svg";
 import Photos from "../../assets/data/photos.json";
 
 const photos = () => {
@@ -19,27 +19,7 @@ const photos = () => {
   return (
     <View style={tw`flex-1 bg-base`}>
       {/* Header Parts  */}
-      <View
-        style={tw`flex-row justify-between items-start py-6 px-4 gap-5 bg-primary`}
-      >
-        <View style={tw`gap-2`}>
-          <Text style={tw`text-white font-PoppinsRegular text-lg `}>
-            Photos
-          </Text>
-        </View>
-        <TouchableOpacity
-          style={tw`flex-row items-center gap-4 border border-gray-200 px-2 py-1 rounded`}
-          onPress={() => setIsModalVisible(true)}
-        >
-          <View style={tw`flex-row items-center gap-2 `}>
-            <SvgXml xml={IconFilter} />
-            <Text style={tw`text-white font-PoppinsRegular text-sm`}>
-              Filter
-            </Text>
-          </View>
-          <SvgXml xml={IconArrowDown} />
-        </TouchableOpacity>
-      </View>
+      <Header type="Image Category" />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={tw`bg-base gap-4`}

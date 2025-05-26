@@ -1,17 +1,22 @@
+"use strict";
+
 import {
   IconCalendarMini,
   IconClockMini,
   IconClose,
   IconDownload,
-  IconNoVideo,
 } from "@/icons/Icon";
+import {
+  useGetCommentsQuery,
+  usePostCommentMutation,
+  useRelatedVideosQuery,
+} from "@/redux/apiSlices/user/userApiSlices";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { VideoView, useVideoPlayer } from "expo-video";
 import {
   ActivityIndicator,
+  FlatList,
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
   ScrollView,
   Text,
   TextInput,
@@ -19,14 +24,16 @@ import {
   View,
 } from "react-native";
 
-import tutorialData from "@/assets/data/tutorials.json";
 import VideoCard from "@/components/VideoCard";
 import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
 import IButton from "@/lib/buttons/IButton";
 import IwtButton from "@/lib/buttons/IwtButton";
 import TButton from "@/lib/buttons/TButton";
+import EmptyCard from "@/lib/Empty/EmptyCard";
 import SideModal from "@/lib/modals/SideModal";
 import tw from "@/lib/tailwind";
+import { _HIGHT } from "@/utils/utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEvent } from "expo";
 import React from "react";
 import { SvgXml } from "react-native-svg";
@@ -34,40 +41,97 @@ import { Avatar } from "react-native-ui-lib";
 
 const VideoDetails = () => {
   const router = useRouter();
-  const [tutorials, setTutorials] = React.useState(tutorialData.tutorials);
+
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [selectedTutorial, setSelectedTutorial] = React.useState(null);
   const [comment, setComment] = React.useState("");
 
   const { id } = useLocalSearchParams();
+  const [data, setData] = React.useState<any>(null);
 
-  const videoSource = selectedTutorial?.video;
+  const {
+    data: Comments,
+    isLoading: commentLoading,
+    isFetching: commentFetching,
+  } = useGetCommentsQuery({
+    params: {
+      video_id: id,
+    },
+  });
+
+  const {
+    data: relativeVideos,
+    isLoading: relativeVideosLoading,
+    isFetching: relativeVideosFetching,
+  } = useRelatedVideosQuery(
+    {
+      params: {
+        video_id: id,
+        category_id: data?.category_id, // Assuming data has category_id
+      },
+    },
+    {
+      skip: !id && !data?.category_id, // Skip the query if id is not available
+    }
+  );
+
+  // console.log(relativeVideos, "Related Videos");
+
+  const [addNewComment, addCommentResults] = usePostCommentMutation();
+
+  const handleAddComment = async () => {
+    if (!comment.trim()) return; // Prevent empty comments
+    try {
+      const res = await addNewComment({
+        video_id: id,
+        comment: comment.trim(),
+      }).unwrap();
+      // console.log(res, "Comment added successfully");
+      setComment(""); // Clear the input after posting
+      // Optionally, you can refetch comments or update the state to show the new comment
+    } catch (error) {
+      console.error("Failed to add comment:", error);
+    }
+  };
+
+  // console.log(data?.video);
+  const videoSource = data?.video;
 
   const player = useVideoPlayer(videoSource, (player) => {
-    console.log("player", player);
+    player.loop = false; // Set loop to false if you don't want the video to loop
     player.play();
   });
 
-  React.useEffect(() => {
-    const tutorial = tutorials.find((tutorial) => tutorial.id === Number(id));
-
-    if (tutorial) {
-      setSelectedTutorial(tutorial as any);
-    }
-    return () => {};
-  }, [id]);
-
-  const keyId = Array.isArray(id) ? id.join("-") : id;
-
   const { status, error } = useEvent(player, "statusChange", {
-    status: player.status,
+    status: player?.status,
   });
 
+  // console.log("rendering video details", Comments);
+
+  // Add this useEffect to handle playback status changes
+  // Get the correct file URL based on type
+  const handleLoadData = async () => {
+    const getNewData = await AsyncStorage.getItem("video");
+    try {
+      const finalData = JSON.parse(getNewData as any);
+      // console.log(finalData);
+      if (finalData) {
+        // console.log(newDocument);
+        setData(finalData);
+      }
+    } catch (error) {
+      // console.log(error);
+    }
+  };
+
+  React.useEffect(() => {
+    handleLoadData();
+  }, [id]);
   return (
-    <View key={keyId} style={tw`flex-1 bg-white`}>
+    <View key={id || null} style={tw`flex-1 bg-white`}>
       {/* Header Parts  */}
       <View
-        style={tw`flex-row py-3 justify-between items-center bg-primary pr-4`}
+        style={tw`flex-row pt-3 justify-between items-center bg-primary pr-4`}
       >
         <BackWithComponent onPress={() => router.back()} />
         <IwtButton
@@ -84,57 +148,48 @@ const VideoDetails = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={tw`bg-base `}
+        style={tw`flex-1`}
       >
-        <View style={tw`px-4 gap-4 mt-5 mb-5`}>
+        <View style={tw` gap-4  mb-5`}>
           {/* VIdeo Player */}
           <View style={tw`rounded-md `}>
             <View
               style={tw`w-full h-52 justify-center items-center rounded-md `}
             >
-              {status === "idle" || status === "loading" ? (
+              {!data?.video ? (
                 <View
                   style={tw`flex-1 w-full border-opacity-15 rounded-md justify-center items-center border border-primary`}
                 >
                   <ActivityIndicator size="large" color="#4B5320" />
                 </View>
-              ) : status === "readyToPlay" ? (
+              ) : (
                 <VideoView
-                  style={tw` h-52 w-full rounded-md`}
+                  style={tw`w-full aspect-video `}
                   player={player}
                   allowsFullscreen
-                  contentFit="fill"
+                  allowsPictureInPicture
                 />
-              ) : status === "error" && error ? (
-                <View
-                  style={tw`flex-1 w-full rounded-md justify-center items-center border border-primary border-opacity-15`}
-                >
-                  <SvgXml width={100} height={100} xml={IconNoVideo} />
-                  <Text
-                    style={tw`text-center text-base font-PoppinsMedium text-primary`}
-                  >
-                    No video found
-                  </Text>
-                </View>
-              ) : null}
+              )}
             </View>
           </View>
           {/* Video Details */}
           <View
-            style={tw`gap-1.5 flex-1 flex-row justify-between items-center `}
+            style={tw`gap-1.5 flex-1 flex-row justify-between items-center px-4 mt-2`}
           >
             <Text style={tw`font-PoppinsSemiBold text-base flex-1`}>
-              Trainging video part 1
+              {data?.title}
             </Text>
             <Text
               style={tw`bg-primary text-white text-center text-xs py-1 self-start px-2 rounded-md font-PoppinsMedium `}
             >
-              Welcome to Node.js
+              {data?.category}
             </Text>
           </View>
         </View>
         <TouchableOpacity
           onPress={() => {
             setIsModalVisible(true);
+            // router?.push(`/video_comment_modal?id=${id}`);
           }}
           style={tw`mx-4 bg-gray-50 rounded-md p-4 gap-2`}
         >
@@ -143,17 +198,21 @@ const VideoDetails = () => {
               Comment's
             </Text>
             <Text style={tw`font-PoppinsRegular text-gray-500 text-sm`}>
-              100
+              {Comments?.data?.data?.length || 0} Comments
             </Text>
           </View>
           <View style={tw`flex-row items-center gap-2`}>
-            <Avatar size={30} source={require("@/assets/images/avatar.png")} />
+            <Avatar
+              size={30}
+              source={{
+                uri: Comments?.data?.data[0]?.user?.photo || "",
+              }}
+            />
             <Text
               numberOfLines={2}
               style={tw`flex-1 font-PoppinsRegular text-sm text-gray-600`}
             >
-              Lorem ipsum dolor sit amet consectetur. Non egestas sagittis justo
-              convallis quis ut mauris.
+              {Comments?.data?.data[0]?.comment || "No comments yet."}
             </Text>
           </View>
         </TouchableOpacity>
@@ -162,7 +221,7 @@ const VideoDetails = () => {
         </View>
         <View style={tw`bg-gray-100 py-10 rounded-t-3xl px-4`}>
           <View style={tw`border border-gray-300 rounded-lg py-4 px-2 gap-5 `}>
-            {tutorials?.map((tutorial) => (
+            {relativeVideos?.data?.map((tutorial) => (
               <VideoCard key={tutorial.id} tutorial={tutorial} />
             ))}
           </View>
@@ -200,64 +259,104 @@ const VideoDetails = () => {
           ),
         }}
       >
-        <KeyboardAvoidingView
+        {/* <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={150}
-        >
-          <ScrollView
-            style={tw`min-h-[20rem] max-h-[30rem] bg-base`}
-            contentContainerStyle={tw`px-4 pt-2 `} // Extra padding for input
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-          >
-            {/* Your comments list */}
-            {[...Array(10)].map((_, i) => (
-              <View key={i} style={tw`flex-row gap-2 pt-2`}>
+        > */}
+        <FlatList
+          ListEmptyComponent={() => (
+            <EmptyCard
+              isLoading={commentLoading || commentFetching}
+              hight={_HIGHT * 0.4}
+            />
+          )}
+          style={tw`min-h-[20rem] max-h-[24rem] bg-base`}
+          contentContainerStyle={tw`px-4 pt-2 gap-2`} // Extra padding for input
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          data={Comments?.data?.data}
+          renderItem={({ index, item }) => {
+            // console.log(item);
+            return (
+              <View style={tw`flex-row gap-2 pt-2`}>
                 <Avatar
                   size={45}
-                  source={require("@/assets/images/avatar.png")}
+                  source={{
+                    uri: item?.user?.photo,
+                  }}
                 />
                 <View style={tw`flex-1`}>
                   <Text style={tw`font-PoppinsRegular text-sm text-gray-600`}>
-                    Lorem ipsum dolor sit amet consectetur. Non egestas sagittis
-                    justo convallis quis ut mauris.
+                    {item?.comment}
                   </Text>
                   <View
-                    style={tw`flex-row items-center justify-between gap-2 px-6`}
+                    style={tw`flex-row items-center justify-between gap-2 pt-2 px-6`}
                   >
-                    <IwtButton
-                      svg={IconCalendarMini}
-                      title="24-04-2025"
-                      titleStyle={tw`text-gray-500 font-PoppinsRegular text-sm`}
-                      containerStyle={tw`bg-transparent`}
-                    />
-                    <IwtButton
-                      svg={IconClockMini}
-                      title="10:20 AM"
-                      titleStyle={tw`text-gray-500 font-PoppinsRegular text-sm`}
-                      containerStyle={tw`bg-transparent`}
-                    />
+                    <View style={tw`flex-row items-center gap-2`}>
+                      <SvgXml xml={IconCalendarMini} />
+                      <Text
+                        style={tw`text-gray-500 font-PoppinsRegular text-sm`}
+                      >
+                        {item?.created_at
+                          ? new Date(item?.created_at).toLocaleDateString(
+                              "en-US",
+                              {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              }
+                            )
+                          : "N/A"}
+                      </Text>
+                    </View>
+                    <View style={tw`flex-row items-center gap-2`}>
+                      <SvgXml xml={IconClockMini} />
+                      <Text
+                        style={tw`text-gray-500 font-PoppinsRegular text-sm`}
+                      >
+                        {item?.created_at
+                          ? new Date(item?.created_at).toLocaleTimeString(
+                              "en-US",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            )
+                          : "N/A"}
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>
-            ))}
-          </ScrollView>
+            );
+          }}
+        />
 
-          {/* Fixed input container at bottom */}
-          <View style={tw`p-4 bg-base border-t border-gray-200`}>
-            <View style={tw`flex-row items-center gap-2`}>
-              <TextInput
-                style={tw`flex-1 h-12 bg-gray-300 rounded-full text-black font-PoppinsMedium px-4`}
-                placeholder="Write a comment"
-                placeholderTextColor={tw.color(`gray-500`)}
-              />
-              <TButton
-                title="Post"
-                containerStyle={tw`h-10 p-0 w-20 rounded-md`}
-              />
-            </View>
+        {/* Fixed input container at bottom */}
+        <View style={tw`p-4 bg-base border-t border-gray-200`}>
+          <View style={tw`flex-row items-center gap-2`}>
+            <TextInput
+              style={tw`flex-1 h-12 bg-gray-300 rounded-full text-black font-PoppinsMedium px-4`}
+              placeholder="Write a comment"
+              value={comment}
+              onChangeText={setComment}
+              onSubmitEditing={() => {
+                handleAddComment();
+                Keyboard.dismiss();
+              }}
+              returnKeyType="send"
+              placeholderTextColor={tw.color(`gray-500`)}
+            />
+            <TButton
+              disabled={comment.trim() === ""}
+              onPress={handleAddComment}
+              isLoading={addCommentResults.isLoading}
+              title="Post"
+              containerStyle={tw`h-10 p-0 w-20 rounded-md`}
+            />
           </View>
-        </KeyboardAvoidingView>
+        </View>
+        {/* </KeyboardAvoidingView> */}
       </SideModal>
     </View>
   );

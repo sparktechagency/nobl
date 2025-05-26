@@ -41,7 +41,7 @@ const SideModal = ({
         panDirection={PanningProvider.Directions.DOWN}
         containerStyle={[tw` bg-base rounded-t-2xl `, layerContainerStyle]}
       >
-        <Pressable disabled style={[tw`bg-white py-1 `, containerStyle]}>
+        <Pressable disabled style={[tw`bg-white  `, containerStyle]}>
           {children}
         </Pressable>
       </Dialog>

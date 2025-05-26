@@ -5,6 +5,7 @@ import { ActivityIndicator, Image, View } from "react-native";
 
 import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 
@@ -35,11 +36,17 @@ export default function App() {
       PoppinsThinItalic: require("../assets/fonts/Poppins/PoppinsThinItalic.ttf"),
     });
     SplashScreen.hideAsync();
-    setTimeout(() => {
-      // route?.replace("/details/video/1");
-      route?.replace("/auth/login");
-    }, 1000);
+    handlePathDecision();
   }, []);
+
+  const handlePathDecision = async () => {
+    const token = await AsyncStorage.getItem("token");
+    if (token) {
+      route?.replace("/home");
+    } else {
+      route?.replace("/auth/login");
+    }
+  };
 
   return (
     <View style={tw`flex-1 justify-center items-center bg-white pb-[10%]`}>

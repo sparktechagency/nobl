@@ -1,9 +1,11 @@
 import {
+  IconActiveAudio,
   IconActiveDocument,
   IconActiveHome,
   IconActiveLinks,
   IconActivePhoto,
   IconActiveVideo,
+  IconUnActiveAudio,
   IconUnActiveDocument,
   IconUnActiveHome,
   IconUnActiveLinks,
@@ -12,11 +14,11 @@ import {
 } from "@/icons/Icon";
 import { StatusBar, Text, TouchableOpacity, View } from "react-native";
 
+import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
+import { Tabs } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
-import { Tabs } from "expo-router";
-import tw from "@/lib/tailwind";
 
 const TabBarButton = (props: any) => {
   return <TouchableOpacity {...props} />;
@@ -122,6 +124,44 @@ export default function TabRoutes() {
                 <SvgXml xml={IconActiveVideo} />
               ) : (
                 <SvgXml xml={IconUnActiveVideo} />
+              );
+            },
+
+            tabBarLabel(props) {
+              return (
+                <>
+                  <Text
+                    style={[
+                      props.focused
+                        ? tw`text-white font-PoppinsSemiBold text-sm pt-1 flex-1`
+                        : tw`text-white text-sm pt-1 font-PoppinsRegular flex-1`,
+                      tw`flex-1`,
+                    ]}
+                  >
+                    Video
+                  </Text>
+                  <View
+                    style={
+                      props.focused
+                        ? tw`bg-white  w-[80%] h-[.2rem] rounded-t-full `
+                        : tw`bg-transparent  h-[.2rem] `
+                    }
+                  />
+                </>
+              );
+            },
+          }}
+        />
+        <Tabs.Screen
+          name="audio"
+          options={{
+            headerShown: false,
+
+            tabBarIcon(props) {
+              return props.focused ? (
+                <SvgXml xml={IconActiveAudio} />
+              ) : (
+                <SvgXml xml={IconUnActiveAudio} />
               );
             },
 

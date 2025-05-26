@@ -31,7 +31,7 @@ const baseQueryWithRath: BaseQueryFn<BaseQueryArgs, unknown, unknown> = async (
       data: args.body,
       headers: {
         ...args.headers,
-        Authorization: token ? `Bearer ${JSON.parse(token)}` : "",
+        Authorization: token ? `Bearer ${token}` : "",
       },
     });
 

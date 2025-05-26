@@ -4,7 +4,7 @@ const authSlice = api.injectEndpoints({
   endpoints: (builder) => ({
     // --------------------Start----------------------
     // ---------------Home --------------
-    getHome: builder.query<any, { params: any }>({
+    getHome: builder.query<any, { params?: any }>({
       query: ({ params }) => ({
         url: `/home`,
         params: params,
@@ -12,7 +12,7 @@ const authSlice = api.injectEndpoints({
       providesTags: ["home"],
     }),
     //------------- Global Category ---------------
-    getCategory: builder.query<any, { params: any }>({
+    getUserCategory: builder.query<any, { params?: any }>({
       query: ({ params }) => ({
         url: `/get-category`,
         params: params,
@@ -20,7 +20,7 @@ const authSlice = api.injectEndpoints({
       providesTags: ["category"],
     }),
     //--------------- Photos --------------------
-    getPhotos: builder.query<any, { params: any }>({
+    getPhotos: builder.query<any, { params?: any }>({
       query: ({ params }) => ({
         url: `/photos`,
         params: params,
@@ -28,21 +28,21 @@ const authSlice = api.injectEndpoints({
       providesTags: ["photo"],
     }),
     //-------------- Videos --------------
-    getVideos: builder.query<any, { params: any }>({
+    getVideos: builder.query<any, { params?: any }>({
       query: ({ params }) => ({
         url: `/videos`,
         params: params,
       }),
       providesTags: ["video"],
     }),
-    getComments: builder.query<any, { params: any }>({
+    getComments: builder.query<any, { params?: any }>({
       query: ({ params }) => ({
         url: `/video-comment`,
         params: params,
       }),
       providesTags: ["video"],
     }),
-    relatedVideos: builder.query<any, { params: any }>({
+    relatedVideos: builder.query<any, { params?: any }>({
       query: ({ params }) => ({
         url: `/related-videos`,
         params: params,
@@ -50,14 +50,14 @@ const authSlice = api.injectEndpoints({
       providesTags: ["video"],
     }),
     //-------------- Audios --------------
-    getAudios: builder.query<any, { params: any }>({
+    getAudios: builder.query<any, { params?: any }>({
       query: ({ params }) => ({
         url: `/audios`,
         params: params,
       }),
       //   providesTags: [""],
     }),
-    relatedAudios: builder.query<any, { params: any }>({
+    relatedAudios: builder.query<any, { params?: any }>({
       query: ({ params }) => ({
         url: `/related-audios`,
         params: params,
@@ -65,7 +65,7 @@ const authSlice = api.injectEndpoints({
       //   providesTags: ["user"],
     }),
     //-------------- Documents --------------
-    getDocument: builder.query<any, { params: any }>({
+    getDocument: builder.query<any, { params?: any }>({
       query: ({ params }) => ({
         url: `/documents`,
         params: params,
@@ -73,7 +73,7 @@ const authSlice = api.injectEndpoints({
       providesTags: ["document"],
     }),
     //-------------- Links --------------
-    getLinks: builder.query<any, { params: any }>({
+    getLinks: builder.query<any, { params?: any }>({
       query: ({ params }) => ({
         url: `/links`,
         params: params,
@@ -81,7 +81,7 @@ const authSlice = api.injectEndpoints({
       providesTags: ["links"],
     }),
     //-------------- Additional Page --------------
-    getAdditionalPage: builder.query<any, { params: any }>({
+    getAdditionalPage: builder.query<any, { params?: any }>({
       query: ({ params }) => ({
         url: `/pages`,
         params: params,
@@ -89,7 +89,7 @@ const authSlice = api.injectEndpoints({
       //   providesTags: ["user"],
     }),
     //-------------- Open App auto Hiter --------------
-    getAppOpen: builder.query<any, { params: any }>({
+    getAppOpen: builder.query<any, { params?: any }>({
       query: ({ params }) => ({
         url: `/app-open-count`,
         params: params,
@@ -99,10 +99,10 @@ const authSlice = api.injectEndpoints({
 
     //---------- post comments for videos -------------
 
-    postComment: builder.mutation<any, { params: any; data: any }>({
-      query: ({ params, data }) => ({
+    postComment: builder.mutation<any, any>({
+      query: (data) => ({
         url: `/video-comment`,
-        params: params,
+        method: "POST",
         body: data,
       }),
       invalidatesTags: ["video"],
@@ -118,7 +118,7 @@ export const {
   useGetAdditionalPageQuery,
   useGetAppOpenQuery,
   useGetAudiosQuery,
-  useGetCategoryQuery,
+  useGetUserCategoryQuery,
   useGetCommentsQuery,
   useGetDocumentQuery,
   useGetLinksQuery,
@@ -130,7 +130,7 @@ export const {
   useLazyGetAdditionalPageQuery,
   useLazyGetAppOpenQuery,
   useLazyGetAudiosQuery,
-  useLazyGetCategoryQuery,
+
   useLazyGetCommentsQuery,
   useLazyGetDocumentQuery,
   useLazyGetLinksQuery,

@@ -1,8 +1,8 @@
 import { ActivityIndicator, Text, View } from "react-native";
 
-import { PrimaryColor } from "../../utils/utils";
 import React from "react";
 import { SvgXml } from "react-native-svg";
+import { PrimaryColor } from "../../utils/utils";
 import tw from "../tailwind";
 
 interface NoFoundCardProps {
@@ -44,8 +44,8 @@ const EmptyCard = ({
 </svg>
 `}
           />
-          <Text style={tw`text-primary50 font-RobotoMedium text-sm`}>
-            {title ? title : "Not Found"}
+          <Text style={tw`text-gray-300 font-PoppinsRegular text-base`}>
+            {title ? title : "Sorry, no data found!"}
           </Text>
         </>
       )}
