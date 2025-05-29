@@ -12,10 +12,10 @@ import {
   IconUnActivePhoto,
   IconUnActiveVideo,
 } from "@/icons/Icon";
+import { PrimaryColor, _WIGHT } from "@/utils/utils";
 import { StatusBar, Text, TouchableOpacity, View } from "react-native";
 
 import tw from "@/lib/tailwind";
-import { PrimaryColor } from "@/utils/utils";
 import { Tabs } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
@@ -37,7 +37,7 @@ export default function TabRoutes() {
           // tabBarHideOnKeyboard: true,
           // tabBarActiveTintColor: "#000",
           // tabBarInactiveTintColor: "#000",
-          tabBarStyle: tw`bg-primary h-20  pb-0 pt-2  `,
+          tabBarStyle: tw`bg-primary h-20  flex-col  pb-0 pt-2  `,
           // tabBarButton: TabBarButton,
           animation: "fade",
         }}
@@ -47,36 +47,40 @@ export default function TabRoutes() {
           options={{
             headerShown: false,
 
-            tabBarIcon(props) {
-              return props.focused ? (
-                <SvgXml xml={IconActiveHome} />
-              ) : (
-                <SvgXml xml={IconUnActiveHome} />
-              );
-            },
-
             // // tabBarItemStyle: tw`border-b-4 border-b-primary px-1 rounded-md`,
-
+            tabBarIcon: () => null,
+            tabBarIconStyle: tw`hidden`,
             tabBarLabel(props) {
               return (
-                <>
-                  <Text
+                <View style={tw`flex-col h-full justify-between`}>
+                  <View style={tw`justify-center gap-1.5 items-center py-1`}>
+                    {props.focused ? (
+                      <SvgXml xml={IconActiveHome} />
+                    ) : (
+                      <SvgXml xml={IconUnActiveHome} />
+                    )}
+                    <Text
+                      style={[
+                        props.focused
+                          ? tw`text-white font-PoppinsSemiBold text-sm    `
+                          : tw`text-white text-sm font-PoppinsRegular `,
+                      ]}
+                    >
+                      Home
+                    </Text>
+                  </View>
+
+                  <View
                     style={[
                       props.focused
-                        ? tw`text-white font-PoppinsSemiBold text-sm pt-1  flex-1 `
-                        : tw`text-white text-sm font-PoppinsRegular pt-1 `,
+                        ? tw`bg-white  h-[.2rem] rounded-t-full `
+                        : tw`bg-transparent  h-[.2rem] `,
+                      {
+                        width: _WIGHT * 0.11,
+                      },
                     ]}
-                  >
-                    Home
-                  </Text>
-                  <View
-                    style={
-                      props.focused
-                        ? tw`bg-white  w-[80%] h-[.2rem] rounded-t-full `
-                        : tw`bg-transparent w-[80%] h-[.2rem] `
-                    }
                   />
-                </>
+                </View>
               );
             },
           }}
@@ -86,35 +90,40 @@ export default function TabRoutes() {
           options={{
             headerShown: false,
 
-            tabBarIcon(props) {
-              return props.focused ? (
-                <SvgXml xml={IconActivePhoto} />
-              ) : (
-                <SvgXml xml={IconUnActivePhoto} />
-              );
-            },
+            tabBarIcon: () => null,
+            tabBarIconStyle: tw`hidden`,
 
             tabBarLabel(props) {
               return (
-                <>
-                  <Text
+                <View style={tw`flex-col h-full justify-between`}>
+                  <View style={tw`justify-center gap-1.5 items-center py-1`}>
+                    {props.focused ? (
+                      <SvgXml xml={IconActivePhoto} />
+                    ) : (
+                      <SvgXml xml={IconUnActivePhoto} />
+                    )}
+                    <Text
+                      style={[
+                        props.focused
+                          ? tw`text-white font-PoppinsSemiBold text-sm    `
+                          : tw`text-white text-sm font-PoppinsRegular `,
+                      ]}
+                    >
+                      Photo
+                    </Text>
+                  </View>
+
+                  <View
                     style={[
                       props.focused
-                        ? tw`text-white font-PoppinsSemiBold text-sm pt-1 flex-1`
-                        : tw`text-white text-sm pt-1 font-PoppinsRegular flex-1`,
-                      tw`flex-1`,
+                        ? tw`bg-white  h-[.2rem] rounded-t-full `
+                        : tw`bg-transparent  h-[.2rem] `,
+                      {
+                        width: _WIGHT * 0.11,
+                      },
                     ]}
-                  >
-                    Photo
-                  </Text>
-                  <View
-                    style={
-                      props.focused
-                        ? tw`bg-white  w-[80%] h-[.2rem] rounded-t-full `
-                        : tw`bg-transparent  h-[.2rem] `
-                    }
                   />
-                </>
+                </View>
               );
             },
           }}
@@ -124,35 +133,40 @@ export default function TabRoutes() {
           options={{
             headerShown: false,
 
-            tabBarIcon(props) {
-              return props.focused ? (
-                <SvgXml xml={IconActiveVideo} />
-              ) : (
-                <SvgXml xml={IconUnActiveVideo} />
-              );
-            },
+            tabBarIcon: () => null,
+            tabBarIconStyle: tw`hidden`,
 
             tabBarLabel(props) {
               return (
-                <>
-                  <Text
+                <View style={tw`flex-col h-full justify-between`}>
+                  <View style={tw`justify-center gap-1.5 items-center py-1`}>
+                    {props.focused ? (
+                      <SvgXml xml={IconActiveVideo} />
+                    ) : (
+                      <SvgXml xml={IconUnActiveVideo} />
+                    )}
+                    <Text
+                      style={[
+                        props.focused
+                          ? tw`text-white font-PoppinsSemiBold text-sm    `
+                          : tw`text-white text-sm font-PoppinsRegular `,
+                      ]}
+                    >
+                      Video
+                    </Text>
+                  </View>
+
+                  <View
                     style={[
                       props.focused
-                        ? tw`text-white font-PoppinsSemiBold text-sm pt-1 flex-1`
-                        : tw`text-white text-sm pt-1 font-PoppinsRegular flex-1`,
-                      tw`flex-1`,
+                        ? tw`bg-white  h-[.2rem] rounded-t-full `
+                        : tw`bg-transparent  h-[.2rem] `,
+                      {
+                        width: _WIGHT * 0.11,
+                      },
                     ]}
-                  >
-                    Video
-                  </Text>
-                  <View
-                    style={
-                      props.focused
-                        ? tw`bg-white  w-[80%] h-[.2rem] rounded-t-full `
-                        : tw`bg-transparent  h-[.2rem] `
-                    }
                   />
-                </>
+                </View>
               );
             },
           }}
@@ -162,35 +176,40 @@ export default function TabRoutes() {
           options={{
             headerShown: false,
 
-            tabBarIcon(props) {
-              return props.focused ? (
-                <SvgXml xml={IconActiveAudio} />
-              ) : (
-                <SvgXml xml={IconUnActiveAudio} />
-              );
-            },
+            tabBarIcon: () => null,
+            tabBarIconStyle: tw`hidden`,
 
             tabBarLabel(props) {
               return (
-                <>
-                  <Text
+                <View style={tw`flex-col h-full justify-between`}>
+                  <View style={tw`justify-center gap-1.5 items-center py-1`}>
+                    {props.focused ? (
+                      <SvgXml xml={IconActiveAudio} />
+                    ) : (
+                      <SvgXml xml={IconUnActiveAudio} />
+                    )}
+                    <Text
+                      style={[
+                        props.focused
+                          ? tw`text-white font-PoppinsSemiBold text-sm    `
+                          : tw`text-white text-sm font-PoppinsRegular `,
+                      ]}
+                    >
+                      Audio
+                    </Text>
+                  </View>
+
+                  <View
                     style={[
                       props.focused
-                        ? tw`text-white font-PoppinsSemiBold text-sm pt-1 flex-1`
-                        : tw`text-white text-sm pt-1 font-PoppinsRegular flex-1`,
-                      tw`flex-1`,
+                        ? tw`bg-white  h-[.2rem] rounded-t-full `
+                        : tw`bg-transparent  h-[.2rem] `,
+                      {
+                        width: _WIGHT * 0.11,
+                      },
                     ]}
-                  >
-                    Audio
-                  </Text>
-                  <View
-                    style={
-                      props.focused
-                        ? tw`bg-white  w-[80%] h-[.2rem] rounded-t-full `
-                        : tw`bg-transparent  h-[.2rem] `
-                    }
                   />
-                </>
+                </View>
               );
             },
           }}
@@ -203,34 +222,40 @@ export default function TabRoutes() {
             // tabBarItemStyle: {
             //     display: user?.role === "Admin" ? "flex" : "none",
             //   },
-            tabBarIcon(props) {
-              return props.focused ? (
-                <SvgXml xml={IconActiveDocument} />
-              ) : (
-                <SvgXml xml={IconUnActiveDocument} />
-              );
-            },
+            tabBarIcon: () => null,
+            tabBarIconStyle: tw`hidden`,
 
             tabBarLabel(props) {
               return (
-                <>
-                  <Text
+                <View style={tw`flex-col h-full justify-between`}>
+                  <View style={tw`justify-center gap-1.5 items-center py-1`}>
+                    {props.focused ? (
+                      <SvgXml xml={IconActiveDocument} />
+                    ) : (
+                      <SvgXml xml={IconUnActiveDocument} />
+                    )}
+                    <Text
+                      style={[
+                        props.focused
+                          ? tw`text-white font-PoppinsSemiBold text-sm    `
+                          : tw`text-white text-sm font-PoppinsRegular `,
+                      ]}
+                    >
+                      Doc
+                    </Text>
+                  </View>
+
+                  <View
                     style={[
                       props.focused
-                        ? tw`text-white font-PoppinsSemiBold text-sm pt-1 flex-1`
-                        : tw`text-white text-sm pt-1 font-PoppinsRegular flex-1`,
+                        ? tw`bg-white  h-[.2rem] rounded-t-full `
+                        : tw`bg-transparent  h-[.2rem] `,
+                      {
+                        width: _WIGHT * 0.11,
+                      },
                     ]}
-                  >
-                    Doc
-                  </Text>
-                  <View
-                    style={
-                      props.focused
-                        ? tw`bg-white  w-[80%] h-[.2rem] rounded-t-full`
-                        : tw`bg-transparent  h-[.2rem] `
-                    }
                   />
-                </>
+                </View>
               );
             },
           }}
@@ -243,35 +268,40 @@ export default function TabRoutes() {
             // tabBarItemStyle: {
             //     display: user?.role === "Admin" ? "flex" : "none",
             //   },
-            tabBarIcon(props) {
-              return props.focused ? (
-                <SvgXml xml={IconActiveLinks} />
-              ) : (
-                <SvgXml xml={IconUnActiveLinks} />
-              );
-            },
+            tabBarIcon: () => null,
+            tabBarIconStyle: tw`hidden`,
 
             tabBarLabel(props) {
               return (
-                <>
-                  <Text
+                <View style={tw`flex-col h-full justify-between`}>
+                  <View style={tw`justify-center gap-1.5 items-center py-1`}>
+                    {props.focused ? (
+                      <SvgXml xml={IconActiveLinks} />
+                    ) : (
+                      <SvgXml xml={IconUnActiveLinks} />
+                    )}
+                    <Text
+                      style={[
+                        props.focused
+                          ? tw`text-white font-PoppinsSemiBold text-sm    `
+                          : tw`text-white text-sm font-PoppinsRegular `,
+                      ]}
+                    >
+                      Video
+                    </Text>
+                  </View>
+
+                  <View
                     style={[
                       props.focused
-                        ? tw`text-white font-PoppinsSemiBold text-sm pt-1 flex-1`
-                        : tw`text-white text-sm pt-1 font-PoppinsRegular flex-1`,
-                      tw`flex-1`,
+                        ? tw`bg-white  h-[.2rem] rounded-t-full `
+                        : tw`bg-transparent  h-[.2rem] `,
+                      {
+                        width: _WIGHT * 0.11,
+                      },
                     ]}
-                  >
-                    Links
-                  </Text>
-                  <View
-                    style={
-                      props.focused
-                        ? tw`bg-white  w-[80%] h-[.2rem] rounded-t-full `
-                        : tw`bg-transparent  h-[.2rem] `
-                    }
                   />
-                </>
+                </View>
               );
             },
           }}

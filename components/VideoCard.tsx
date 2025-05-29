@@ -3,6 +3,7 @@ import { Image, Text, View } from "react-native";
 
 import IButton from "@/lib/buttons/IButton";
 import tw from "@/lib/tailwind";
+import { _HIGHT } from "@/utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -20,7 +21,12 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
             uri: tutorial?.thumbnail,
           }}
           resizeMode="cover"
-          style={tw`w-full h-40 rounded-md`}
+          style={[
+            tw`w-full   rounded-t-lg`,
+            {
+              height: _HIGHT * 0.2,
+            },
+          ]}
         />
         <View
           style={tw`absolute bottom-0 h-full justify-center items-center left-0 right-0 bg-black/10 p-2`}

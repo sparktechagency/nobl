@@ -2,6 +2,7 @@ import { IconDoc, IconExcel, IconPdf } from "@/icons/Icon";
 import { Text, TouchableOpacity, View } from "react-native";
 
 import tw from "@/lib/tailwind";
+import { _HIGHT } from "@/utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
@@ -73,7 +74,12 @@ const DocumentCard = ({ document }: { document: any }) => {
     >
       <Image
         source={{ uri: document?.thumbnail }}
-        style={tw`w-full h-44 border-b-0 border-t-2  border-r-2 border-l-2 border-gray-800 rounded-t-lg`}
+        style={[
+          tw`w-full h-44 border-b-0 border-t-2  border-r-2 border-l-2 border-gray-800 rounded-t-lg`,
+          {
+            height: _HIGHT * 0.2,
+          },
+        ]}
         contentFit="cover"
       />
       <View

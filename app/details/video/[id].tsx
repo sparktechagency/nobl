@@ -15,7 +15,6 @@ import { PrimaryColor, _HIGHT } from "@/utils/utils";
 import { router, useLocalSearchParams } from "expo-router";
 import { VideoView, useVideoPlayer } from "expo-video";
 import {
-  ActivityIndicator,
   FlatList,
   Platform,
   RefreshControl,
@@ -93,20 +92,23 @@ const VideoDetails = () => {
       setComment(""); // Clear the input after posting
       // Optionally, you can refetch comments or update the state to show the new comment
     } catch (error) {
-      console.error("Failed to add comment:", error);
+      console.warn("Failed to add comment:", error);
     }
   };
 
   // console.log(data?.video);
   const videoSource = data?.video;
 
-  const player = useVideoPlayer(videoSource, (player) => {
-    player.loop = false; // Set loop to false if you don't want the video to loop
-    player.play();
-  });
+  const player = useVideoPlayer(
+    "http://182.252.68.227:8003/uploads/videos/video/1748261788.mp4",
+    (player) => {
+      player.loop = false; // Set loop to false if you don't want the video to loop
+      player.play();
+    }
+  );
 
-  const { status, error } = useEvent(player, "statusChange", {
-    status: player?.status,
+  const { isPlaying } = useEvent(player, "playingChange", {
+    isPlaying: player.playing,
   });
 
   // console.log("rendering video details", Comments);
@@ -117,11 +119,7 @@ const VideoDetails = () => {
     const getNewData = await AsyncStorage.getItem("video");
     try {
       const finalData = JSON.parse(getNewData as any);
-      // console.log(finalData);
-      if (finalData) {
-        // console.log(newDocument);
-        setData(finalData);
-      }
+      setData(finalData);
     } catch (error) {
       // console.log(error);
     }
@@ -129,7 +127,7 @@ const VideoDetails = () => {
 
   React.useEffect(() => {
     handleLoadData();
-  }, [id]);
+  }, []);
 
   const [loading, setLoading] = React.useState(false);
   // console.log(player.currentStatus.playbackState, "Playback State");
@@ -161,6 +159,27 @@ const VideoDetails = () => {
     }
   };
 
+  // console.log(data);
+  // console.log(player);
+
+  // ...Imports, definition of the component, creating the player etc.
+
+  React.useEffect(() => {
+    const subscription = player.addListener(
+      "statusChange",
+      ({ status, error }) => {
+        // setPlayerStatus(status);
+        // setPlayerError(error);
+        console.log("Player status changed: ", status);
+      }
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+  // Rest of the component...
+
   return (
     <View key={id as string} style={tw`flex-1 bg-white`}>
       {/* Header Parts  */}
@@ -190,35 +209,25 @@ const VideoDetails = () => {
         contentContainerStyle={tw`bg-base `}
         style={tw`flex-1`}
       >
-        <View style={tw` gap-4  mb-5`}>
-          {/* VIdeo Player */}
-          <View style={tw`rounded-md `}>
-            <View
-              style={tw`w-full h-52 justify-center items-center rounded-md `}
-            >
-              {status === "loading" ? (
-                <View>
-                  <ActivityIndicator size="large" color="#4B5320" />
-                </View>
-              ) : !data?.video ? (
-                <View
-                  style={tw`flex-1 w-full border-opacity-15 rounded-md justify-center items-center border border-primary`}
-                >
-                  <ActivityIndicator size="large" color="#4B5320" />
-                </View>
-              ) : (
-                <VideoView
-                  style={tw`w-full aspect-video `}
-                  player={player}
-                  allowsFullscreen
-                  allowsPictureInPicture
-                />
-              )}
-            </View>
-          </View>
-          {/* Video Details */}
+        {/* VIdeo Player */}
+
+        <View style={tw`w-full h-52 justify-center items-center rounded-md `}>
+          {isPlaying && (
+            <VideoView
+              style={tw`w-full aspect-video `}
+              player={player}
+              allowsFullscreen
+              shouldRasterizeIOS
+              allowsPictureInPicture
+            />
+          )}
+        </View>
+
+        {/* Video Details */}
+
+        <View style={tw` mt-4  h-12`}>
           <View
-            style={tw`gap-1.5 flex-1 flex-row justify-between items-center px-4 mt-2`}
+            style={tw`gap-1.5  flex-1 flex-row justify-between items-center px-4 mt-2`}
           >
             <Text style={tw`font-PoppinsSemiBold text-base flex-1`}>
               {data?.title}
@@ -230,6 +239,7 @@ const VideoDetails = () => {
             </Text>
           </View>
         </View>
+
         <TouchableOpacity
           onPress={() => {
             setIsModalVisible(true);

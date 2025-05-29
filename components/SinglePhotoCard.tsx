@@ -6,6 +6,7 @@ import { Alert, Platform, Pressable, Text } from "react-native";
 import { IconDownload } from "@/icons/Icon";
 import IButton from "@/lib/buttons/IButton";
 import tw from "@/lib/tailwind";
+import { _HIGHT } from "@/utils/utils";
 import { Image } from "expo-image";
 import React from "react";
 
@@ -73,7 +74,7 @@ const SinglePhotoCard = ({ photo }: { photo?: any }) => {
         source={{ uri: photo?.thumbnail }}
         style={{
           width: "100%",
-          height: 200,
+          height: _HIGHT * 0.2,
         }}
         contentFit="cover"
       />

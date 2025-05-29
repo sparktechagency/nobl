@@ -22,16 +22,18 @@ import EmptyCard from "@/lib/Empty/EmptyCard";
 import tw from "@/lib/tailwind";
 import { useRelatedAudiosQuery } from "@/redux/apiSlices/user/userApiSlices";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Slider from "@react-native-community/slider";
 import { useAudioPlayer } from "expo-audio";
 import React from "react";
+import { Slider } from "react-native-awesome-slider";
 import RNFetchBlob from "react-native-blob-util";
+import { useSharedValue } from "react-native-reanimated";
 
 const VideoDetails = () => {
   const { id } = useLocalSearchParams();
   const [data, setData] = React.useState<any>(null);
   const [currentTime, setCurrentTime] = React.useState(0);
-  const ref = React.useRef(null);
+  const [fullDuration, setFullDuration] = React.useState(0);
+
   const {
     data: relativeAudios,
     isLoading: relativeAudioLoading,
@@ -53,7 +55,6 @@ const VideoDetails = () => {
   const player = useAudioPlayer(data?.audio);
 
   // console.log("rendering video details", Comments);
-
   // Add this useEffect to handle playback status changes
   // Get the correct file URL based on type
   const handleLoadData = async () => {
@@ -74,23 +75,10 @@ const VideoDetails = () => {
     handleLoadData();
   }, [id]);
 
-  React.useEffect(() => {
-    player.addListener("playbackStatusUpdate", (start) => {
-      // console.log(start, "Playback Status Update");
-      setCurrentTime(start.currentTime);
-    });
-    return () => {
-      player.removeAllListeners("playbackStatusUpdate");
-    };
-  }, [player]);
+  const progress = useSharedValue(0);
+  const min = useSharedValue(0);
+  const max = useSharedValue(0);
 
-  React.useEffect(() => {
-    if (data?.audio && player) {
-      // console.log("Setting audio for player", data?.audio);
-
-      player.play();
-    }
-  }, [player, data?.audio]);
   const [loading, setLoading] = React.useState(false);
   // console.log(player.currentStatus.playbackState, "Playback State");
   const handleDownload = async () => {
@@ -121,6 +109,35 @@ const VideoDetails = () => {
     }
   };
 
+  React.useEffect(() => {
+    const setupPlayer = async () => {
+      try {
+        // Just play the audio directly - it will handle loading
+        player.play();
+
+        // Setup listeners
+        player.setAudioSamplingEnabled(true);
+        player.addListener("playbackStatusUpdate", (status) => {
+          console.log(status);
+          setCurrentTime(status.currentTime);
+          setFullDuration(status?.duration);
+          max.value = status.duration;
+          progress.value = status.currentTime;
+        });
+      } catch (error) {
+        console.error("Player initialization error:", error);
+      }
+    };
+
+    if (data?.audio) {
+      setupPlayer();
+    }
+
+    return () => {
+      player.removeAllListeners("playbackStatusUpdate");
+    };
+  }, [data?.audio, player.isLoaded]);
+
   return (
     <View key={id as string} style={tw`flex-1 bg-white`}>
       {/* Header Parts  */}
@@ -149,10 +166,11 @@ const VideoDetails = () => {
         <View style={tw`m-4 p-6 bg-primary rounded-lg `}>
           <View style={tw`flex-row justify-between items-center mt-2`}>
             <Text style={tw`text-xs text-gray-100`}>
-              {new Date(currentTime * 1000).toISOString().substr(11, 8)}
+              {new Date(currentTime * 1000)?.toISOString()?.substr(11, 8)}
             </Text>
             <Text style={tw`text-xs text-gray-100`}>
-              {new Date(player.duration * 1000).toISOString().substr(11, 8)}
+              {fullDuration &&
+                new Date(fullDuration * 1000)?.toISOString()?.substr(11, 8)}
             </Text>
           </View>
           {player?.currentStatus.playbackState == "idle" ? (
@@ -164,24 +182,35 @@ const VideoDetails = () => {
           ) : (
             <>
               <Slider
-                accessible
                 onValueChange={(value) => {
-                  // console.log(value);
+                  console.log(value);
                   player.seekTo(value);
                 }}
-                thumbTintColor="red"
-                disabled={player.duration === 0}
-                minimumTrackTintColor={PrimaryColor}
-                minimumValue={0}
-                maximumValue={player.duration || 1}
-                collapsableChildren={false}
-                value={currentTime}
-                style={tw`w-full`}
+                bubbleContainerStyle={tw`h-4 w-4 hidden bg-white`}
+                style={tw`bg-green-500 my-5 text-white`}
+                renderThumb={() => null}
+                // thumbScaleValue={}
+                renderTrack={() => null}
+                thumbWidth={0}
+                markStyle={tw`bg-gray-600 h-4 text-white`}
+                bubbleTextStyle={tw`text-white bg-red-600`}
+                containerStyle={tw`bg-gray-100 h-3 rounded-full border border-white`}
+                progress={progress}
+                minimumValue={min}
+                maximumValue={max}
+                theme={{
+                  disableMinTrackTintColor: "#fff",
+                  maximumTrackTintColor: "#fff",
+                  minimumTrackTintColor: PrimaryColor,
+                  cacheTrackTintColor: "#333",
+                  bubbleBackgroundColor: "#666",
+                  heartbeatColor: "#999",
+                }}
               />
             </>
           )}
           {/* play puse button and 5ms back and forward buttons  */}
-          <View style={tw`flex-row justify-between items-center mt-2`}>
+          <View style={tw`flex-row mx-10 justify-between items-center `}>
             <IwtButton
               svg={IconPlayerBackButton}
               containerStyle={tw`bg-transparent p-2 rounded-full`}
@@ -192,11 +221,17 @@ const VideoDetails = () => {
             <IwtButton
               svg={player.playing ? IconPlayerPuseButton : IconPlayerPlayButton}
               containerStyle={tw`bg-transparent p-2 rounded-full`}
-              onPress={() => {
-                if (player.playing) {
-                  player.pause();
-                } else {
-                  player.play();
+              onPress={async () => {
+                try {
+                  if (player.playing) {
+                    player.pause();
+                  } else if (player.currentStatus.didJustFinish) {
+                    player.seekTo(1);
+                  } else {
+                    player.play();
+                  }
+                } catch (error) {
+                  console.warn("Error toggling playback:", error);
                 }
               }}
             />
