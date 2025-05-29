@@ -86,7 +86,7 @@ const DocumentCard = ({ document }: { document: any }) => {
           <Text
             style={tw`bg-primary text-white text-center text-xs py-1 self-start px-2 rounded-md font-PoppinsMedium `}
           >
-            {document?.category}
+            {document?.category?.name}
           </Text>
         </View>
         <Text style={tw`text-primary text-xs font-PoppinsMedium`}>

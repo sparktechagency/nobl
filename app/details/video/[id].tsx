@@ -11,12 +11,14 @@ import {
   usePostCommentMutation,
   useRelatedVideosQuery,
 } from "@/redux/apiSlices/user/userApiSlices";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { PrimaryColor, _HIGHT } from "@/utils/utils";
+import { router, useLocalSearchParams } from "expo-router";
 import { VideoView, useVideoPlayer } from "expo-video";
 import {
   ActivityIndicator,
   FlatList,
-  Keyboard,
+  Platform,
+  RefreshControl,
   ScrollView,
   Text,
   TextInput,
@@ -25,27 +27,24 @@ import {
 } from "react-native";
 
 import VideoCard from "@/components/VideoCard";
+import EmptyCard from "@/lib/Empty/EmptyCard";
 import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
 import IButton from "@/lib/buttons/IButton";
 import IwtButton from "@/lib/buttons/IwtButton";
 import TButton from "@/lib/buttons/TButton";
-import EmptyCard from "@/lib/Empty/EmptyCard";
-import SideModal from "@/lib/modals/SideModal";
+import BottomModal from "@/lib/modals/BottomModal";
 import tw from "@/lib/tailwind";
-import { _HIGHT } from "@/utils/utils";
+import Avatar from "@/lib/ui/Avatar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEvent } from "expo";
 import React from "react";
+import RNFetchBlob from "react-native-blob-util";
 import { SvgXml } from "react-native-svg";
-import { Avatar } from "react-native-ui-lib";
 
 const VideoDetails = () => {
-  const router = useRouter();
-
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [selectedTutorial, setSelectedTutorial] = React.useState(null);
   const [comment, setComment] = React.useState("");
-
   const { id } = useLocalSearchParams();
   const [data, setData] = React.useState<any>(null);
 
@@ -53,9 +52,11 @@ const VideoDetails = () => {
     data: Comments,
     isLoading: commentLoading,
     isFetching: commentFetching,
+    refetch: commentRetch,
   } = useGetCommentsQuery({
     params: {
       video_id: id,
+      per_page: 500,
     },
   });
 
@@ -63,11 +64,13 @@ const VideoDetails = () => {
     data: relativeVideos,
     isLoading: relativeVideosLoading,
     isFetching: relativeVideosFetching,
+    refetch: relativeRefetch,
   } = useRelatedVideosQuery(
     {
       params: {
         video_id: id,
         category_id: data?.category_id, // Assuming data has category_id
+        per_page: 500,
       },
     },
     {
@@ -127,8 +130,39 @@ const VideoDetails = () => {
   React.useEffect(() => {
     handleLoadData();
   }, [id]);
+
+  const [loading, setLoading] = React.useState(false);
+  // console.log(player.currentStatus.playbackState, "Playback State");
+  const handleDownload = async () => {
+    setLoading(true);
+    try {
+      const res = await RNFetchBlob.config({
+        fileCache: true,
+        appendExt: "mp4",
+        addAndroidDownloads: {
+          useDownloadManager: true,
+          storeLocal: true,
+          storeInDownloads: true,
+          mediaScannable: true,
+          notification: true,
+          title: `${data?.title}.mp4`,
+          description: "File downloaded by download manager.",
+          path: `${RNFetchBlob.fs.dirs.DownloadDir}/${data?.title}.mp4`,
+        },
+      }).fetch("GET", data?.video);
+
+      if (Platform.OS === "ios") {
+        RNFetchBlob.ios.previewDocument(res.path());
+      }
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+
   return (
-    <View key={id || null} style={tw`flex-1 bg-white`}>
+    <View key={id as string} style={tw`flex-1 bg-white`}>
       {/* Header Parts  */}
       <View
         style={tw`flex-row pt-3 justify-between items-center bg-primary pr-4`}
@@ -136,16 +170,22 @@ const VideoDetails = () => {
         <BackWithComponent onPress={() => router.back()} />
         <IwtButton
           title="Download"
+          isLoading={loading}
+          loadingColor={PrimaryColor}
           svg={IconDownload}
-          disabled={status === "loading"}
+          // disabled={status === "loading"}
           containerStyle={tw`bg-white p-1 h-9 px-3 rounded-md`}
           titleStyle={tw`text-primary font-PoppinsRegular`}
           onPress={() => {
+            handleDownload();
             console.log("Download");
           }}
         />
       </View>
       <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={false} onRefresh={relativeRefetch} />
+        }
         showsVerticalScrollIndicator={false}
         contentContainerStyle={tw`bg-base `}
         style={tw`flex-1`}
@@ -156,7 +196,11 @@ const VideoDetails = () => {
             <View
               style={tw`w-full h-52 justify-center items-center rounded-md `}
             >
-              {!data?.video ? (
+              {status === "loading" ? (
+                <View>
+                  <ActivityIndicator size="large" color="#4B5320" />
+                </View>
+              ) : !data?.video ? (
                 <View
                   style={tw`flex-1 w-full border-opacity-15 rounded-md justify-center items-center border border-primary`}
                 >
@@ -182,7 +226,7 @@ const VideoDetails = () => {
             <Text
               style={tw`bg-primary text-white text-center text-xs py-1 self-start px-2 rounded-md font-PoppinsMedium `}
             >
-              {data?.category}
+              {data?.category?.name || "Uncategorized"}
             </Text>
           </View>
         </View>
@@ -203,11 +247,12 @@ const VideoDetails = () => {
           </View>
           <View style={tw`flex-row items-center gap-2`}>
             <Avatar
-              size={30}
+              size={50}
               source={{
-                uri: Comments?.data?.data[0]?.user?.photo || "",
+                uri: Comments?.data?.data[0]?.user?.photo,
               }}
             />
+
             <Text
               numberOfLines={2}
               style={tw`flex-1 font-PoppinsRegular text-sm text-gray-600`}
@@ -221,49 +266,52 @@ const VideoDetails = () => {
         </View>
         <View style={tw`bg-gray-100 py-10 rounded-t-3xl px-4`}>
           <View style={tw`border border-gray-300 rounded-lg py-4 px-2 gap-5 `}>
-            {relativeVideos?.data?.map((tutorial) => (
+            {relativeVideos?.data?.map((tutorial: any) => (
               <VideoCard key={tutorial.id} tutorial={tutorial} />
             ))}
           </View>
         </View>
       </ScrollView>
-
-      <SideModal
+      <BottomModal
+        draggable
+        height={_HIGHT * 0.5}
         visible={isModalVisible}
-        setVisible={() => {
-          Keyboard.dismiss();
-          setIsModalVisible(false);
-        }}
-        containerStyle={tw`bg-base`}
-        scrollable
-        props={{
-          renderPannableHeader: () => (
-            <View
-              style={tw`flex-row justify-between items-center bg-primary p-2`}
-            >
-              <View style={tw`mx-3`} />
-              <View>
-                <Text style={tw`text-white font-PoppinsRegular text-base`}>
-                  Comments
-                </Text>
-              </View>
-              <IButton
-                svg={IconClose}
-                onPress={() => {
-                  Keyboard.dismiss();
-                  setIsModalVisible(false);
-                }}
-                containerStyle={tw`bg-transparent self-end`}
-              />
+        setVisible={setIsModalVisible}
+        customStyles={tw`rounded-md`}
+        headerComponent={
+          <View
+            style={tw`w-full flex-row justify-between items-center bg-primary p-2`}
+          >
+            <View style={tw`mx-3`} />
+            <View>
+              <Text style={tw`text-white font-PoppinsRegular text-base`}>
+                Comments
+              </Text>
             </View>
-          ),
-        }}
+            <IButton
+              svg={IconClose}
+              onPress={() => {
+                setIsModalVisible(false);
+              }}
+              containerStyle={tw`bg-transparent self-end`}
+            />
+          </View>
+        }
       >
         {/* <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={150}
         > */}
+
         <FlatList
+          // scrollEnabled={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={false}
+              onRefresh={commentRetch}
+              colors={[PrimaryColor]}
+            />
+          }
           ListEmptyComponent={() => (
             <EmptyCard
               isLoading={commentLoading || commentFetching}
@@ -271,7 +319,7 @@ const VideoDetails = () => {
             />
           )}
           style={tw`min-h-[20rem] max-h-[24rem] bg-base`}
-          contentContainerStyle={tw`px-4 pt-2 gap-2`} // Extra padding for input
+          contentContainerStyle={tw`px-4 pt-2 pb-4 gap-2`} // Extra padding for input
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
           data={Comments?.data?.data}
@@ -280,9 +328,9 @@ const VideoDetails = () => {
             return (
               <View style={tw`flex-row gap-2 pt-2`}>
                 <Avatar
-                  size={45}
+                  size={40}
                   source={{
-                    uri: item?.user?.photo,
+                    uri: Comments?.data?.data[0]?.user?.photo,
                   }}
                 />
                 <View style={tw`flex-1`}>
@@ -340,10 +388,6 @@ const VideoDetails = () => {
               placeholder="Write a comment"
               value={comment}
               onChangeText={setComment}
-              onSubmitEditing={() => {
-                handleAddComment();
-                Keyboard.dismiss();
-              }}
               returnKeyType="send"
               placeholderTextColor={tw.color(`gray-500`)}
             />
@@ -357,7 +401,7 @@ const VideoDetails = () => {
           </View>
         </View>
         {/* </KeyboardAvoidingView> */}
-      </SideModal>
+      </BottomModal>
     </View>
   );
 };

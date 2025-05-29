@@ -13,7 +13,7 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
   // console.log(tutorial?.type);
 
   return (
-    <View style={tw`bg-deepBlue50 shadow-md rounded-md `}>
+    <View style={tw`bg-deepBlue50 shadow-md overflow-hidden rounded-md `}>
       <View>
         <Image
           source={{
@@ -48,7 +48,7 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
           <Text
             style={tw`bg-primary text-white text-center text-xs py-1 self-start px-2 rounded-md font-PoppinsMedium `}
           >
-            {tutorial?.category}
+            {tutorial?.category?.name}
           </Text>
         </View>
         <IButton

@@ -48,7 +48,7 @@ const AudioCard = ({ audio }: { audio: any }) => {
           <Text
             style={tw`bg-primary text-white text-center text-xs py-1 self-start px-2 rounded-md font-PoppinsMedium `}
           >
-            {audio?.category}
+            {audio?.category?.name}
           </Text>
         </View>
         <IButton

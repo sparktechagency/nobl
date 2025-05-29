@@ -24,6 +24,11 @@ const TabBarButton = (props: any) => {
   return <TouchableOpacity {...props} />;
 };
 
+export const unstable_settings = {
+  // Ensure any route can link back to `/`
+  initialRouteName: "index",
+};
+
 export default function TabRoutes() {
   return (
     <>
@@ -176,7 +181,7 @@ export default function TabRoutes() {
                       tw`flex-1`,
                     ]}
                   >
-                    Video
+                    Audio
                   </Text>
                   <View
                     style={

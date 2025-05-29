@@ -13,22 +13,27 @@ import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
 import { useLoginMutation } from "@/redux/apiSlices/authApiSlices";
-import { PrimaryColor } from "@/utils/utils";
 import { toast } from "@backpackapp-io/react-native-toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Checkbox from "expo-checkbox";
 import { Formik } from "formik";
 import { Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Checkbox } from "react-native-ui-lib";
 
 const login = () => {
   const router = useRouter();
   const [checkBox, setCheckBox] = useState(false);
   const [login] = useLoginMutation();
+  const [saveLoinInfo, setLoginInfo] = React.useState<any>(null);
 
-  const handleFromSubmit = async (values) => {
-    console.log(values);
+  // console.log(saveLoinInfo);
+
+  const handleFromSubmit = async (values: any) => {
+    // console.log(values);
     try {
+      if (checkBox) {
+        AsyncStorage.setItem("loginInfo", JSON.stringify({ values }));
+      }
       const res = await login(values).unwrap();
       if (res.status) {
         AsyncStorage.setItem("token", res?.data?.access_token);
@@ -60,6 +65,18 @@ const login = () => {
 
   const { top } = useSafeAreaInsets();
 
+  const handleSaveLoginInfo = async () => {
+    const info = await AsyncStorage.getItem("loginInfo");
+    const check = await AsyncStorage.getItem("check");
+    setCheckBox(JSON.parse(check));
+    // console.log("check",JSON.parse(check));
+    setLoginInfo(JSON.parse(info));
+  };
+
+  React.useEffect(() => {
+    handleSaveLoginInfo();
+  }, []);
+  // console.log(checkBox);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -80,9 +97,10 @@ const login = () => {
 
         <View style={tw`bg-primary w-full p-4 rounded-t-[2rem] pt-8 pb-5`}>
           <Formik
-            initialValues={{ email: "", password: "" }}
+            initialValues={saveLoinInfo?.values || { email: "", password: "" }}
             onSubmit={handleFromSubmit}
             validate={validate}
+            enableReinitialize
           >
             {({
               handleChange,
@@ -122,18 +140,26 @@ const login = () => {
                   style={tw`gap-4 py-8 flex-row items-center justify-between`}
                 >
                   <TouchableOpacity
-                    onPress={() => {
+                    onPress={async () => {
+                      await AsyncStorage.setItem(
+                        "check",
+                        JSON.stringify(!checkBox)
+                      );
                       setCheckBox(!checkBox);
                     }}
                     style={tw`flex-row items-center gap-2`}
                   >
                     <Checkbox
-                      color="white"
-                      iconColor={PrimaryColor}
+                      // color={"white"}
+                      style={tw`border border-gray-50`}
                       value={checkBox}
-                      size={20}
-                      containerStyle={tw` rounded`}
-                      onValueChange={setCheckBox}
+                      onValueChange={async (value) => {
+                        await AsyncStorage.setItem(
+                          "check",
+                          JSON.stringify(value)
+                        );
+                        setCheckBox(value);
+                      }}
                     />
                     <Text style={tw`text-white text-sm font-PoppinsRegular`}>
                       Remember me

@@ -18,13 +18,11 @@ import React from "react";
 const PhotoCard = ({
   photo,
 }: {
-  photo: {
-    id: number;
-    category: string;
-    image: string;
-  };
+  photo: any; // Assuming photo has properties like id, image, category
 }) => {
   const { width: screenWidth } = useWindowDimensions();
+
+  // console.log(photo);
 
   const [loading, setLoading] = React.useState(false);
   const [height, setHeight] = React.useState(0);
@@ -45,7 +43,7 @@ const PhotoCard = ({
         }
       }
 
-      const uri = photo.image;
+      const uri = photo.photo || "";
       const fileName = `photo-${photo.id}-${Date.now()}.jpg`;
 
       // For Android: Save to downloads folder
@@ -99,7 +97,7 @@ const PhotoCard = ({
   return (
     <Pressable style={tw`m-1 relative rounded-md overflow-hidden`}>
       <Image
-        source={{ uri: photo?.image }}
+        source={{ uri: photo?.photo }}
         style={{
           width: "100%",
           height: height,
@@ -109,7 +107,7 @@ const PhotoCard = ({
       <Text
         style={tw`absolute px-2 py-1 bottom-2 left-2 rounded-md bg-primary text-white font-PoppinsRegular text-[0.56rem]`}
       >
-        {photo.category}
+        {photo.category?.name || "Uncategorized"}
       </Text>
       <IButton
         svg={IconDownload}

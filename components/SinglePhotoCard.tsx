@@ -9,13 +9,7 @@ import tw from "@/lib/tailwind";
 import { Image } from "expo-image";
 import React from "react";
 
-interface Photo {
-  id: number;
-  category: string;
-  thumbnail: string;
-}
-
-const SinglePhotoCard = ({ photo }: { photo?: Photo }) => {
+const SinglePhotoCard = ({ photo }: { photo?: any }) => {
   const [loading, setLoading] = React.useState(false);
   const [height, setHeight] = React.useState(0);
 
@@ -86,7 +80,7 @@ const SinglePhotoCard = ({ photo }: { photo?: Photo }) => {
       <Text
         style={tw`absolute px-2 py-1 bottom-2 left-2 rounded-md bg-primary text-white font-PoppinsRegular text-[0.56rem]`}
       >
-        {photo?.category}
+        {photo?.category?.name}
       </Text>
       <IButton
         svg={IconDownload}

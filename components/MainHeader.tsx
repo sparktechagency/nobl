@@ -1,14 +1,14 @@
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 import { IconSettings } from "@/icons/Icon";
 import IButton from "@/lib/buttons/IButton";
 import tw from "@/lib/tailwind";
+import Avatar from "@/lib/ui/Avatar";
 import { useGetProfileQuery } from "@/redux/apiSlices/authApiSlices";
 import { getGreeting } from "@/utils/utils";
 import { router } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
-import { Avatar } from "react-native-ui-lib";
 
 const MainHeader = () => {
   const { data: UserData } = useGetProfileQuery({});
@@ -20,19 +20,23 @@ const MainHeader = () => {
         <Text style={tw`text-white font-PoppinsBold text-xl`}>
           {getGreeting()},
         </Text>
-        <View
+        <TouchableOpacity
+          onPress={() => {
+            router?.push("/setting/my_profile");
+          }}
           style={tw`flex-row items-center gap-2 border border-white self-start px-3 py-1 rounded-md`}
         >
           <Avatar
-            size={37}
+            size={40}
             source={{
               uri: UserData?.data?.photo,
             }}
           />
+
           <Text style={tw`text-white font-PoppinsMedium text-lg`}>
             {UserData?.data?.name}
           </Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <IButton
         onPress={() => {

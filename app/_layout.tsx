@@ -7,7 +7,10 @@ import { SafeAreaView } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
-
+export const unstable_settings = {
+  // Ensure any route can link back to `/`
+  initialRouteName: "index",
+};
 export default function RootLayout() {
   const { bottom, top } = useSafeAreaInsets();
   return (

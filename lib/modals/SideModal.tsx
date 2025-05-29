@@ -1,52 +1,57 @@
-import { Dialog, DialogProps, PanningProvider } from "react-native-ui-lib";
+import React, { useRef } from "react";
 
-import React from "react";
-import { Pressable } from "react-native";
-import tw from "../tailwind";
+import { _HIGHT } from "@/utils/utils";
+import { ScrollView } from "react-native";
+import RBSheet from "react-native-raw-bottom-sheet";
 
-interface SideModalProps {
-  visible?: boolean;
-  setVisible?: React.Dispatch<React.SetStateAction<boolean>>;
-  layerContainerStyle?: any;
-  containerStyle?: any;
-  children?: React.ReactNode;
+interface BottomSheetProps {
+  children: React.ReactNode;
   scrollable?: boolean;
-  headerOff?: boolean;
-  closeBTN?: boolean;
-  props?: DialogProps;
 }
 
-const SideModal = ({
-  children,
-  containerStyle,
-  setVisible,
-  visible,
-  headerOff,
-  closeBTN,
-  layerContainerStyle,
-  scrollable,
-  props,
-}: SideModalProps) => {
-  return (
-    <>
-      <Dialog
-        {...props}
-        width={"100%"}
-        // height={Ios ? height - height * 0.4 : '100%'}
-        // height={_HIGHT * 0.7}
-        ignoreBackgroundPress={false}
-        visible={visible || false}
-        bottom={true}
-        onDismiss={() => setVisible && setVisible(false)}
-        panDirection={PanningProvider.Directions.DOWN}
-        containerStyle={[tw` bg-base rounded-t-2xl `, layerContainerStyle]}
-      >
-        <Pressable disabled style={[tw`bg-white  `, containerStyle]}>
-          {children}
-        </Pressable>
-      </Dialog>
-    </>
-  );
-};
+interface UseBottomModalResult {
+  open: () => void;
+  close: () => void;
+  BottomModal: React.FC<BottomSheetProps>;
+}
 
-export default SideModal;
+export const useBottomModal = (): UseBottomModalResult => {
+  // Keep the reference stable and ensure it's always available
+  const ref = useRef<RBSheet>(null);
+
+  const open = () => {
+    if (ref.current) {
+      ref.current.open();
+    }
+  };
+
+  const close = () => {
+    if (ref.current) {
+      ref.current.close();
+    }
+  };
+
+  const BottomModal: React.FC<BottomSheetProps> = ({
+    children,
+    scrollable = false,
+  }) => (
+    <RBSheet
+      ref={ref}
+      draggable
+      height={_HIGHT * 0.6}
+      customStyles={{
+        container: {
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+        },
+        draggableIcon: {
+          width: 30,
+        },
+      }}
+    >
+      {scrollable ? <ScrollView>{children}</ScrollView> : children}
+    </RBSheet>
+  );
+
+  return { open, close, BottomModal };
+};

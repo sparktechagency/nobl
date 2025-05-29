@@ -8,27 +8,18 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
 
-const LinkCard = ({
-  link,
-}: {
-  link: {
-    id: number;
-    title: string;
-    url: string;
-    image: string;
-  };
-}) => {
+const LinkCard = ({ link }: { link: any }) => {
   const router = useRouter();
 
   return (
     <TouchableOpacity
       onPress={() => {
-        Linking.openURL(link?.url);
+        Linking.openURL(link?.link);
       }}
       style={tw` rounded-lg bg-deepBlue50 shadow p-2 border border-gray-200`}
     >
       <Image
-        source={{ uri: link.image }}
+        source={{ uri: link.thumbnail }}
         style={tw`w-full h-44   rounded-t-lg`}
         contentFit="fill"
       />
@@ -39,7 +30,7 @@ const LinkCard = ({
           numberOfLines={2}
           style={tw`font-PoppinsSemiBold text-base flex-1`}
         >
-          {link?.url}
+          {link?.link}
         </Text>
 
         <IButton

@@ -1,16 +1,18 @@
-import { IconCamera, IconEdit } from "@/icons/Icon";
 import { ScrollView, View } from "react-native";
 
-import { Avatar } from "react-native-ui-lib/src/components/avatar";
+import { IconEdit } from "@/icons/Icon";
 import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
-import IButton from "@/lib/buttons/IButton";
-import InputText from "@/lib/inputs/InputText";
 import IwtButton from "@/lib/buttons/IwtButton";
-import React from "react";
-import { router } from "expo-router";
+import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
+import Avatar from "@/lib/ui/Avatar";
+import { useGetProfileQuery } from "@/redux/apiSlices/authApiSlices";
+import { router } from "expo-router";
+import React from "react";
 
 const my_profile = () => {
+  const { data: userData } = useGetProfileQuery({});
+
   return (
     <View style={tw`flex-1 bg-base`}>
       <View style={tw`h-20 bg-primary`}>
@@ -26,21 +28,22 @@ const my_profile = () => {
             <Avatar
               size={100}
               source={{
-                uri: "https://s3-alpha-sig.figma.com/img/f7df/8f32/21b80e6a901c2ea98091efd1bf19e5b6?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=Ja5XFw-PFD4oWWunxKSVNtEZi6HEgeV9Vpq4yN9bG12ZhTFqM6XoMkcC7bQXuuxSKDBhuXS25~friMNl4xEWDFap5t1IUHmSy2jaIgg84an0xzW5d8u9yi2RM~a0wmQLpv3QWE4C8MdwwjIDpC5kBz0FGxitD-6LBhdKvPKS9cwqvA4ZfGebQw-vxMp3S601v8mZfcieCR2x18-Hx~DDtcxdz5p6qCsxUE2jqOdHv0Qgkn3zzk1Nel3HPETslLZA2NBAU6hc2V0S-cT4K7TLPSAJI~BdMuCbxDZGHdOCcIy1q5LQLfvR-2-1F5zPpPQdEqZ-r4kyFBQKJFkN5C~KdQ__",
+                uri: userData?.data?.photo,
               }}
             />
-            <IButton
+            {/* <IButton
               svg={IconCamera}
               onPress={() => router.push("/setting/edit_profile")}
               containerStyle={tw`absolute bottom-0 right-0 bg-transparent p-0`}
-            />
+            /> */}
           </View>
           <View style={tw`mt-8 gap-4`}>
             <InputText
               editable={false}
               label="Name"
+              value={userData?.data?.name}
               textInputProps={{
-                placeholder: "Arif Biswas",
+                placeholder: "write your name",
                 style: tw`text-base font-PoppinsRegular`,
               }}
               onChangeText={() => {}}
@@ -48,8 +51,9 @@ const my_profile = () => {
             <InputText
               editable={false}
               label="Email"
+              value={userData?.data?.email}
               textInputProps={{
-                placeholder: "arif@gmail.com",
+                placeholder: "write you email",
                 style: tw`text-base font-PoppinsRegular`,
               }}
               onChangeText={() => {}}
@@ -57,8 +61,9 @@ const my_profile = () => {
             <InputText
               editable={false}
               label="Address"
+              value={userData?.data?.address}
               textInputProps={{
-                placeholder: "Dhaka, Bangladesh",
+                placeholder: "Address",
                 style: tw`text-base font-PoppinsRegular`,
               }}
               onChangeText={() => {}}
@@ -66,6 +71,7 @@ const my_profile = () => {
             <InputText
               editable={false}
               label="Badge Number"
+              value={userData?.data?.badge_number}
               textInputProps={{
                 placeholder: "1234567890",
                 style: tw`text-base font-PoppinsRegular`,

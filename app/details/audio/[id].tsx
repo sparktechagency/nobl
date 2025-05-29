@@ -1,50 +1,128 @@
-import { IconDownload, IconNoVideo } from "@/icons/Icon";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { VideoView, useVideoPlayer } from "expo-video";
-import { ActivityIndicator, ScrollView, Text, View } from "react-native";
+import {
+  IconDownload,
+  IconPlayerBackButton,
+  IconPlayerForwardButton,
+  IconPlayerPlayButton,
+  IconPlayerPuseButton,
+} from "@/icons/Icon";
+import { PrimaryColor, _HIGHT } from "@/utils/utils";
+import { router, useLocalSearchParams } from "expo-router";
+import {
+  ActivityIndicator,
+  Platform,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
-import tutorialData from "@/assets/data/tutorials.json";
-import VideoCard from "@/components/VideoCard";
+import AudioCard from "@/components/AudioCard";
 import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
 import IwtButton from "@/lib/buttons/IwtButton";
+import EmptyCard from "@/lib/Empty/EmptyCard";
 import tw from "@/lib/tailwind";
-import { useEvent } from "expo";
+import { useRelatedAudiosQuery } from "@/redux/apiSlices/user/userApiSlices";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Slider from "@react-native-community/slider";
+import { useAudioPlayer } from "expo-audio";
 import React from "react";
-import { SvgXml } from "react-native-svg";
+import RNFetchBlob from "react-native-blob-util";
 
 const VideoDetails = () => {
-  const router = useRouter();
-  const [tutorials, setTutorials] = React.useState(tutorialData.tutorials);
-  const [isModalVisible, setIsModalVisible] = React.useState(false);
-  const [selectedTutorial, setSelectedTutorial] = React.useState(null);
-  const [comment, setComment] = React.useState("");
-
   const { id } = useLocalSearchParams();
+  const [data, setData] = React.useState<any>(null);
+  const [currentTime, setCurrentTime] = React.useState(0);
+  const ref = React.useRef(null);
+  const {
+    data: relativeAudios,
+    isLoading: relativeAudioLoading,
+    isFetching: relativeAudioFetching,
+  } = useRelatedAudiosQuery(
+    {
+      params: {
+        video_id: id,
+        category_id: data?.category_id, // Assuming data has category_id
+      },
+    },
+    {
+      skip: !id && !data?.category_id, // Skip the query if id is not available
+    }
+  );
 
-  const videoSource = selectedTutorial?.video;
+  // console.log(relativeAudio, "Related Audio");
 
-  const player = useVideoPlayer(videoSource, (player) => {
-    console.log("player", player);
-    player.play();
-  });
+  const player = useAudioPlayer(data?.audio);
+
+  // console.log("rendering video details", Comments);
+
+  // Add this useEffect to handle playback status changes
+  // Get the correct file URL based on type
+  const handleLoadData = async () => {
+    const getNewData = await AsyncStorage.getItem("audio");
+    try {
+      const finalData = JSON.parse(getNewData as any);
+      // console.log(finalData);
+      if (finalData) {
+        // console.log(newDocument);
+        setData(finalData);
+      }
+    } catch (error) {
+      // console.log(error);
+    }
+  };
 
   React.useEffect(() => {
-    const tutorial = tutorials.find((tutorial) => tutorial.id === Number(id));
-
-    if (tutorial) {
-      setSelectedTutorial(tutorial as any);
-    }
-    return () => {};
+    handleLoadData();
   }, [id]);
 
-  const keyId = Array.isArray(id) ? id.join("-") : id;
+  React.useEffect(() => {
+    player.addListener("playbackStatusUpdate", (start) => {
+      // console.log(start, "Playback Status Update");
+      setCurrentTime(start.currentTime);
+    });
+    return () => {
+      player.removeAllListeners("playbackStatusUpdate");
+    };
+  }, [player]);
 
-  const { status, error } = useEvent(player, "statusChange", {
-    status: player.status,
-  });
+  React.useEffect(() => {
+    if (data?.audio && player) {
+      // console.log("Setting audio for player", data?.audio);
+
+      player.play();
+    }
+  }, [player, data?.audio]);
+  const [loading, setLoading] = React.useState(false);
+  // console.log(player.currentStatus.playbackState, "Playback State");
+  const handleDownload = async () => {
+    setLoading(true);
+    try {
+      const res = await RNFetchBlob.config({
+        fileCache: true,
+        appendExt: "mp3",
+        addAndroidDownloads: {
+          useDownloadManager: true,
+          storeLocal: true,
+          storeInDownloads: true,
+          mediaScannable: true,
+          notification: true,
+          title: `${data?.title}.mp3`,
+          description: "File downloaded by download manager.",
+          path: `${RNFetchBlob.fs.dirs.DownloadDir}/${data?.title}.mp3`,
+        },
+      }).fetch("GET", data?.audio);
+
+      if (Platform.OS === "ios") {
+        RNFetchBlob.ios.previewDocument(res.path());
+      }
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
 
   return (
-    <View key={keyId} style={tw`flex-1 bg-white`}>
+    <View key={id as string} style={tw`flex-1 bg-white`}>
       {/* Header Parts  */}
       <View
         style={tw`flex-row py-3 justify-between items-center bg-primary pr-4`}
@@ -52,11 +130,14 @@ const VideoDetails = () => {
         <BackWithComponent onPress={() => router.back()} />
         <IwtButton
           title="Download"
+          isLoading={loading}
+          loadingColor={PrimaryColor}
           svg={IconDownload}
-          disabled={status === "loading"}
+          // disabled={status === "loading"}
           containerStyle={tw`bg-white p-1 h-9 px-3 rounded-md`}
           titleStyle={tw`text-primary font-PoppinsRegular`}
           onPress={() => {
+            handleDownload();
             console.log("Download");
           }}
         />
@@ -65,50 +146,80 @@ const VideoDetails = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={tw`bg-base `}
       >
-        <View style={tw`px-4 gap-4 mt-5 mb-5`}>
-          {/* VIdeo Player */}
-          <View style={tw`rounded-md `}>
-            <View
-              style={tw`w-full h-52 justify-center items-center rounded-md `}
-            >
-              {status === "idle" || status === "loading" ? (
-                <View
-                  style={tw`flex-1 w-full border-opacity-15 rounded-md justify-center items-center border border-primary`}
-                >
-                  <ActivityIndicator size="large" color="#4B5320" />
-                </View>
-              ) : status === "readyToPlay" ? (
-                <VideoView
-                  style={tw` h-52 w-full rounded-md`}
-                  player={player}
-                  allowsFullscreen
-                  contentFit="fill"
-                />
-              ) : status === "error" && error ? (
-                <View
-                  style={tw`flex-1 w-full rounded-md justify-center items-center border border-primary border-opacity-15`}
-                >
-                  <SvgXml width={100} height={100} xml={IconNoVideo} />
-                  <Text
-                    style={tw`text-center text-base font-PoppinsMedium text-primary`}
-                  >
-                    No video found
-                  </Text>
-                </View>
-              ) : null}
-            </View>
+        <View style={tw`m-4 p-6 bg-primary rounded-lg `}>
+          <View style={tw`flex-row justify-between items-center mt-2`}>
+            <Text style={tw`text-xs text-gray-100`}>
+              {new Date(currentTime * 1000).toISOString().substr(11, 8)}
+            </Text>
+            <Text style={tw`text-xs text-gray-100`}>
+              {new Date(player.duration * 1000).toISOString().substr(11, 8)}
+            </Text>
           </View>
-          {/* Video Details */}
+          {player?.currentStatus.playbackState == "idle" ? (
+            <ActivityIndicator
+              size="large"
+              color={PrimaryColor}
+              style={tw`mt-10`}
+            />
+          ) : (
+            <>
+              <Slider
+                accessible
+                onValueChange={(value) => {
+                  // console.log(value);
+                  player.seekTo(value);
+                }}
+                thumbTintColor="red"
+                disabled={player.duration === 0}
+                minimumTrackTintColor={PrimaryColor}
+                minimumValue={0}
+                maximumValue={player.duration || 1}
+                collapsableChildren={false}
+                value={currentTime}
+                style={tw`w-full`}
+              />
+            </>
+          )}
+          {/* play puse button and 5ms back and forward buttons  */}
+          <View style={tw`flex-row justify-between items-center mt-2`}>
+            <IwtButton
+              svg={IconPlayerBackButton}
+              containerStyle={tw`bg-transparent p-2 rounded-full`}
+              onPress={() => {
+                player.seekTo(currentTime - 5);
+              }}
+            />
+            <IwtButton
+              svg={player.playing ? IconPlayerPuseButton : IconPlayerPlayButton}
+              containerStyle={tw`bg-transparent p-2 rounded-full`}
+              onPress={() => {
+                if (player.playing) {
+                  player.pause();
+                } else {
+                  player.play();
+                }
+              }}
+            />
+            <IwtButton
+              svg={IconPlayerForwardButton}
+              containerStyle={tw`bg-transparent p-2 rounded-full`}
+              onPress={() => {
+                player.seekTo(currentTime + 5);
+              }}
+            />
+          </View>
+        </View>
+        <View style={tw`mt-2 gap-4  mb-5`}>
           <View
-            style={tw`gap-1.5 flex-1 flex-row justify-between items-center `}
+            style={tw`gap-1.5 flex-1 flex-row justify-between items-center px-4 mt-2`}
           >
             <Text style={tw`font-PoppinsSemiBold text-base flex-1`}>
-              Trainging video part 1
+              {data?.title}
             </Text>
             <Text
               style={tw`bg-primary text-white text-center text-xs py-1 self-start px-2 rounded-md font-PoppinsMedium `}
             >
-              Welcome to Node.js
+              {data?.category?.name || "Uncategorized"}
             </Text>
           </View>
         </View>
@@ -137,14 +248,21 @@ const VideoDetails = () => {
             </Text>
           </View>
         </TouchableOpacity> */}
-        <View style={tw`flex-row pt-6 pb-2 px-4 gap-3 items-center `}>
-          <Text style={tw`font-PoppinsSemiBold text-lg`}>Related Videos</Text>
+        <View style={tw`flex-row pt-4 pb-2 px-4 gap-3 items-center `}>
+          <Text style={tw`font-PoppinsSemiBold text-lg`}>Related Audios</Text>
         </View>
         <View style={tw`bg-gray-100 py-10 rounded-t-3xl px-4`}>
           <View style={tw`border border-gray-300 rounded-lg py-4 px-2 gap-5 `}>
-            {tutorials?.map((tutorial) => (
-              <VideoCard key={tutorial.id} tutorial={tutorial} />
-            ))}
+            {!relativeAudios?.data?.length ? (
+              <EmptyCard
+                isLoading={relativeAudioLoading || relativeAudioFetching}
+                hight={_HIGHT * 0.34}
+              />
+            ) : (
+              relativeAudios?.data?.map((tutorial: any) => (
+                <AudioCard key={tutorial.id} audio={tutorial} />
+              ))
+            )}
           </View>
         </View>
       </ScrollView>

@@ -1,245 +1,68 @@
-import { IconArrowDown, IconClose, IconFilter } from "@/icons/Icon";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, RefreshControl, ScrollView, View } from "react-native";
 
 import DocumentCard from "@/components/DocumentCard";
-import IButton from "@/lib/buttons/IButton";
-import SideModal from "@/lib/modals/SideModal";
+import Header from "@/components/Header";
+import EmptyCard from "@/lib/Empty/EmptyCard";
 import tw from "@/lib/tailwind";
-import { useRouter } from "expo-router";
+import { useGetDocumentQuery } from "@/redux/apiSlices/user/userApiSlices";
+import { _HIGHT } from "@/utils/utils";
 import React from "react";
-import { SvgXml } from "react-native-svg";
-import documentData from "../../assets/data/document.json";
 
-const documents = () => {
-  const router = useRouter();
-  const [documents, setDocuments] = React.useState(documentData);
-  const [isModalVisible, setIsModalVisible] = React.useState(false);
+const document = () => {
+  const [selectedCategory, setSelectedCategory] = React.useState<number | null>(
+    null
+  );
+
+  const {
+    data: Data,
+    isFetching,
+    isLoading,
+    refetch,
+  } = useGetDocumentQuery({
+    params: {
+      category_id: selectedCategory || null,
+    },
+  });
   return (
     <View style={tw`flex-1 bg-base`}>
       {/* Header Parts  */}
-      <View
-        style={tw`flex-row justify-between items-start py-6 px-4 gap-5 bg-primary`}
-      >
-        <View style={tw`gap-2`}>
-          <Text style={tw`text-white font-PoppinsRegular text-lg `}>
-            Documents
-          </Text>
-        </View>
-        <TouchableOpacity
-          style={tw`flex-row items-center gap-4 border border-gray-200 px-2 py-1 rounded`}
-          onPress={() => setIsModalVisible(true)}
-        >
-          <View style={tw`flex-row items-center gap-2 `}>
-            <SvgXml xml={IconFilter} />
-            <Text style={tw`text-white font-PoppinsRegular text-sm`}>
-              Filter
-            </Text>
-          </View>
-          <SvgXml xml={IconArrowDown} />
-        </TouchableOpacity>
-      </View>
+      <Header
+        title="Documents"
+        type="Video Category"
+        onSelectCategory={(category) => {
+          setSelectedCategory(category?.value || null);
+        }}
+      />
       <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={false} onRefresh={refetch} />
+        }
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={tw`bg-base `}
+        contentContainerStyle={tw`bg-base gap-4`}
       >
         <View style={tw`flex-row pt-3 pb-2 px-3 gap-3 items-center `} />
-        <View style={tw`bg-white pb-10 pt-6 rounded-t-3xl px-4 gap-4`}>
-          {documents?.map((document) => (
-            <DocumentCard key={document.id} document={document} />
-          ))}
+        <View style={tw`bg-gray-100 py-8 rounded-t-3xl px-4`}>
+          <View style={tw`border border-gray-300 rounded-lg py-4 px-2 gap-5 `}>
+            <FlatList
+              scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={() => (
+                <EmptyCard
+                  isLoading={isFetching || isLoading}
+                  hight={_HIGHT * 0.5}
+                />
+              )}
+              data={Data?.data?.data}
+              contentContainerStyle={tw`gap-4`}
+              renderItem={({ index, item }) => {
+                return <DocumentCard key={item.id} document={item} />;
+              }}
+            />
+          </View>
         </View>
       </ScrollView>
-
-      <SideModal
-        visible={isModalVisible}
-        setVisible={() => setIsModalVisible(false)}
-        containerStyle={tw`bg-primary`}
-        scrollable
-        props={{
-          renderPannableHeader: () => (
-            <View
-              style={tw`flex-row justify-between items-center bg-primary p-2`}
-            >
-              <View />
-              <View>
-                <Text style={tw`text-white font-PoppinsRegular text-base `}>
-                  Select a category
-                </Text>
-              </View>
-              <IButton
-                svg={IconClose}
-                onPress={() => setIsModalVisible(false)}
-                containerStyle={tw`bg-transparent self-end`}
-              />
-            </View>
-          ),
-        }}
-      >
-        <ScrollView
-          style={tw`h-[35rem]`}
-          // showsVerticalScrollIndicator={false}
-        >
-          <View style={tw`bg-white  p-4 gap-3`}>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>All</Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                Welcome to NOBL
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>Introduction</Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                Key to success in this industry
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                Door approach / Pitch
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                Transitioning
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                Building Value
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                Qualify Questions
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                Buying Atmosphere
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>Amply Value</Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                Drop Price / Compare Price
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                Closing Lines
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                Area Management
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                How to use your IPad Resources
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                How to use your IPad Resources
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                How to use your IPad Resources
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                How to use your IPad Resources
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                How to use your IPad Resources
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                How to use your IPad Resources
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                How to use your IPad Resources
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                How to use your IPad Resources
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                How to use your IPad Resources
-              </Text>
-            </View>
-            <View
-              style={tw`border border-primary border-opacity-25 rounded-lg p-2`}
-            >
-              <Text style={tw`font-PoppinsMedium text-base`}>
-                How to use your IPad Resources
-              </Text>
-            </View>
-          </View>
-        </ScrollView>
-      </SideModal>
     </View>
   );
 };
 
-export default documents;
+export default document;

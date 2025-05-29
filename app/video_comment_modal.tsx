@@ -20,8 +20,8 @@ import IwtButton from "@/lib/buttons/IwtButton";
 import TButton from "@/lib/buttons/TButton";
 import tw from "@/lib/tailwind";
 import { _HIGHT } from "@/utils/utils";
+import { Image } from "expo-image";
 import React from "react";
-import { Avatar } from "react-native-ui-lib";
 
 const video_comment_modal = () => {
   const { id } = useLocalSearchParams();
@@ -92,10 +92,9 @@ const video_comment_modal = () => {
           // console.log(item);
           return (
             <View style={tw`flex-row gap-2 pt-2`}>
-              <Avatar
-                size={45}
-                source={require("@/assets/images/avatar.png")}
-              />
+              <View style={tw`h-12 w-12 rounded-full`}>
+                <Image source={require("@/assets/images/avatar.png")} />
+              </View>
               <View style={tw`flex-1`}>
                 <Text style={tw`font-PoppinsRegular text-sm text-gray-600`}>
                   Lorem ipsum dolor sit amet consectetur. Non egestas sagittis

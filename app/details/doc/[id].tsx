@@ -81,6 +81,9 @@ const DocumentDetails = () => {
         appendExt: data?.document_type,
         addAndroidDownloads: {
           useDownloadManager: true,
+          storeLocal: true,
+          storeInDownloads: true,
+          mediaScannable: true,
           notification: true,
           title: `${data?.title}.${data?.document_type}`,
           description: "File downloaded by download manager.",

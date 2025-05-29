@@ -34,9 +34,12 @@ const authSlice = api.injectEndpoints({
       invalidatesTags: ["user"],
     }),
     resetPassword: builder.mutation<any, any>({
-      query: (data) => ({
+      query: ({ data, token }) => ({
         url: `/auth/reset-password`,
         method: "POST",
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+        },
         body: data,
       }),
       invalidatesTags: ["user"],
@@ -53,6 +56,9 @@ const authSlice = api.injectEndpoints({
       query: (data) => ({
         url: `/auth/update-profile`,
         method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
         body: data,
       }),
       invalidatesTags: ["user"],
