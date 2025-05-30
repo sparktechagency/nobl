@@ -9,6 +9,11 @@ const authSlice = api.injectEndpoints({
       }),
       providesTags: ["user"],
     }),
+    getTokenCheck: builder.query<any, any>({
+      query: () => ({
+        url: `/auth/check-token`,
+      }),
+    }),
     login: builder.mutation<any, any>({
       query: (data) => ({
         url: `/auth/login`,
@@ -85,4 +90,5 @@ export const {
   useResetPasswordMutation,
   useUpdateProfileMutation,
   useVerifyOtpMutation,
+  useGetTokenCheckQuery,
 } = authSlice;

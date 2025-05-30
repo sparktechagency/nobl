@@ -2,12 +2,13 @@ import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
 import { ActivityIndicator, Image, View } from "react-native";
+import React, { useEffect } from "react";
 
-import tw from "@/lib/tailwind";
-import { PrimaryColor } from "@/utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { PrimaryColor } from "@/utils/utils";
+import tw from "@/lib/tailwind";
+import { useGetTokenCheckQuery } from "@/redux/apiSlices/authApiSlices";
 import { useRouter } from "expo-router";
-import { useEffect } from "react";
 
 SplashScreen.preventAutoHideAsync(); // Prevent Expo's splash screen from auto-hiding
 
@@ -36,17 +37,28 @@ export default function App() {
       PoppinsThinItalic: require("../assets/fonts/Poppins/PoppinsThinItalic.ttf"),
     });
     SplashScreen.hideAsync();
-    handlePathDecision();
   }, []);
 
+  // RTK Query Token Checker
+  const { data: tokenCheck, isFetching, isLoading } = useGetTokenCheckQuery({});
+
   const handlePathDecision = async () => {
+    if (isFetching || isLoading) return;
     const token = await AsyncStorage.getItem("token");
     if (token) {
-      route?.replace("/home");
+      if (tokenCheck?.status) {
+        route?.replace("/home");
+      } else {
+        route?.replace("/auth/login");
+      }
     } else {
       route?.replace("/auth/login");
     }
   };
+
+  React.useEffect(() => {
+    handlePathDecision();
+  }, [tokenCheck, isFetching, isLoading]);
 
   return (
     <View style={tw`flex-1 justify-center items-center bg-white pb-[10%]`}>

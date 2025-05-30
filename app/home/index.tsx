@@ -12,7 +12,6 @@ import tw from "@/lib/tailwind";
 import { useGetHomeQuery } from "@/redux/apiSlices/user/userApiSlices";
 import React from "react";
 import { SvgXml } from "react-native-svg";
-import tutorialData from "../../assets/data/tutorials.json";
 
 const index = () => {
   const {
@@ -21,7 +20,6 @@ const index = () => {
     isLoading,
     refetch,
   } = useGetHomeQuery({});
-  const [tutorials, setTutorials] = React.useState(tutorialData.tutorials);
 
   // console.log(HomeData)
 

@@ -12,8 +12,8 @@ import {
   IconUnActivePhoto,
   IconUnActiveVideo,
 } from "@/icons/Icon";
-import { PrimaryColor, _WIGHT } from "@/utils/utils";
-import { StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { _WIGHT } from "@/utils/utils";
+import { Text, TouchableOpacity, View } from "react-native";
 
 import tw from "@/lib/tailwind";
 import { Tabs } from "expo-router";
@@ -307,7 +307,7 @@ export default function TabRoutes() {
           }}
         />
       </Tabs>
-      <StatusBar barStyle="light-content" backgroundColor={PrimaryColor} />
+      {/* <StatusBar barStyle="light-content" backgroundColor={PrimaryColor} /> */}
     </>
   );
 }

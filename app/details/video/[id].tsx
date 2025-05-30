@@ -1,44 +1,45 @@
 "use strict";
 
 import {
-  IconCalendarMini,
-  IconClockMini,
-  IconClose,
-  IconDownload,
-} from "@/icons/Icon";
-import {
-  useGetCommentsQuery,
-  usePostCommentMutation,
-  useRelatedVideosQuery,
-} from "@/redux/apiSlices/user/userApiSlices";
-import { PrimaryColor, _HIGHT } from "@/utils/utils";
-import { router, useLocalSearchParams } from "expo-router";
-import { VideoView, useVideoPlayer } from "expo-video";
-import {
   FlatList,
   Platform,
   RefreshControl,
   ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import {
+  IconCalendarMini,
+  IconClockMini,
+  IconClose,
+  IconDownload,
+} from "@/icons/Icon";
+import { PrimaryColor, _HIGHT } from "@/utils/utils";
+import { router, useLocalSearchParams } from "expo-router";
+import {
+  useGetCommentsQuery,
+  usePostCommentMutation,
+  useRelatedVideosQuery,
+} from "@/redux/apiSlices/user/userApiSlices";
 
-import VideoCard from "@/components/VideoCard";
-import EmptyCard from "@/lib/Empty/EmptyCard";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Avatar from "@/lib/ui/Avatar";
 import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
+import BottomModal from "@/lib/modals/BottomModal";
+import EmptyCard from "@/lib/Empty/EmptyCard";
 import IButton from "@/lib/buttons/IButton";
 import IwtButton from "@/lib/buttons/IwtButton";
-import TButton from "@/lib/buttons/TButton";
-import BottomModal from "@/lib/modals/BottomModal";
-import tw from "@/lib/tailwind";
-import Avatar from "@/lib/ui/Avatar";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEvent } from "expo";
-import React from "react";
 import RNFetchBlob from "react-native-blob-util";
+import React from "react";
 import { SvgXml } from "react-native-svg";
+import TButton from "@/lib/buttons/TButton";
+import VideoCard from "@/components/VideoCard";
+import VideoPlayerCard from "@/components/VideoPlayerCard";
+import { VideoSource } from "expo-video";
+import tw from "@/lib/tailwind";
 
 const VideoDetails = () => {
   const [isModalVisible, setIsModalVisible] = React.useState(false);
@@ -97,37 +98,12 @@ const VideoDetails = () => {
   };
 
   // console.log(data?.video);
-  const videoSource = data?.video;
-
-  const player = useVideoPlayer(
-    "http://182.252.68.227:8003/uploads/videos/video/1748261788.mp4",
-    (player) => {
-      player.loop = false; // Set loop to false if you don't want the video to loop
-      player.play();
-    }
-  );
-
-  const { isPlaying } = useEvent(player, "playingChange", {
-    isPlaying: player.playing,
-  });
+  const videoSource: VideoSource = data?.video;
 
   // console.log("rendering video details", Comments);
 
   // Add this useEffect to handle playback status changes
   // Get the correct file URL based on type
-  const handleLoadData = async () => {
-    const getNewData = await AsyncStorage.getItem("video");
-    try {
-      const finalData = JSON.parse(getNewData as any);
-      setData(finalData);
-    } catch (error) {
-      // console.log(error);
-    }
-  };
-
-  React.useEffect(() => {
-    handleLoadData();
-  }, []);
 
   const [loading, setLoading] = React.useState(false);
   // console.log(player.currentStatus.playbackState, "Playback State");
@@ -159,29 +135,22 @@ const VideoDetails = () => {
     }
   };
 
-  // console.log(data);
-  // console.log(player);
-
-  // ...Imports, definition of the component, creating the player etc.
+  const handleLoadData = async () => {
+    const getNewData = await AsyncStorage.getItem("video");
+    try {
+      const finalData = JSON.parse(getNewData as any);
+      setData(finalData);
+    } catch (error) {
+      // console.log(error);
+    }
+  };
 
   React.useEffect(() => {
-    const subscription = player.addListener(
-      "statusChange",
-      ({ status, error }) => {
-        // setPlayerStatus(status);
-        // setPlayerError(error);
-        console.log("Player status changed: ", status);
-      }
-    );
-
-    return () => {
-      subscription.remove();
-    };
+    handleLoadData();
   }, []);
-  // Rest of the component...
 
   return (
-    <View key={id as string} style={tw`flex-1 bg-white`}>
+    <View style={tw`flex-1 bg-white`}>
       {/* Header Parts  */}
       <View
         style={tw`flex-row pt-3 justify-between items-center bg-primary pr-4`}
@@ -211,21 +180,11 @@ const VideoDetails = () => {
       >
         {/* VIdeo Player */}
 
-        <View style={tw`w-full h-52 justify-center items-center rounded-md `}>
-          {isPlaying && (
-            <VideoView
-              style={tw`w-full aspect-video `}
-              player={player}
-              allowsFullscreen
-              shouldRasterizeIOS
-              allowsPictureInPicture
-            />
-          )}
-        </View>
+        <VideoPlayerCard source={videoSource} />
 
         {/* Video Details */}
 
-        <View style={tw` mt-4  h-12`}>
+        <View style={tw` mt-2  h-12`}>
           <View
             style={tw`gap-1.5  flex-1 flex-row justify-between items-center px-4 mt-2`}
           >
@@ -417,3 +376,32 @@ const VideoDetails = () => {
 };
 
 export default VideoDetails;
+
+const styles = StyleSheet.create({
+  contentContainer: {
+    flex: 1,
+    padding: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 50,
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 3,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: "#4630ec",
+  },
+  buttonText: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#eeeeee",
+    textAlign: "center",
+  },
+  video: {
+    width: 300,
+    height: 168.75,
+    marginVertical: 20,
+  },
+});
