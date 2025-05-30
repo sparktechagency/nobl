@@ -1,7 +1,7 @@
 import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { PrimaryColor, _WIGHT } from "@/utils/utils";
 import { VideoSource, VideoView, useVideoPlayer } from "expo-video";
 
-import { _WIGHT } from "@/utils/utils";
 import { useEvent } from "expo";
 
 interface VideoPlayerCardProps {
@@ -11,27 +11,33 @@ interface VideoPlayerCardProps {
 export default function VideoPlayerCard({ source }: VideoPlayerCardProps) {
   const player = useVideoPlayer(source as VideoSource, (player) => {
     player.play();
+    player.showNowPlayingNotification = true;
+    player.allowsExternalPlayback = true;
   });
 
   const { status, error } = useEvent(player, "statusChange", {
     status: player.status,
   });
 
-  console.log(status, error);
+  // console.log(status, error);
 
   return (
     <View>
-      {status == "loading" ? (
-        <View style={[styles.video, { justifyContent: "center" }]}>
-          <ActivityIndicator size="large" />
+      {status == "loading" && (
+        <View
+          style={[
+            styles.video,
+            { justifyContent: "center", position: "absolute" },
+          ]}
+        >
+          <ActivityIndicator color={PrimaryColor} size="large" />
         </View>
-      ) : (
-        <VideoView
-          player={player}
-          style={styles.video}
-          // nativeControls={false}
-        />
       )}
+      <VideoView
+        player={player}
+        style={styles.video}
+        // nativeControls={false}
+      />
     </View>
   );
 }

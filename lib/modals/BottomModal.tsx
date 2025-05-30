@@ -4,6 +4,7 @@ import {
   Modal,
   PanResponder,
   Platform,
+  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -132,31 +133,33 @@ const BottomModal = forwardRef(
             activeOpacity={1}
             onPress={closeOnPressMask ? () => handleSetVisible(false) : null}
           />
-          <Animated.View
-            style={[
-              styles.container,
-              { transform: pan.getTranslateTransform() },
-              { height: animatedHeight },
-              customStyles,
-            ]}
-            {...(dragOnContent && panResponder.panHandlers)}
-          >
-            {draggable && (
-              <View
-                style={styles.draggableContainer}
-                {...(!dragOnContent && panResponder.panHandlers)}
-              >
-                {headerComponent ? (
-                  headerComponent
-                ) : (
-                  <View
-                    style={[styles.draggableIcon, customStyles.draggableIcon]}
-                  />
-                )}
-              </View>
-            )}
-            {children}
-          </Animated.View>
+          <SafeAreaView style={styles.safeArea}>
+            <Animated.View
+              style={[
+                styles.container,
+                { transform: pan.getTranslateTransform() },
+                { height: animatedHeight },
+                customStyles,
+              ]}
+              {...(dragOnContent && panResponder.panHandlers)}
+            >
+              {draggable && (
+                <View
+                  style={styles.draggableContainer}
+                  {...(!dragOnContent && panResponder.panHandlers)}
+                >
+                  {headerComponent ? (
+                    headerComponent
+                  ) : (
+                    <View
+                      style={[styles.draggableIcon, customStyles.draggableIcon]}
+                    />
+                  )}
+                </View>
+              )}
+              {children}
+            </Animated.View>
+          </SafeAreaView>
         </KeyboardAvoidingView>
       </Modal>
     );
@@ -166,6 +169,10 @@ const BottomModal = forwardRef(
 export default BottomModal;
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    justifyContent: "flex-end", // Ensures the modal content starts at the bottom
+  },
   wrapper: {
     flex: 1,
     backgroundColor: "#00000077",

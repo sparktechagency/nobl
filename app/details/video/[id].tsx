@@ -38,7 +38,6 @@ import { SvgXml } from "react-native-svg";
 import TButton from "@/lib/buttons/TButton";
 import VideoCard from "@/components/VideoCard";
 import VideoPlayerCard from "@/components/VideoPlayerCard";
-import { VideoSource } from "expo-video";
 import tw from "@/lib/tailwind";
 
 const VideoDetails = () => {
@@ -98,7 +97,6 @@ const VideoDetails = () => {
   };
 
   // console.log(data?.video);
-  const videoSource: VideoSource = data?.video;
 
   // console.log("rendering video details", Comments);
 
@@ -180,7 +178,7 @@ const VideoDetails = () => {
       >
         {/* VIdeo Player */}
 
-        <VideoPlayerCard source={videoSource} />
+        <VideoPlayerCard key={data?.video} source={data?.video} />
 
         {/* Video Details */}
 
@@ -246,7 +244,7 @@ const VideoDetails = () => {
         height={_HIGHT * 0.5}
         visible={isModalVisible}
         setVisible={setIsModalVisible}
-        customStyles={tw`rounded-md`}
+        customStyles={[tw`rounded-md `]}
         headerComponent={
           <View
             style={tw`w-full flex-row justify-between items-center bg-primary p-2`}
@@ -350,8 +348,8 @@ const VideoDetails = () => {
         />
 
         {/* Fixed input container at bottom */}
-        <View style={tw`p-4 bg-base border-t border-gray-200`}>
-          <View style={tw`flex-row items-center gap-2`}>
+        <View style={[tw`p-4  bg-base border-t border-gray-200`]}>
+          <View style={tw`flex-row items-center  gap-2`}>
             <TextInput
               style={tw`flex-1 h-12 bg-gray-300 rounded-full text-black font-PoppinsMedium px-4`}
               placeholder="Write a comment"

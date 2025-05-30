@@ -4,9 +4,9 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
+import { SvgProps, SvgXml } from "react-native-svg";
 
 import React from "react";
-import { SvgXml } from "react-native-svg";
 import tw from "../tailwind";
 
 interface IButton {
@@ -19,6 +19,7 @@ interface IButton {
   isLoading?: boolean;
   loadingColor?: string;
   disabled?: boolean;
+  svgProps?: SvgProps;
 }
 
 const IwtButton = ({
@@ -31,6 +32,7 @@ const IwtButton = ({
   disabled,
   isLoading,
   loadingColor,
+  svgProps,
 }: IButton) => {
   return (
     <TouchableOpacity
@@ -60,6 +62,7 @@ const IwtButton = ({
     </svg>
      `
               }
+              {...svgProps}
             />
           )}
         </>

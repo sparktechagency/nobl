@@ -1,4 +1,11 @@
 import {
+  ActivityIndicator,
+  Platform,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
+import {
   IconDownload,
   IconPlayerBackButton,
   IconPlayerForwardButton,
@@ -7,25 +14,18 @@ import {
 } from "@/icons/Icon";
 import { PrimaryColor, _HIGHT } from "@/utils/utils";
 import { router, useLocalSearchParams } from "expo-router";
-import {
-  ActivityIndicator,
-  Platform,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import AudioCard from "@/components/AudioCard";
 import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
-import IwtButton from "@/lib/buttons/IwtButton";
 import EmptyCard from "@/lib/Empty/EmptyCard";
-import tw from "@/lib/tailwind";
-import { useRelatedAudiosQuery } from "@/redux/apiSlices/user/userApiSlices";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useAudioPlayer } from "expo-audio";
+import IwtButton from "@/lib/buttons/IwtButton";
+import RNFetchBlob from "react-native-blob-util";
 import React from "react";
 import { Slider } from "react-native-awesome-slider";
-import RNFetchBlob from "react-native-blob-util";
+import tw from "@/lib/tailwind";
+import { useRelatedAudiosQuery } from "@/redux/apiSlices/user/userApiSlices";
 import { useSharedValue } from "react-native-reanimated";
 
 const VideoDetails = () => {
@@ -53,7 +53,7 @@ const VideoDetails = () => {
   // console.log(relativeAudio, "Related Audio");
 
   const player = useAudioPlayer(data?.audio);
-
+  const status = useAudioPlayerStatus(player);
   // console.log("rendering video details", Comments);
   // Add this useEffect to handle playback status changes
   // Get the correct file URL based on type
@@ -64,6 +64,8 @@ const VideoDetails = () => {
       // console.log(finalData);
       if (finalData) {
         // console.log(newDocument);
+        setFullDuration(finalData.duration);
+        max.value = finalData.duration;
         setData(finalData);
       }
     } catch (error) {
@@ -74,6 +76,8 @@ const VideoDetails = () => {
   React.useEffect(() => {
     handleLoadData();
   }, [id]);
+
+  // console.log(data);
 
   const progress = useSharedValue(0);
   const min = useSharedValue(0);
@@ -118,17 +122,16 @@ const VideoDetails = () => {
         // Setup listeners
         player.setAudioSamplingEnabled(true);
         player.addListener("playbackStatusUpdate", (status) => {
-          console.log(status);
           setCurrentTime(status.currentTime);
-          setFullDuration(status?.duration);
-          max.value = status.duration;
           progress.value = status.currentTime;
+        });
+        player.addListener("audioSampleUpdate", (audio) => {
+          console.log(audio);
         });
       } catch (error) {
         console.error("Player initialization error:", error);
       }
     };
-
     if (data?.audio) {
       setupPlayer();
     }
@@ -137,6 +140,8 @@ const VideoDetails = () => {
       player.removeAllListeners("playbackStatusUpdate");
     };
   }, [data?.audio, player.isLoaded]);
+
+  // console.log(status, "Player Duration");
 
   return (
     <View key={id as string} style={tw`flex-1 bg-white`}>
@@ -199,12 +204,8 @@ const VideoDetails = () => {
                 minimumValue={min}
                 maximumValue={max}
                 theme={{
-                  disableMinTrackTintColor: "#fff",
-                  maximumTrackTintColor: "#fff",
                   minimumTrackTintColor: PrimaryColor,
                   cacheTrackTintColor: "#333",
-                  bubbleBackgroundColor: "#666",
-                  heartbeatColor: "#999",
                 }}
               />
             </>
@@ -258,31 +259,7 @@ const VideoDetails = () => {
             </Text>
           </View>
         </View>
-        {/* <TouchableOpacity
-          onPress={() => {
-            setIsModalVisible(true);
-          }}
-          style={tw`mx-4 bg-gray-50 rounded-md p-4 gap-2`}
-        >
-          <View style={tw`flex-row items-center gap-2`}>
-            <Text style={tw`font-PoppinsSemiBold text-base text-black `}>
-              Comment's
-            </Text>
-            <Text style={tw`font-PoppinsRegular text-gray-500 text-sm`}>
-              100
-            </Text>
-          </View>
-          <View style={tw`flex-row items-center gap-2`}>
-            <Avatar size={30} source={require("@/assets/images/avatar.png")} />
-            <Text
-              numberOfLines={2}
-              style={tw`flex-1 font-PoppinsRegular text-sm text-gray-600`}
-            >
-              Lorem ipsum dolor sit amet consectetur. Non egestas sagittis justo
-              convallis quis ut mauris.
-            </Text>
-          </View>
-        </TouchableOpacity> */}
+
         <View style={tw`flex-row pt-4 pb-2 px-4 gap-3 items-center `}>
           <Text style={tw`font-PoppinsSemiBold text-lg`}>Related Audios</Text>
         </View>
@@ -301,97 +278,6 @@ const VideoDetails = () => {
           </View>
         </View>
       </ScrollView>
-
-      {/* <SideModal
-        visible={isModalVisible}
-        setVisible={() => {
-          Keyboard.dismiss();
-          setIsModalVisible(false);
-        }}
-        containerStyle={tw`bg-base`}
-        scrollable
-        props={{
-          renderPannableHeader: () => (
-            <View
-              style={tw`flex-row justify-between items-center bg-primary p-2`}
-            >
-              <View style={tw`mx-3`} />
-              <View>
-                <Text style={tw`text-white font-PoppinsRegular text-base`}>
-                  Comments
-                </Text>
-              </View>
-              <IButton
-                svg={IconClose}
-                onPress={() => {
-                  Keyboard.dismiss();
-                  setIsModalVisible(false);
-                }}
-                containerStyle={tw`bg-transparent self-end`}
-              />
-            </View>
-          ),
-        }}
-      >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={150}
-        >
-          <ScrollView
-            style={tw`min-h-[20rem] max-h-[30rem] bg-base`}
-            contentContainerStyle={tw`px-4 pt-2 `} // Extra padding for input
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-          >
-      
-            {[...Array(10)].map((_, i) => (
-              <View key={i} style={tw`flex-row gap-2 pt-2`}>
-                <Avatar
-                  size={45}
-                  source={require("@/assets/images/avatar.png")}
-                />
-                <View style={tw`flex-1`}>
-                  <Text style={tw`font-PoppinsRegular text-sm text-gray-600`}>
-                    Lorem ipsum dolor sit amet consectetur. Non egestas sagittis
-                    justo convallis quis ut mauris.
-                  </Text>
-                  <View
-                    style={tw`flex-row items-center justify-between gap-2 px-6`}
-                  >
-                    <IwtButton
-                      svg={IconCalendarMini}
-                      title="24-04-2025"
-                      titleStyle={tw`text-gray-500 font-PoppinsRegular text-sm`}
-                      containerStyle={tw`bg-transparent`}
-                    />
-                    <IwtButton
-                      svg={IconClockMini}
-                      title="10:20 AM"
-                      titleStyle={tw`text-gray-500 font-PoppinsRegular text-sm`}
-                      containerStyle={tw`bg-transparent`}
-                    />
-                  </View>
-                </View>
-              </View>
-            ))}
-          </ScrollView>
-
-          
-          <View style={tw`p-4 bg-base border-t border-gray-200`}>
-            <View style={tw`flex-row items-center gap-2`}>
-              <TextInput
-                style={tw`flex-1 h-12 bg-gray-300 rounded-full text-black font-PoppinsMedium px-4`}
-                placeholder="Write a comment"
-                placeholderTextColor={tw.color(`gray-500`)}
-              />
-              <TButton
-                title="Post"
-                containerStyle={tw`h-10 p-0 w-20 rounded-md`}
-              />
-            </View>
-          </View>
-        </KeyboardAvoidingView>
-      </SideModal> */}
     </View>
   );
 };

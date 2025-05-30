@@ -1,12 +1,13 @@
 import { IconPlayButton, IconPlayButtonSmall } from "@/icons/Icon";
 import { Image, Text, View } from "react-native";
 
-import IButton from "@/lib/buttons/IButton";
-import tw from "@/lib/tailwind";
-import { _HIGHT } from "@/utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
+import IButton from "@/lib/buttons/IButton";
+import IwtButton from "@/lib/buttons/IwtButton";
 import React from "react";
+import { _HIGHT } from "@/utils/utils";
+import tw from "@/lib/tailwind";
+import { useRouter } from "expo-router";
 
 const VideoCard = ({ tutorial }: { tutorial: any }) => {
   const router = useRouter();
@@ -57,15 +58,18 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
             {tutorial?.category?.name}
           </Text>
         </View>
-        <IButton
+        <IwtButton
           svg={IconPlayButtonSmall}
           svgProps={{
             height: 20,
             width: 20,
           }}
-          // title={tutorial?.duration}
+          title={
+            tutorial?.duration &&
+            new Date(tutorial?.duration * 1000)?.toISOString()?.substr(11, 8)
+          }
           onPress={() => router.push(`/details/video/${tutorial?.id}`)}
-          containerStyle={tw`p-2 rounded-md `}
+          containerStyle={tw`px-2 h-10 justify-center items-center rounded-md `}
           // titleStyle={tw`text-xs`}
         />
       </View>
