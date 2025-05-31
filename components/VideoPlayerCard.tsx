@@ -1,25 +1,31 @@
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { PrimaryColor, _WIGHT } from "@/utils/utils";
 import { VideoSource, VideoView, useVideoPlayer } from "expo-video";
-
 import { useEvent } from "expo";
+import React from "react";
 
 interface VideoPlayerCardProps {
   source: VideoSource;
 }
 
-export default function VideoPlayerCard({ source }: VideoPlayerCardProps) {
-  const player = useVideoPlayer(source as VideoSource, (player) => {
-    player.play();
-    player.showNowPlayingNotification = true;
-    player.allowsExternalPlayback = true;
-  });
+ const  VideoPlayerCard = ({ source }: VideoPlayerCardProps) => {
+  //  console.log(source)
+  const player = useVideoPlayer(
+    source as VideoSource,
+    (player) => {
+      player.play();
+      player.showNowPlayingNotification = true;
+      player.allowsExternalPlayback = true;
+      player.staysActiveInBackground = true;
+    }
+  );
+
 
   const { status, error } = useEvent(player, "statusChange", {
     status: player.status,
   });
 
-  // console.log(status, error);
+
 
   return (
     <View>
@@ -33,14 +39,30 @@ export default function VideoPlayerCard({ source }: VideoPlayerCardProps) {
           <ActivityIndicator color={PrimaryColor} size="large" />
         </View>
       )}
+      {status === "error" && (
+        <View style={[
+          styles.video,
+          { justifyContent: "center", position: "absolute" },
+        ]}>
+          <Text style={{ color: 'red', textAlign: 'center' }}>
+            Failed to load video: {error?.message}
+          </Text>
+        </View>
+      )}
+
+    
       <VideoView
         player={player}
         style={styles.video}
-        // nativeControls={false}
+      // nativeControls={false}
       />
+      
+
     </View>
   );
 }
+
+export default React.memo(VideoPlayerCard)
 
 const styles = StyleSheet.create({
   contentContainer: {

@@ -1,5 +1,5 @@
 import { IconPlayButton, IconPlayButtonSmall } from "@/icons/Icon";
-import { Image, Text, View } from "react-native";
+import {  Text, View } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import IButton from "@/lib/buttons/IButton";
@@ -8,6 +8,7 @@ import React from "react";
 import { _HIGHT } from "@/utils/utils";
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
+import { Image } from "expo-image";
 
 const VideoCard = ({ tutorial }: { tutorial: any }) => {
   const router = useRouter();
@@ -21,7 +22,7 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
           source={{
             uri: tutorial?.thumbnail,
           }}
-          resizeMode="cover"
+         contentFit="cover"
           style={[
             tw`w-full   rounded-t-lg`,
             {

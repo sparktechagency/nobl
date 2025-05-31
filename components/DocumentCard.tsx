@@ -9,29 +9,29 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
 
-const getMimeType = (filePath) => {
-  const extension = filePath.split(".").pop().toLowerCase();
+// const getMimeType = (filePath) => {
+//   const extension = filePath.split(".").pop().toLowerCase();
 
-  switch (extension) {
-    case "xls":
-      return "application/vnd.ms-excel";
-    case "xlsx":
-      return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    case "doc":
-      return "application/msword";
-    case "docx":
-      return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-    case "pdf":
-      return "application/pdf";
-    case "jpg":
-    case "jpeg":
-      return "image/jpeg";
-    case "png":
-      return "image/png";
-    default:
-      return "application/octet-stream"; // fallback for unknown types
-  }
-};
+//   switch (extension) {
+//     case "xls":
+//       return "application/vnd.ms-excel";
+//     case "xlsx":
+//       return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+//     case "doc":
+//       return "application/msword";
+//     case "docx":
+//       return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+//     case "pdf":
+//       return "application/pdf";
+//     case "jpg":
+//     case "jpeg":
+//       return "image/jpeg";
+//     case "png":
+//       return "image/png";
+//     default:
+//       return "application/octet-stream"; // fallback for unknown types
+//   }
+// };
 const DocumentCard = ({ document }: { document: any }) => {
   const router = useRouter();
   const [localPath, setLocalPath] = React.useState<string | null>(null);

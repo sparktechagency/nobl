@@ -56,7 +56,7 @@ const links = () => {
               data={Data?.data?.data}
               contentContainerStyle={tw`gap-4`}
               renderItem={({ index, item }) => {
-                return <LinkCard key={item.id} link={item} />;
+                return <LinkCard link={item} />;
               }}
             />
           </View>

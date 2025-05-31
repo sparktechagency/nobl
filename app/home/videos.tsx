@@ -52,10 +52,11 @@ const video = () => {
                   hight={_HIGHT * 0.5}
                 />
               )}
+              keyExtractor={(item)=>item?.id}
               data={Data?.data?.data}
               contentContainerStyle={tw`gap-4`}
               renderItem={({ index, item }) => {
-                return <VideoCard key={item.id} tutorial={item} />;
+                return <VideoCard  tutorial={item} />;
               }}
             />
           </View>

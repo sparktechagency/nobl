@@ -62,16 +62,16 @@ const index = () => {
                 return (
                   <React.Fragment>
                     {item?.type === "video" && (
-                      <VideoCard key={item.id} tutorial={item} />
+                      <VideoCard  tutorial={item} />
                     )}
                     {item?.type === "document" && (
-                      <DocumentCard key={item.id} document={item} />
+                      <DocumentCard  document={item} />
                     )}
                     {item?.type === "audio" && (
-                      <AudioCard key={item.id} audio={item} />
+                      <AudioCard  audio={item} />
                     )}
                     {item?.type === "photo" && (
-                      <SinglePhotoCard key={item.id} photo={item} />
+                      <SinglePhotoCard  photo={item} />
                     )}
                   </React.Fragment>
                 );

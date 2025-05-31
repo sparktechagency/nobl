@@ -55,7 +55,7 @@ const audio = () => {
               data={Data?.data?.data}
               contentContainerStyle={tw`gap-4`}
               renderItem={({ index, item }) => {
-                return <AudioCard key={item.id} audio={item} />;
+                return <AudioCard  audio={item} />;
               }}
             />
           </View>

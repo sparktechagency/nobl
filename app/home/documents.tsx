@@ -55,7 +55,7 @@ const document = () => {
               data={Data?.data?.data}
               contentContainerStyle={tw`gap-4`}
               renderItem={({ index, item }) => {
-                return <DocumentCard key={item.id} document={item} />;
+                return <DocumentCard  document={item} />;
               }}
             />
           </View>
