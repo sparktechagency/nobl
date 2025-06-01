@@ -1,13 +1,13 @@
 import { IconDoc, IconExcel, IconPdf } from "@/icons/Icon";
 import { Text, TouchableOpacity, View } from "react-native";
 
-import tw from "@/lib/tailwind";
-import { _HIGHT } from "@/utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
+import { _HIGHT } from "@/utils/utils";
+import tw from "@/lib/tailwind";
+import { useRouter } from "expo-router";
 
 // const getMimeType = (filePath) => {
 //   const extension = filePath.split(".").pop().toLowerCase();
@@ -116,4 +116,4 @@ const DocumentCard = ({ document }: { document: any }) => {
   );
 };
 
-export default DocumentCard;
+export default React.memo(DocumentCard);

@@ -9,11 +9,11 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-import { IconDownload } from "@/icons/Icon";
 import IButton from "@/lib/buttons/IButton";
-import tw from "@/lib/tailwind";
+import { IconDownload } from "@/icons/Icon";
 import { Image } from "expo-image";
 import React from "react";
+import tw from "@/lib/tailwind";
 
 const PhotoCard = ({
   photo,
@@ -105,6 +105,7 @@ const PhotoCard = ({
         contentFit="cover"
       />
       <Text
+        numberOfLines={1}
         style={tw`absolute px-2 py-1 bottom-2 left-2 rounded-md bg-primary text-white font-PoppinsRegular text-[0.56rem]`}
       >
         {photo.category?.name || "Uncategorized"}
@@ -119,4 +120,4 @@ const PhotoCard = ({
   );
 };
 
-export default PhotoCard;
+export default React.memo(PhotoCard);

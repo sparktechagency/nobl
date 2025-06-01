@@ -15,9 +15,21 @@
         "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to save photos to your library",
         "NSPhotoLibraryAddUsageDescription": "Allow $(PRODUCT_NAME) to save photos to your library",
         "UIViewControllerBasedStatusBarAppearance": true,
-        "NSAppTransportSecurity": {
-          "NSAllowsArbitraryLoads": true
+         "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true,
+          "NSExceptionDomains": {
+            "182.252.68.227": {
+              "NSIncludesSubdomains": true,
+              "NSTemporaryExceptionAllowsInsecureHTTPLoads": true,
+              "NSTemporaryExceptionMinimumTLSVersion": "1.0",
+              "NSTemporaryExceptionRequiresForwardSecrecy": false,
+              "NSThirdPartyExceptionAllowsInsecureHTTPLoads": true
+            }
+          }
         },
+
+      "usesNonExemptEncryption": false,
+ 
          "UIBackgroundModes": [
           "audio"
         ]

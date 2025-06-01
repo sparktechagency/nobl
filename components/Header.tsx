@@ -1,14 +1,14 @@
-import { IconArrowDown, IconClose, IconFilter } from "@/icons/Icon";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { IconArrowDown, IconClose, IconFilter } from "@/icons/Icon";
 
+import BottomModal from "@/lib/modals/BottomModal";
 import EmptyCard from "@/lib/Empty/EmptyCard";
 import IButton from "@/lib/buttons/IButton";
-import BottomModal from "@/lib/modals/BottomModal";
-import tw from "@/lib/tailwind";
-import { useGetUserCategoryQuery } from "@/redux/apiSlices/user/userApiSlices";
-import { _HIGHT } from "@/utils/utils";
 import React from "react";
 import { SvgXml } from "react-native-svg";
+import { _HIGHT } from "@/utils/utils";
+import tw from "@/lib/tailwind";
+import { useGetUserCategoryQuery } from "@/redux/apiSlices/user/userApiSlices";
 
 interface HeaderProps {
   onSelectCategory?: (category?: {
@@ -138,4 +138,4 @@ const Header = ({
   );
 };
 
-export default Header;
+export default React.memo(Header);

@@ -2,12 +2,12 @@ import { IconEarthLink, IconOuterArray } from "@/icons/Icon";
 import { Linking, Text, TouchableOpacity, View } from "react-native";
 
 import IButton from "@/lib/buttons/IButton";
-import tw from "@/lib/tailwind";
-import { _HIGHT } from "@/utils/utils";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
+import { _HIGHT } from "@/utils/utils";
+import tw from "@/lib/tailwind";
+import { useRouter } from "expo-router";
 
 const LinkCard = ({ link }: { link: any }) => {
   const router = useRouter();
@@ -56,4 +56,4 @@ const LinkCard = ({ link }: { link: any }) => {
   );
 };
 
-export default LinkCard;
+export default React.memo(LinkCard);

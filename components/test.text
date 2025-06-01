@@ -1,34 +1,20 @@
+import { AVPlaybackStatus, ResizeMode, Video } from "expo-av";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { PrimaryColor, _WIGHT } from "@/utils/utils";
-import { VideoSource, VideoView, useVideoPlayer } from "expo-video";
 
 import React from "react";
-import { useEvent } from "expo";
 
 interface VideoPlayerCardProps {
-  source: VideoSource;
+  source: string;
 }
 
 const VideoPlayerCard = ({ source }: VideoPlayerCardProps) => {
-  //  console.log(source)
-  const player = useVideoPlayer(
-    // "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" as VideoSource,
-    source as VideoSource,
-    (player) => {
-      player.play();
-      player.showNowPlayingNotification = true;
-      player.allowsExternalPlayback = true;
-      player.staysActiveInBackground = true;
-    }
-  );
-
-  const { status, error } = useEvent(player, "statusChange", {
-    status: player.status,
-  });
+  const videoRef = React.useRef<Video>(null);
+  const [status, setStatus] = React.useState<AVPlaybackStatus | any>({});
 
   return (
     <View>
-      {status == "loading" && (
+      {(!status.isLoaded || status.isBuffering) && (
         <View
           style={[
             styles.video,
@@ -38,7 +24,7 @@ const VideoPlayerCard = ({ source }: VideoPlayerCardProps) => {
           <ActivityIndicator color={PrimaryColor} size="large" />
         </View>
       )}
-      {status === "error" && (
+      {status.error && (
         <View
           style={[
             styles.video,
@@ -46,15 +32,22 @@ const VideoPlayerCard = ({ source }: VideoPlayerCardProps) => {
           ]}
         >
           <Text style={{ color: "red", textAlign: "center" }}>
-            Failed to load video: {error?.message}
+            Failed to load video: {status.error}
           </Text>
         </View>
       )}
 
-      <VideoView
-        player={player}
+      <Video
+        ref={videoRef}
         style={styles.video}
-        // nativeControls={false}
+        source={{
+          uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        }}
+        // source={{ uri: source }}
+        useNativeControls
+        resizeMode={ResizeMode.CONTAIN}
+        isLooping={false}
+        onPlaybackStatusUpdate={setStatus}
       />
     </View>
   );

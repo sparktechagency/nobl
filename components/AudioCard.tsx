@@ -1,14 +1,14 @@
 import { IconAudio, IconPlayButton } from "@/icons/Icon";
-import {  Text, View } from "react-native";
+import { Text, View } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import IButton from "@/lib/buttons/IButton";
+import { Image } from "expo-image";
 import IwtButton from "@/lib/buttons/IwtButton";
 import React from "react";
 import { _HIGHT } from "@/utils/utils";
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
-import { Image } from "expo-image";
 
 const AudioCard = ({ audio }: { audio: any }) => {
   const router = useRouter();
@@ -22,7 +22,7 @@ const AudioCard = ({ audio }: { audio: any }) => {
           source={{
             uri: audio?.thumbnail,
           }}
-            contentFit="cover"
+          contentFit="cover"
           style={[
             tw`w-full   rounded-t-lg`,
             {
@@ -48,12 +48,16 @@ const AudioCard = ({ audio }: { audio: any }) => {
       >
         <View style={tw`gap-1.5 flex-1`}>
           {audio?.title && (
-            <Text style={tw`font-PoppinsSemiBold text-base flex-1`}>
+            <Text
+              numberOfLines={1}
+              style={tw`font-PoppinsSemiBold text-base flex-1`}
+            >
               {audio?.title}
             </Text>
           )}
 
           <Text
+            numberOfLines={1}
             style={tw`bg-primary text-white text-center text-xs py-1 self-start px-2 rounded-md font-PoppinsMedium `}
           >
             {audio?.category?.name}
@@ -77,4 +81,4 @@ const AudioCard = ({ audio }: { audio: any }) => {
   );
 };
 
-export default AudioCard;
+export default React.memo(AudioCard);

@@ -5,7 +5,6 @@ import {
   Platform,
   RefreshControl,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -179,8 +178,6 @@ const VideoDetails = () => {
         {/* VIdeo Player */}
 
         <VideoPlayerCard key={data?.video} source={data?.video} />
-        
-
 
         {/* Video Details */}
 
@@ -376,32 +373,3 @@ const VideoDetails = () => {
 };
 
 export default VideoDetails;
-
-const styles = StyleSheet.create({
-  contentContainer: {
-    flex: 1,
-    padding: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 50,
-  },
-  button: {
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 3,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    backgroundColor: "#4630ec",
-  },
-  buttonText: {
-    fontSize: 12,
-    fontWeight: "bold",
-    color: "#eeeeee",
-    textAlign: "center",
-  },
-  video: {
-    width: 300,
-    height: 168.75,
-    marginVertical: 20,
-  },
-});

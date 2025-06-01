@@ -1,14 +1,14 @@
 import { Text, TouchableOpacity, View } from "react-native";
 
-import { IconSettings } from "@/icons/Icon";
-import IButton from "@/lib/buttons/IButton";
-import tw from "@/lib/tailwind";
 import Avatar from "@/lib/ui/Avatar";
-import { useGetProfileQuery } from "@/redux/apiSlices/authApiSlices";
-import { getGreeting } from "@/utils/utils";
-import { router } from "expo-router";
+import IButton from "@/lib/buttons/IButton";
+import { IconSettings } from "@/icons/Icon";
 import React from "react";
 import { SvgXml } from "react-native-svg";
+import { getGreeting } from "@/utils/utils";
+import { router } from "expo-router";
+import tw from "@/lib/tailwind";
+import { useGetProfileQuery } from "@/redux/apiSlices/authApiSlices";
 
 const MainHeader = () => {
   const { data: UserData } = useGetProfileQuery({});
@@ -49,4 +49,4 @@ const MainHeader = () => {
   );
 };
 
-export default MainHeader;
+export default React.memo(MainHeader);

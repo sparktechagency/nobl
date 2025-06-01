@@ -3,12 +3,12 @@ import * as MediaLibrary from "expo-media-library";
 
 import { Alert, Platform, Pressable, Text } from "react-native";
 
-import { IconDownload } from "@/icons/Icon";
 import IButton from "@/lib/buttons/IButton";
-import tw from "@/lib/tailwind";
-import { _HIGHT } from "@/utils/utils";
+import { IconDownload } from "@/icons/Icon";
 import { Image } from "expo-image";
 import React from "react";
+import { _HIGHT } from "@/utils/utils";
+import tw from "@/lib/tailwind";
 
 const SinglePhotoCard = ({ photo }: { photo?: any }) => {
   const [loading, setLoading] = React.useState(false);
@@ -93,4 +93,4 @@ const SinglePhotoCard = ({ photo }: { photo?: any }) => {
   );
 };
 
-export default SinglePhotoCard;
+export default React.memo(SinglePhotoCard);

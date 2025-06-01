@@ -1,14 +1,14 @@
 import { IconPlayButton, IconPlayButtonSmall } from "@/icons/Icon";
-import {  Text, View } from "react-native";
+import { Text, View } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import IButton from "@/lib/buttons/IButton";
+import { Image } from "expo-image";
 import IwtButton from "@/lib/buttons/IwtButton";
 import React from "react";
 import { _HIGHT } from "@/utils/utils";
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
-import { Image } from "expo-image";
 
 const VideoCard = ({ tutorial }: { tutorial: any }) => {
   const router = useRouter();
@@ -22,7 +22,7 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
           source={{
             uri: tutorial?.thumbnail,
           }}
-         contentFit="cover"
+          contentFit="cover"
           style={[
             tw`w-full   rounded-t-lg`,
             {
@@ -48,12 +48,16 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
       >
         <View style={tw`gap-1.5 flex-1`}>
           {tutorial?.title && (
-            <Text style={tw`font-PoppinsSemiBold text-base flex-1`}>
+            <Text
+              numberOfLines={1}
+              style={tw`font-PoppinsSemiBold text-base flex-1`}
+            >
               {tutorial?.title}
             </Text>
           )}
 
           <Text
+            numberOfLines={1}
             style={tw`bg-primary text-white text-center text-xs py-1 self-start px-2 rounded-md font-PoppinsMedium `}
           >
             {tutorial?.category?.name}
@@ -78,4 +82,4 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
   );
 };
 
-export default VideoCard;
+export default React.memo(VideoCard);

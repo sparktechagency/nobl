@@ -1,38 +1,22 @@
-import {
-  ActivityIndicator,
-  Platform,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
-import {
-  IconDownload,
-  IconPlayerBackButton,
-  IconPlayerForwardButton,
-  IconPlayerPlayButton,
-  IconPlayerPuseButton,
-} from "@/icons/Icon";
+import { Platform, ScrollView, Text, View } from "react-native";
 import { PrimaryColor, _HIGHT } from "@/utils/utils";
 import { router, useLocalSearchParams } from "expo-router";
-import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AudioCard from "@/components/AudioCard";
+import AudioPlayerCard from "@/components/AudioPlayerCard";
 import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
 import EmptyCard from "@/lib/Empty/EmptyCard";
+import { IconDownload } from "@/icons/Icon";
 import IwtButton from "@/lib/buttons/IwtButton";
 import RNFetchBlob from "react-native-blob-util";
 import React from "react";
-import { Slider } from "react-native-awesome-slider";
 import tw from "@/lib/tailwind";
 import { useRelatedAudiosQuery } from "@/redux/apiSlices/user/userApiSlices";
-import { useSharedValue } from "react-native-reanimated";
 
 const VideoDetails = () => {
   const { id } = useLocalSearchParams();
   const [data, setData] = React.useState<any>(null);
-  const [currentTime, setCurrentTime] = React.useState(0);
-  const [fullDuration, setFullDuration] = React.useState(0);
 
   const {
     data: relativeAudios,
@@ -52,8 +36,6 @@ const VideoDetails = () => {
 
   // console.log(relativeAudio, "Related Audio");
 
-  const player = useAudioPlayer(data?.audio);
-  const status = useAudioPlayerStatus(player);
   // console.log("rendering video details", Comments);
   // Add this useEffect to handle playback status changes
   // Get the correct file URL based on type
@@ -64,8 +46,6 @@ const VideoDetails = () => {
       // console.log(finalData);
       if (finalData) {
         // console.log(newDocument);
-        setFullDuration(finalData.duration);
-        max.value = finalData.duration;
         setData(finalData);
       }
     } catch (error) {
@@ -78,10 +58,6 @@ const VideoDetails = () => {
   }, [id]);
 
   // console.log(data);
-
-  const progress = useSharedValue(0);
-  const min = useSharedValue(0);
-  const max = useSharedValue(0);
 
   const [loading, setLoading] = React.useState(false);
   // console.log(player.currentStatus.playbackState, "Playback State");
@@ -113,34 +89,6 @@ const VideoDetails = () => {
     }
   };
 
-  React.useEffect(() => {
-    const setupPlayer = async () => {
-      try {
-        // Just play the audio directly - it will handle loading
-        player.play();
-
-        // Setup listeners
-        player.setAudioSamplingEnabled(true);
-        player.addListener("playbackStatusUpdate", (status) => {
-          setCurrentTime(status.currentTime);
-          progress.value = status.currentTime;
-        });
-        player.addListener("audioSampleUpdate", (audio) => {
-          console.log(audio);
-        });
-      } catch (error) {
-        console.error("Player initialization error:", error);
-      }
-    };
-    if (data?.audio) {
-      setupPlayer();
-    }
-
-    return () => {
-      player.removeAllListeners("playbackStatusUpdate");
-    };
-  }, [data?.audio, player.isLoaded]);
-
   // console.log(status, "Player Duration");
 
   return (
@@ -168,83 +116,7 @@ const VideoDetails = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={tw`bg-base `}
       >
-        <View style={tw`m-4 p-6 bg-primary rounded-lg `}>
-          <View style={tw`flex-row justify-between items-center mt-2`}>
-            <Text style={tw`text-xs text-gray-100`}>
-              {new Date(currentTime * 1000)?.toISOString()?.substr(11, 8)}
-            </Text>
-            <Text style={tw`text-xs text-gray-100`}>
-              {fullDuration &&
-                new Date(fullDuration * 1000)?.toISOString()?.substr(11, 8)}
-            </Text>
-          </View>
-          {player?.currentStatus.playbackState == "idle" ? (
-            <ActivityIndicator
-              size="large"
-              color={PrimaryColor}
-              style={tw`mt-10`}
-            />
-          ) : (
-            <>
-              <Slider
-                onValueChange={(value) => {
-                  console.log(value);
-                  player.seekTo(value);
-                }}
-                bubbleContainerStyle={tw`h-4 w-4 hidden bg-white`}
-                style={tw`bg-green-500 my-5 text-white`}
-                renderThumb={() => null}
-                // thumbScaleValue={}
-                renderTrack={() => null}
-                thumbWidth={0}
-                markStyle={tw`bg-gray-600 h-4 text-white`}
-                bubbleTextStyle={tw`text-white bg-red-600`}
-                containerStyle={tw`bg-gray-100 h-3 rounded-full border border-white`}
-                progress={progress}
-                minimumValue={min}
-                maximumValue={max}
-                theme={{
-                  minimumTrackTintColor: PrimaryColor,
-                  cacheTrackTintColor: "#333",
-                }}
-              />
-            </>
-          )}
-          {/* play puse button and 5ms back and forward buttons  */}
-          <View style={tw`flex-row mx-10 justify-between items-center `}>
-            <IwtButton
-              svg={IconPlayerBackButton}
-              containerStyle={tw`bg-transparent p-2 rounded-full`}
-              onPress={() => {
-                player.seekTo(currentTime - 5);
-              }}
-            />
-            <IwtButton
-              svg={player.playing ? IconPlayerPuseButton : IconPlayerPlayButton}
-              containerStyle={tw`bg-transparent p-2 rounded-full`}
-              onPress={async () => {
-                try {
-                  if (player.playing) {
-                    player.pause();
-                  } else if (player.currentStatus.didJustFinish) {
-                    player.seekTo(1);
-                  } else {
-                    player.play();
-                  }
-                } catch (error) {
-                  console.warn("Error toggling playback:", error);
-                }
-              }}
-            />
-            <IwtButton
-              svg={IconPlayerForwardButton}
-              containerStyle={tw`bg-transparent p-2 rounded-full`}
-              onPress={() => {
-                player.seekTo(currentTime + 5);
-              }}
-            />
-          </View>
-        </View>
+        <AudioPlayerCard data={data} />
         <View style={tw`mt-2 gap-4  mb-5`}>
           <View
             style={tw`gap-1.5 flex-1 flex-row justify-between items-center px-4 mt-2`}
