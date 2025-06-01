@@ -17,6 +17,7 @@ import {
   IconDownload,
 } from "@/icons/Icon";
 import { PrimaryColor, _HIGHT } from "@/utils/utils";
+import React, { useCallback } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import {
   useGetCommentsQuery,
@@ -32,7 +33,6 @@ import EmptyCard from "@/lib/Empty/EmptyCard";
 import IButton from "@/lib/buttons/IButton";
 import IwtButton from "@/lib/buttons/IwtButton";
 import RNFetchBlob from "react-native-blob-util";
-import React from "react";
 import { SvgXml } from "react-native-svg";
 import TButton from "@/lib/buttons/TButton";
 import VideoCard from "@/components/VideoCard";
@@ -104,7 +104,7 @@ const VideoDetails = () => {
 
   const [loading, setLoading] = React.useState(false);
   // console.log(player.currentStatus.playbackState, "Playback State");
-  const handleDownload = async () => {
+  const handleDownload = useCallback(async () => {
     setLoading(true);
     try {
       const res = await RNFetchBlob.config({
@@ -130,7 +130,7 @@ const VideoDetails = () => {
     } catch (error) {
       setLoading(false);
     }
-  };
+  }, [data]);
 
   const handleLoadData = async () => {
     const getNewData = await AsyncStorage.getItem("video");

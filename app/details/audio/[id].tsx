@@ -1,5 +1,6 @@
 import { Platform, ScrollView, Text, View } from "react-native";
 import { PrimaryColor, _HIGHT } from "@/utils/utils";
+import React, { useCallback } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,7 +11,6 @@ import EmptyCard from "@/lib/Empty/EmptyCard";
 import { IconDownload } from "@/icons/Icon";
 import IwtButton from "@/lib/buttons/IwtButton";
 import RNFetchBlob from "react-native-blob-util";
-import React from "react";
 import tw from "@/lib/tailwind";
 import { useRelatedAudiosQuery } from "@/redux/apiSlices/user/userApiSlices";
 
@@ -39,7 +39,7 @@ const VideoDetails = () => {
   // console.log("rendering video details", Comments);
   // Add this useEffect to handle playback status changes
   // Get the correct file URL based on type
-  const handleLoadData = async () => {
+  const handleLoadData = useCallback(async () => {
     const getNewData = await AsyncStorage.getItem("audio");
     try {
       const finalData = JSON.parse(getNewData as any);
@@ -51,7 +51,7 @@ const VideoDetails = () => {
     } catch (error) {
       // console.log(error);
     }
-  };
+  }, []);
 
   React.useEffect(() => {
     handleLoadData();
@@ -61,7 +61,7 @@ const VideoDetails = () => {
 
   const [loading, setLoading] = React.useState(false);
   // console.log(player.currentStatus.playbackState, "Playback State");
-  const handleDownload = async () => {
+  const handleDownload = useCallback(async () => {
     setLoading(true);
     try {
       const res = await RNFetchBlob.config({
@@ -87,7 +87,7 @@ const VideoDetails = () => {
     } catch (error) {
       setLoading(false);
     }
-  };
+  }, [data]);
 
   // console.log(status, "Player Duration");
 

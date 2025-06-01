@@ -1,15 +1,15 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
 import { ActivityIndicator, Platform, Text, View } from "react-native";
+import React, { useCallback } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
-import { IconDownload } from "@/icons/Icon";
-import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
-import IwtButton from "@/lib/buttons/IwtButton";
-import tw from "@/lib/tailwind";
-import { PrimaryColor } from "@/utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React from "react";
-import RNFetchBlob from "react-native-blob-util";
+import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
+import { IconDownload } from "@/icons/Icon";
+import IwtButton from "@/lib/buttons/IwtButton";
 import Pdf from "react-native-pdf";
+import { PrimaryColor } from "@/utils/utils";
+import RNFetchBlob from "react-native-blob-util";
+import tw from "@/lib/tailwind";
 
 const DocumentDetails = () => {
   const router = useRouter();
@@ -73,7 +73,7 @@ const DocumentDetails = () => {
   //   }
   // };
 
-  const handleDownload = async () => {
+  const handleDownload = useCallback(async () => {
     setLoading(true);
     try {
       const res = await RNFetchBlob.config({
@@ -100,7 +100,7 @@ const DocumentDetails = () => {
       setError(true);
       setLoading(false);
     }
-  };
+  }, [data]);
 
   let viewer = null;
 
