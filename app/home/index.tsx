@@ -1,17 +1,17 @@
-import { PrimaryColor, _HIGHT } from "@/utils/utils";
 import { FlatList, RefreshControl, ScrollView, Text, View } from "react-native";
+import { PrimaryColor, _HIGHT } from "@/utils/utils";
 
 import AudioCard from "@/components/AudioCard";
 import DocumentCard from "@/components/DocumentCard";
-import MainHeader from "@/components/MainHeader";
-import SinglePhotoCard from "@/components/SinglePhotoCard";
-import VideoCard from "@/components/VideoCard";
-import { IconHistoryClock } from "@/icons/Icon";
 import EmptyCard from "@/lib/Empty/EmptyCard";
+import { IconHistoryClock } from "@/icons/Icon";
+import MainHeader from "@/components/MainHeader";
+import React from "react";
+import SinglePhotoCard from "@/components/SinglePhotoCard";
+import { SvgXml } from "react-native-svg";
+import VideoCard from "@/components/VideoCard";
 import tw from "@/lib/tailwind";
 import { useGetHomeQuery } from "@/redux/apiSlices/user/userApiSlices";
-import React from "react";
-import { SvgXml } from "react-native-svg";
 
 const index = () => {
   const {
@@ -19,7 +19,11 @@ const index = () => {
     isFetching,
     isLoading,
     refetch,
-  } = useGetHomeQuery({});
+  } = useGetHomeQuery({
+    params: {
+      per_page: 500,
+    },
+  });
 
   // console.log(HomeData)
 
@@ -61,18 +65,12 @@ const index = () => {
               renderItem={({ index, item }) => {
                 return (
                   <React.Fragment>
-                    {item?.type === "video" && (
-                      <VideoCard  tutorial={item} />
-                    )}
+                    {item?.type === "video" && <VideoCard tutorial={item} />}
                     {item?.type === "document" && (
-                      <DocumentCard  document={item} />
+                      <DocumentCard document={item} />
                     )}
-                    {item?.type === "audio" && (
-                      <AudioCard  audio={item} />
-                    )}
-                    {item?.type === "photo" && (
-                      <SinglePhotoCard  photo={item} />
-                    )}
+                    {item?.type === "audio" && <AudioCard audio={item} />}
+                    {item?.type === "photo" && <SinglePhotoCard photo={item} />}
                   </React.Fragment>
                 );
               }}

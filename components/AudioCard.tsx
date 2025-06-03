@@ -1,8 +1,8 @@
-import { IconAudio, IconPlayButton } from "@/icons/Icon";
 import { Text, View } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import IButton from "@/lib/buttons/IButton";
+import { IconAudio } from "@/icons/Icon";
 import { Image } from "expo-image";
 import IwtButton from "@/lib/buttons/IwtButton";
 import React from "react";
@@ -38,8 +38,12 @@ const AudioCard = ({ audio }: { audio: any }) => {
               AsyncStorage.setItem("audio", JSON.stringify(audio));
               router.push(`/details/audio/${audio?.id}`);
             }}
-            svg={IconPlayButton}
-            containerStyle={tw`bg-transparent rounded-full p-2`}
+            svg={IconAudio}
+            svgProps={{
+              height: 30,
+              width: 30,
+            }}
+            containerStyle={tw`bg-transparent rounded-full p-2 h-14 w-14 bg-white bg-opacity-15`}
           />
         </View>
       </View>
