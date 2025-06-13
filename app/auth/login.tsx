@@ -13,6 +13,7 @@ import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
 import { useLoginMutation } from "@/redux/apiSlices/authApiSlices";
+import { PrimaryColor } from "@/utils/utils";
 import { toast } from "@backpackapp-io/react-native-toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Checkbox from "expo-checkbox";
@@ -23,7 +24,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const login = () => {
   const router = useRouter();
   const [checkBox, setCheckBox] = useState(false);
-  const [login] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
   const [saveLoinInfo, setLoginInfo] = React.useState<any>(null);
 
   // console.log(saveLoinInfo);
@@ -173,7 +174,9 @@ const login = () => {
                   </Link>
                 </View>
                 <TButton
+                  isLoading={isLoading}
                   title="Login"
+                  loadingColor={PrimaryColor}
                   onPress={() => {
                     handleSubmit();
                     // router.push("/home");

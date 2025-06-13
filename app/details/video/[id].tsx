@@ -1,6 +1,20 @@
 "use strict";
 
 import {
+  IconCalendarMini,
+  IconClockMini,
+  IconClose,
+  IconDownload,
+} from "@/icons/Icon";
+import {
+  useGetCommentsQuery,
+  usePostCommentMutation,
+  useRelatedVideosQuery,
+} from "@/redux/apiSlices/user/userApiSlices";
+import { PrimaryColor, _HIGHT } from "@/utils/utils";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useCallback } from "react";
+import {
   FlatList,
   Platform,
   RefreshControl,
@@ -10,34 +24,20 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  IconCalendarMini,
-  IconClockMini,
-  IconClose,
-  IconDownload,
-} from "@/icons/Icon";
-import { PrimaryColor, _HIGHT } from "@/utils/utils";
-import React, { useCallback } from "react";
-import { router, useLocalSearchParams } from "expo-router";
-import {
-  useGetCommentsQuery,
-  usePostCommentMutation,
-  useRelatedVideosQuery,
-} from "@/redux/apiSlices/user/userApiSlices";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Avatar from "@/lib/ui/Avatar";
-import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
-import BottomModal from "@/lib/modals/BottomModal";
-import EmptyCard from "@/lib/Empty/EmptyCard";
-import IButton from "@/lib/buttons/IButton";
-import IwtButton from "@/lib/buttons/IwtButton";
-import RNFetchBlob from "react-native-blob-util";
-import { SvgXml } from "react-native-svg";
-import TButton from "@/lib/buttons/TButton";
 import VideoCard from "@/components/VideoCard";
 import VideoPlayerCard from "@/components/VideoPlayerCard";
+import EmptyCard from "@/lib/Empty/EmptyCard";
+import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
+import IButton from "@/lib/buttons/IButton";
+import IwtButton from "@/lib/buttons/IwtButton";
+import TButton from "@/lib/buttons/TButton";
+import BottomModal from "@/lib/modals/BottomModal";
 import tw from "@/lib/tailwind";
+import Avatar from "@/lib/ui/Avatar";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import RNFetchBlob from "react-native-blob-util";
+import { SvgXml } from "react-native-svg";
 
 const VideoDetails = () => {
   const [isModalVisible, setIsModalVisible] = React.useState(false);

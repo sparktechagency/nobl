@@ -1,9 +1,9 @@
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { PrimaryColor, _WIGHT } from "@/utils/utils";
 import { VideoSource, VideoView, useVideoPlayer } from "expo-video";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
-import React from "react";
 import { useEvent } from "expo";
+import React from "react";
 
 interface VideoPlayerCardProps {
   source: VideoSource;
@@ -12,19 +12,28 @@ interface VideoPlayerCardProps {
 const VideoPlayerCard = ({ source }: VideoPlayerCardProps) => {
   //  console.log(source)
   const player = useVideoPlayer(
-    // "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" as VideoSource,
+    // "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" as VideoSource,
     source as VideoSource,
     (player) => {
+      // player.showNowPlayingNotification = true;
+      // player.allowsExternalPlayback = true;
+      // player.staysActiveInBackground = true;
+      player.audioMixingMode = "doNotMix";
+
+      // player.replace(source as VideoSource);
       player.play();
-      player.showNowPlayingNotification = true;
-      player.allowsExternalPlayback = true;
-      player.staysActiveInBackground = true;
     }
   );
 
-  const { status, error } = useEvent(player, "statusChange", {
+  const { status, error, oldStatus } = useEvent(player, "statusChange", {
     status: player.status,
   });
+
+  // dismiss all littiner
+
+  console.log(error);
+
+  console.log(status, oldStatus);
 
   return (
     <View>
