@@ -1,9 +1,7 @@
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
-import { IconRightArray } from "@/assets/icon/Icon";
 import React from "react";
 import { SvgXml } from "react-native-svg";
-import { View } from "react-native-ui-lib";
 import tw from "../tailwind";
 
 interface BackButtonProps {
@@ -23,18 +21,31 @@ const BackButton = ({
     <TouchableOpacity
       activeOpacity={0.5}
       onPress={onPress}
-      style={[tw`flex-row items-center gap-2 p-[4%] `, containerStyle]}
+      style={[tw`flex-row items-center gap-2  `, containerStyle]}
     >
-      <View style={tw`flex-row items-center gap-2`}>
-        <SvgXml xml={IconRightArray} />
+      <TouchableOpacity
+        onPress={onPress}
+        style={tw`flex-row items-center gap-4 `}
+      >
+        <View
+          style={tw`bg-white w-10 h-10 justify-center items-center rounded-lg`}
+        >
+          <SvgXml
+            xml={`<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="36" height="36" rx="6" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M13.3976 18.8888L21.0798 26L23 24.2225L16.2779 18L23 11.7775L21.0798 10L13.3976 17.1113C13.143 17.347 13 17.6667 13 18C13 18.3333 13.143 18.653 13.3976 18.8888Z" fill="#4B5320"/>
+</svg>
 
-        {title && (
-          <Text style={[tw`text-black900 font-RobotoBold text-lg`, titleStyle]}>
-            {" "}
-            {title}{" "}
-          </Text>
-        )}
-      </View>
+`}
+          />
+        </View>
+        <Text
+          numberOfLines={1}
+          style={[tw`text-white  font-PoppinsSemiBold text-base`, titleStyle]}
+        >
+          {title ? title : null}
+        </Text>
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 };

@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { Platform, Text, TouchableOpacity, View } from "react-native";
 
 import Avatar from "@/lib/ui/Avatar";
 import IButton from "@/lib/buttons/IButton";
@@ -14,7 +14,13 @@ const MainHeader = () => {
   const { data: UserData } = useGetProfileQuery({});
   return (
     <View
-      style={tw`flex-row justify-between items-start py-8 px-4 gap-3 bg-primary`}
+      style={[
+        tw`flex-row justify-between items-start px-4 gap-3 bg-primary`,
+        {
+          paddingTop: Platform.OS === "ios" ? 0 : 20,
+          paddingBottom: 20,
+        },
+      ]}
     >
       <View style={tw`gap-2`}>
         <Text style={tw`text-white font-PoppinsBold text-xl`}>

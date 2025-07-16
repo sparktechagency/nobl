@@ -116,6 +116,7 @@ const BottomModal = forwardRef(
     }, [visible]);
 
     // React Native modal render
+
     return (
       <Modal
         transparent
@@ -131,9 +132,11 @@ const BottomModal = forwardRef(
           <TouchableOpacity
             style={styles.mask}
             activeOpacity={1}
-            onPress={closeOnPressMask ? () => handleSetVisible(false) : null}
+            onPress={
+              closeOnPressMask ? () => handleSetVisible(false) : () => {}
+            }
           />
-          <SafeAreaView style={styles.safeArea}>
+          <ModalContent>
             <Animated.View
               style={[
                 styles.container,
@@ -159,7 +162,7 @@ const BottomModal = forwardRef(
               )}
               {children}
             </Animated.View>
-          </SafeAreaView>
+          </ModalContent>
         </KeyboardAvoidingView>
       </Modal>
     );
@@ -167,6 +170,14 @@ const BottomModal = forwardRef(
 );
 
 export default BottomModal;
+
+export const ModalContent = ({ children }: any): React.ReactElement => {
+  if (Platform.OS === "ios") {
+    return children;
+  } else {
+    return <SafeAreaView style={styles.safeArea}>{children}</SafeAreaView>;
+  }
+};
 
 const styles = StyleSheet.create({
   safeArea: {

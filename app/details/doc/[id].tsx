@@ -3,9 +3,9 @@ import React, { useCallback } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
+import BackButton from "@/lib/backHeader/BackButton";
+import IButton from "@/lib/buttons/IButton";
 import { IconDownload } from "@/icons/Icon";
-import IwtButton from "@/lib/buttons/IwtButton";
 import Pdf from "react-native-pdf";
 import { PrimaryColor } from "@/utils/utils";
 import RNFetchBlob from "react-native-blob-util";
@@ -124,19 +124,17 @@ const DocumentDetails = () => {
   }
 
   return (
-    <View style={tw`flex-1 bg-white`}>
+    <View style={tw`flex-1 bg-transparent`}>
       {/* Header */}
       <View
-        style={tw`flex-row py-3 justify-between items-center bg-primary pr-4`}
+        style={tw`  flex-row justify-between items-center absolute top-0 left-0 right-0 z-20  mt-2 mx-3  bg-transparent `}
       >
-        <BackWithComponent onPress={() => router.back()} />
+        <BackButton onPress={() => router.back()} />
         {!error && (
-          <IwtButton
-            title="Download"
+          <IButton
             svg={IconDownload}
             disabled={loading}
-            containerStyle={tw`bg-white p-1 h-9 px-3 rounded-md`}
-            titleStyle={tw`text-primary font-PoppinsRegular`}
+            containerStyle={tw`bg-white self-start p-1 h-9 px-3 rounded-md`}
             onPress={handleDownload}
           />
         )}

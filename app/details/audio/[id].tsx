@@ -95,7 +95,12 @@ const VideoDetails = () => {
     <View key={id as string} style={tw`flex-1 bg-white`}>
       {/* Header Parts  */}
       <View
-        style={tw`flex-row py-3 justify-between items-center bg-primary pr-4`}
+        style={[
+          tw`flex-row justify-between pb-2 items-center bg-primary pr-4`,
+          {
+            paddingTop: Platform.OS === "android" ? 5 : 0,
+          },
+        ]}
       >
         <BackWithComponent onPress={() => router.back()} />
         <IwtButton

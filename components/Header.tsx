@@ -1,4 +1,4 @@
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Platform, Text, TouchableOpacity, View } from "react-native";
 import { IconArrowDown, IconClose, IconFilter } from "@/icons/Icon";
 
 import BottomModal from "@/lib/modals/BottomModal";
@@ -44,7 +44,13 @@ const Header = ({
   return (
     <>
       <View
-        style={tw`flex-row justify-between items-start py-6 px-4 gap-5 bg-primary`}
+        style={[
+          tw`flex-row justify-between items-start  px-4 gap-5 bg-primary`,
+          {
+            paddingTop: Platform.OS === "ios" ? 0 : 10,
+            paddingBottom: 10,
+          },
+        ]}
       >
         <View style={tw`gap-2`}>
           <Text style={tw`text-white font-PoppinsRegular text-lg `}>

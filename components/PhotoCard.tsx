@@ -4,15 +4,14 @@ import * as MediaLibrary from "expo-media-library";
 import {
   Alert,
   Platform,
-  Pressable,
   Text,
+  TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
 
-import IButton from "@/lib/buttons/IButton";
-import { IconDownload } from "@/icons/Icon";
 import { Image } from "expo-image";
 import React from "react";
+import { router } from "expo-router";
 import tw from "@/lib/tailwind";
 
 const PhotoCard = ({
@@ -94,8 +93,20 @@ const PhotoCard = ({
     // const newHeight = width * aspectRatio;
   }, [screenWidth]);
 
+  console.log(photo?.photo);
+
   return (
-    <Pressable style={tw`m-1 relative rounded-md overflow-hidden`}>
+    <TouchableOpacity
+      onPress={() => {
+        router.push(`/details/photo`, {
+          dangerouslySingular(name, params) {
+            params.link = photo?.photo;
+            return name;
+          },
+        });
+      }}
+      style={tw`m-1 relative rounded-md overflow-hidden`}
+    >
       <Image
         source={{ uri: photo?.photo }}
         style={{
@@ -110,13 +121,13 @@ const PhotoCard = ({
       >
         {photo.category?.name || "Uncategorized"}
       </Text>
-      <IButton
+      {/* <IButton
         svg={IconDownload}
         isLoading={loading}
         onPress={downloadPhoto}
         containerStyle={tw`absolute top-2 right-2 bg-deepBlue50 w-8 h-8 rounded-md p-2`}
-      />
-    </Pressable>
+      /> */}
+    </TouchableOpacity>
   );
 };
 

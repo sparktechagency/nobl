@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { Platform, Text, TouchableOpacity, View } from "react-native";
 
 import React from "react";
 import { SvgXml } from "react-native-svg";
@@ -26,8 +26,12 @@ const BackWithComponent = ({
   return (
     <View
       style={[
-        tw`flex-row items-center justify-between gap-2 p-[4%] `,
+        tw`flex-row items-center justify-between gap-2 px-[4%] `,
         containerStyle,
+        {
+          paddingTop: Platform.OS === "android" ? 5 : 0,
+          paddingBottom: 5,
+        },
       ]}
     >
       {!togather ? (
