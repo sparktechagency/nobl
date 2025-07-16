@@ -12,10 +12,10 @@ import {
   IconUnActivePhoto,
   IconUnActiveVideo,
 } from "@/icons/Icon";
-import { _WIGHT } from "@/utils/utils";
 import { Text, TouchableOpacity, View } from "react-native";
 
 import tw from "@/lib/tailwind";
+import { _WIGHT } from "@/utils/utils";
 import { Tabs } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
@@ -287,7 +287,7 @@ export default function TabRoutes() {
                           : tw`text-white text-sm font-PoppinsRegular `,
                       ]}
                     >
-                      Video
+                      links
                     </Text>
                   </View>
 
