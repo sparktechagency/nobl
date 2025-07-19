@@ -1,70 +1,80 @@
-import { PrimaryColor, _WIGHT } from "@/utils/utils";
-import { VideoSource, VideoView, useVideoPlayer } from "expo-video";
+import * as FileSystem from "expo-file-system";
+
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { PrimaryColor, _WIGHT } from "@/utils/utils";
+import React, { useEffect, useState } from "react";
+import { VideoSource, VideoView, useVideoPlayer } from "expo-video";
 
 import { useEvent } from "expo";
-import React from "react";
 
 interface VideoPlayerCardProps {
   source: VideoSource;
 }
 
 const VideoPlayerCard = ({ source }: VideoPlayerCardProps) => {
-  //  console.log(source)
-  const player = useVideoPlayer(
-    // "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" as VideoSource,
-    source as VideoSource,
-    (player) => {
-      // player.showNowPlayingNotification = true;
-      // player.allowsExternalPlayback = true;
-      // player.staysActiveInBackground = true;
-      player.audioMixingMode = "doNotMix";
+  const [cachedSource, setCachedSource] = useState<VideoSource | null>(null);
+  const [downloadError, setDownloadError] = useState(false);
 
-      // player.replace(source as VideoSource);
+  // console.log(`video-${source?.toString()?.split("/").pop()}`);
+
+  // Cache the video to local file system
+  useEffect(() => {
+    const downloadVideo = async (source: VideoSource) => {
+      try {
+        const fileUri =
+          FileSystem.documentDirectory +
+          `${source?.toString()?.split("/").pop()}`;
+
+        const fileInfo = await FileSystem?.getInfoAsync(fileUri);
+        // console.log("Downloading video...", fileUri);
+        // Check if file already exists
+        // console.log(fileInfo);
+        if (fileInfo.exists) {
+          console.log("Video already cached");
+          setCachedSource(fileInfo?.uri as VideoSource);
+          return;
+        } else {
+          await FileSystem?.downloadAsync(source as any, fileUri);
+          console.log("Downloading video...");
+        }
+        // console.log(fileUri, fileInfo);
+        setCachedSource(fileUri as VideoSource);
+      } catch (error: any) {
+        console.error("Download error:", error);
+        setDownloadError(true);
+      }
+    };
+
+    downloadVideo(source);
+  }, [source]);
+
+  const player = useVideoPlayer(
+    downloadError ? source : (cachedSource as VideoSource),
+    (player) => {
       player.play();
     }
   );
 
-  const { status, error, oldStatus } = useEvent(player, "statusChange", {
+  const { status, error } = useEvent(player, "statusChange", {
     status: player.status,
   });
 
-  // dismiss all littiner
-
-  console.log(error);
-
-  console.log(status, oldStatus);
-
   return (
     <View>
-      {status == "loading" && (
-        <View
-          style={[
-            styles.video,
-            { justifyContent: "center", position: "absolute" },
-          ]}
-        >
+      {status === "loading" && (
+        <View style={[styles.video, styles.absoluteCenter]}>
           <ActivityIndicator color={PrimaryColor} size="large" />
         </View>
       )}
       {status === "error" && (
-        <View
-          style={[
-            styles.video,
-            { justifyContent: "center", position: "absolute" },
-          ]}
-        >
+        <View style={[styles.video, styles.absoluteCenter]}>
           <Text style={{ color: "red", textAlign: "center" }}>
             Failed to load video: {error?.message}
           </Text>
         </View>
       )}
 
-      <VideoView
-        player={player}
-        style={styles.video}
-        // nativeControls={false}
-      />
+      <VideoView player={player} style={styles.video} />
     </View>
   );
 };
@@ -72,29 +82,22 @@ const VideoPlayerCard = ({ source }: VideoPlayerCardProps) => {
 export default React.memo(VideoPlayerCard);
 
 const styles = StyleSheet.create({
-  contentContainer: {
-    flex: 1,
-    padding: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 50,
-  },
-  button: {
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 3,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    backgroundColor: "#4630ec",
-  },
-  buttonText: {
-    fontSize: 12,
-    fontWeight: "bold",
-    color: "#eeeeee",
-    textAlign: "center",
-  },
   video: {
     width: _WIGHT,
     aspectRatio: 16 / 9,
+  },
+  center: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  absoluteCenter: {
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 100,
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 });

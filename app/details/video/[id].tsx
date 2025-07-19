@@ -182,7 +182,7 @@ const VideoDetails = () => {
       >
         {/* VIdeo Player */}
 
-        <VideoPlayerCard key={data?.video} source={data?.video} />
+        <VideoPlayerCard source={data?.video} />
 
         {/* Video Details */}
 
