@@ -1,15 +1,16 @@
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 
-import { Alert, Image, Platform, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { Alert, Platform, View } from "react-native";
 
-import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
 import { IconDownload } from "@/icons/Icon";
+import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
 import IwtButton from "@/lib/buttons/IwtButton";
-import { PrimaryColor } from "@/utils/utils";
-import React from "react";
 import tw from "@/lib/tailwind";
+import { PrimaryColor } from "@/utils/utils";
+import { Image } from "expo-image";
+import React from "react";
 
 const PictureShow = () => {
   const { link } = useLocalSearchParams();
@@ -89,18 +90,18 @@ const PictureShow = () => {
           loadingColor={PrimaryColor}
           svg={IconDownload}
           // disabled={status === "loading"}
-          containerStyle={tw`bg-white p-1 h-9 px-3 rounded-md`}
+          containerStyle={tw`bg-white p-1 h-9 px-3 rounded-md z-40`}
           titleStyle={tw`text-primary font-PoppinsRegular`}
           onPress={() => {
             downloadPhoto();
           }}
         />
       </View>
-      <View style={tw`flex-1 m-5`}>
+      <View style={tw`w-full h-[80%]  z-0`}>
         <Image
           source={{ uri: link as string }}
-          style={tw`aspect-ratio-16/9 w-full`}
-          resizeMode="contain"
+          style={tw`w-full h-full  `}
+          contentFit="contain"
         />
       </View>
     </View>

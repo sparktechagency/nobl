@@ -14,11 +14,11 @@ import {
 } from "@/icons/Icon";
 import { Text, TouchableOpacity, View } from "react-native";
 
-import tw from "@/lib/tailwind";
-import { _WIGHT } from "@/utils/utils";
-import { Tabs } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
+import { Tabs } from "expo-router";
+import { _WIGHT } from "@/utils/utils";
+import tw from "@/lib/tailwind";
 
 const TabBarButton = (props: any) => {
   return <TouchableOpacity {...props} />;
@@ -307,7 +307,7 @@ export default function TabRoutes() {
           }}
         />
       </Tabs>
-      {/* <StatusBar barStyle="light-content" backgroundColor={PrimaryColor} /> */}
+      {/* <StatusBar   barStyle="light-content" backgroundColor={PrimaryColor} /> */}
     </>
   );
 }
