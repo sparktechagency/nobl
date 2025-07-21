@@ -1,59 +1,18 @@
-import * as FileSystem from "expo-file-system";
-
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { PrimaryColor, _WIGHT } from "@/utils/utils";
-import React, { useEffect, useState } from "react";
 import { VideoSource, VideoView, useVideoPlayer } from "expo-video";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 import { useEvent } from "expo";
+import React from "react";
 
 interface VideoPlayerCardProps {
-  source: VideoSource;
+  source: string | VideoSource;
 }
 
 const VideoPlayerCard = ({ source }: VideoPlayerCardProps) => {
-  const [cachedSource, setCachedSource] = useState<VideoSource | null>(null);
-  const [downloadError, setDownloadError] = useState(false);
-
-  // console.log(`video-${source?.toString()?.split("/").pop()}`);
-
-  // Cache the video to local file system
-  useEffect(() => {
-    const downloadVideo = async (source: VideoSource) => {
-      try {
-        const fileUri =
-          FileSystem.documentDirectory +
-          `${source?.toString()?.split("/").pop()}`;
-
-        const fileInfo = await FileSystem?.getInfoAsync(fileUri);
-        // console.log("Downloading video...", fileUri);
-        // Check if file already exists
-        // console.log(fileInfo);
-        if (fileInfo.exists) {
-          console.log("Video already cached");
-          setCachedSource(fileInfo?.uri as VideoSource);
-          return;
-        } else {
-          await FileSystem?.downloadAsync(source as any, fileUri);
-          console.log("Downloading video...");
-        }
-        // console.log(fileUri, fileInfo);
-        setCachedSource(fileUri as VideoSource);
-      } catch (error: any) {
-        console.error("Download error:", error);
-        setDownloadError(true);
-      }
-    };
-
-    downloadVideo(source);
-  }, [source]);
-
-  const player = useVideoPlayer(
-    downloadError ? source : (cachedSource as VideoSource),
-    (player) => {
-      player.play();
-    }
-  );
+  const player = useVideoPlayer(source, (player) => {
+    player.play();
+  });
 
   const { status, error } = useEvent(player, "statusChange", {
     status: player.status,
