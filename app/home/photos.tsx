@@ -44,10 +44,8 @@ const photos = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={tw`bg-base gap-4 `}
       >
-        <View
-          style={tw`mt-3 bg-base flex-row pt-4 pb-2 px-4 gap-3 items-center `}
-        />
-        <View style={tw`flex-1 bg-gray-100 pb-10 pt-4 rounded-t-3xl px-4`}>
+        {/* <View style={tw` bg-base  flex-row   px-4 gap-3 items-center `} /> */}
+        <View style={tw`py-3  px-4`}>
           {/* <Galeria urls={PhotosData?.data?.data.map((photo) => photo?.photo)}> */}
           <MasonryFlashList
             scrollEnabled={false}

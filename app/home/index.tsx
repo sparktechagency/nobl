@@ -48,7 +48,7 @@ const index = () => {
             Recent Activities
           </Text>
         </View>
-        <View style={tw`bg-gray-100 py-10 rounded-t-3xl px-4`}>
+        <View style={tw` pb-10 rounded-t-3xl px-4`}>
           <View style={tw`border border-gray-300 rounded-lg py-4 px-2 gap-5 `}>
             <FlatList
               scrollEnabled={false}

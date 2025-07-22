@@ -5,7 +5,6 @@ import IButton from "@/lib/buttons/IButton";
 import { IconSettings } from "@/icons/Icon";
 import React from "react";
 import { SvgXml } from "react-native-svg";
-import { getGreeting } from "@/utils/utils";
 import { router } from "expo-router";
 import tw from "@/lib/tailwind";
 import { useGetProfileQuery } from "@/redux/apiSlices/authApiSlices";
@@ -18,14 +17,14 @@ const MainHeader = () => {
         tw`flex-row justify-between items-start px-4 gap-3 bg-primary`,
         {
           paddingTop: Platform.OS === "ios" ? 0 : 20,
-          paddingBottom: 20,
+          paddingBottom: 10,
         },
       ]}
     >
       <View style={tw`gap-2`}>
-        <Text style={tw`text-white font-PoppinsBold text-xl`}>
+        {/* <Text style={tw`text-white font-PoppinsBold text-xl`}>
           {getGreeting()},
-        </Text>
+        </Text> */}
         <TouchableOpacity
           onPress={() => {
             router?.push("/setting/my_profile");
@@ -33,13 +32,13 @@ const MainHeader = () => {
           style={tw`flex-row items-center gap-2 border border-white self-start px-3 py-1 rounded-md`}
         >
           <Avatar
-            size={40}
+            size={30}
             source={{
               uri: UserData?.data?.photo,
             }}
           />
 
-          <Text style={tw`text-white font-PoppinsMedium text-lg`}>
+          <Text style={tw`text-white font-PoppinsMedium text-md`}>
             {UserData?.data?.name}
           </Text>
         </TouchableOpacity>
@@ -48,7 +47,7 @@ const MainHeader = () => {
         onPress={() => {
           router.push("/setting");
         }}
-        icon={<SvgXml xml={IconSettings} />}
+        icon={<SvgXml xml={IconSettings} height={35} width={35} />}
         containerStyle={tw`self-start p-0 bg-transparent`}
       />
     </View>

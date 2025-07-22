@@ -1,4 +1,3 @@
-import { PrimaryColor, _HIGHT } from "@/utils/utils";
 import {
   FlatList,
   LogBox,
@@ -6,14 +5,15 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
+import { PrimaryColor, _HIGHT } from "@/utils/utils";
 
 import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
 import EmptyCard from "@/lib/Empty/EmptyCard";
-import tw from "@/lib/tailwind";
-import { useGetAdditionalPageQuery } from "@/redux/apiSlices/user/userApiSlices";
-import { router } from "expo-router";
 import React from "react";
 import RenderHtml from "react-native-render-html";
+import { router } from "expo-router";
+import tw from "@/lib/tailwind";
+import { useGetAdditionalPageQuery } from "@/redux/apiSlices/user/userApiSlices";
 
 LogBox.ignoreAllLogs();
 
@@ -30,7 +30,7 @@ const terms_and_conditions = () => {
   };
   return (
     <View style={tw`flex-1 bg-white`}>
-      <View style={tw`h-20 bg-primary`}>
+      <View style={tw`h-13 bg-primary`}>
         <BackWithComponent
           onPress={() => router.back()}
           title="Terms & Conditions"

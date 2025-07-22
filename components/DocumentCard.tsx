@@ -83,9 +83,9 @@ const DocumentCard = ({ document }: { document: any }) => {
         contentFit="cover"
       />
       <View
-        style={tw` flex-row justify-between items-center mt-3 px-4 pb-4 gap-2`}
+        style={tw` flex-row justify-between items-center mt-3 px-4 pb-1 gap-2`}
       >
-        <View style={tw`gap-1.5 flex-1`}>
+        <View style={tw`gap-1.5 flex-1 flex-row`}>
           <Text style={tw`font-PoppinsSemiBold text-base flex-1`}>
             {document?.title}
           </Text>
@@ -95,9 +95,9 @@ const DocumentCard = ({ document }: { document: any }) => {
             {document?.category?.name}
           </Text>
         </View>
-        <Text style={tw`text-primary text-xs font-PoppinsMedium`}>
+        {/* <Text style={tw`text-primary text-xs font-PoppinsMedium`}>
           {document?.no_of_page} P
-        </Text>
+        </Text> */}
       </View>
       <View
         style={tw`bg-primary absolute right-2 top-2 rounded-full  justify-center items-center  h-9 w-9 `}

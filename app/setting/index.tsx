@@ -7,21 +7,21 @@ import {
 } from "@/icons/Icon";
 import { Text, TouchableOpacity, View } from "react-native";
 
-import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
-import tw from "@/lib/tailwind";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
+import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
 import React from "react";
 import { SvgXml } from "react-native-svg";
+import tw from "@/lib/tailwind";
+import { useRouter } from "expo-router";
 
 const index = () => {
   const router = useRouter();
   return (
     <View style={tw`flex-1 bg-white`}>
-      <View style={tw`h-20 bg-primary`}>
+      <View style={tw`h-13 bg-primary`}>
         <BackWithComponent
           onPress={() => router.back()}
-          title="Setting"
+          title="Settings"
           togather
         />
       </View>

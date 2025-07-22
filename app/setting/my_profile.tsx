@@ -1,21 +1,21 @@
 import { ScrollView, View } from "react-native";
 
-import { IconEdit } from "@/icons/Icon";
-import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
-import IwtButton from "@/lib/buttons/IwtButton";
-import InputText from "@/lib/inputs/InputText";
-import tw from "@/lib/tailwind";
 import Avatar from "@/lib/ui/Avatar";
-import { useGetProfileQuery } from "@/redux/apiSlices/authApiSlices";
-import { router } from "expo-router";
+import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
+import { IconEdit } from "@/icons/Icon";
+import InputText from "@/lib/inputs/InputText";
+import IwtButton from "@/lib/buttons/IwtButton";
 import React from "react";
+import { router } from "expo-router";
+import tw from "@/lib/tailwind";
+import { useGetProfileQuery } from "@/redux/apiSlices/authApiSlices";
 
 const my_profile = () => {
   const { data: userData } = useGetProfileQuery({});
 
   return (
     <View style={tw`flex-1 bg-base`}>
-      <View style={tw`h-20 bg-primary`}>
+      <View style={tw`h-13 bg-primary`}>
         <BackWithComponent
           onPress={() => router.back()}
           title="My Profile"

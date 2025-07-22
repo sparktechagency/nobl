@@ -37,7 +37,8 @@ export default function TabRoutes() {
           // tabBarHideOnKeyboard: true,
           // tabBarActiveTintColor: "#000",
           // tabBarInactiveTintColor: "#000",
-          tabBarStyle: tw`bg-primary h-20  flex-col  pb-0 pt-2  `,
+          tabBarStyle: tw`bg-primary h-20  flex-col  pb-0 pt-2  px-4`,
+          // tabBarShowLabel: false,
           // tabBarButton: TabBarButton,
           animation: "fade",
         }}

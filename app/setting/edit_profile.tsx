@@ -1,21 +1,21 @@
 import * as ImagePicker from "expo-image-picker";
 
+import { ScrollView, View } from "react-native";
 import {
   useGetProfileQuery,
   useUpdateProfileMutation,
 } from "@/redux/apiSlices/authApiSlices";
-import { ScrollView, View } from "react-native";
 
-import { IconCamera } from "@/icons/Icon";
-import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
-import IButton from "@/lib/buttons/IButton";
-import TButton from "@/lib/buttons/TButton";
-import InputText from "@/lib/inputs/InputText";
-import tw from "@/lib/tailwind";
 import Avatar from "@/lib/ui/Avatar";
-import { router } from "expo-router";
+import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
 import { Formik } from "formik";
+import IButton from "@/lib/buttons/IButton";
+import { IconCamera } from "@/icons/Icon";
+import InputText from "@/lib/inputs/InputText";
 import React from "react";
+import TButton from "@/lib/buttons/TButton";
+import { router } from "expo-router";
+import tw from "@/lib/tailwind";
 
 const edit_profile = () => {
   const { data: userData } = useGetProfileQuery({});
@@ -88,7 +88,7 @@ const edit_profile = () => {
   };
   return (
     <View style={tw`flex-1 bg-base`}>
-      <View style={tw`h-20 bg-primary`}>
+      <View style={tw`h-13 bg-primary`}>
         <BackWithComponent
           onPress={() => router.back()}
           title="Edit Profile"

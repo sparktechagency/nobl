@@ -1,16 +1,16 @@
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 
-import { router, useLocalSearchParams } from "expo-router";
 import { Alert, Platform, View } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
 
-import { IconDownload } from "@/icons/Icon";
 import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
+import { IconDownload } from "@/icons/Icon";
+import ImageZoomer from "@/lib/imageZoomer/ImageZoomer";
 import IwtButton from "@/lib/buttons/IwtButton";
-import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
-import { Image } from "expo-image";
 import React from "react";
+import tw from "@/lib/tailwind";
 
 const PictureShow = () => {
   const { link } = useLocalSearchParams();
@@ -77,7 +77,7 @@ const PictureShow = () => {
       {/* Header Parts  */}
       <View
         style={[
-          tw`flex-row justify-between pb-2 items-center bg-primary pr-4`,
+          tw`flex-row z-50 justify-between pb-2 items-center bg-primary pr-4`,
           {
             paddingTop: Platform.OS === "android" ? 5 : 0,
           },
@@ -90,7 +90,7 @@ const PictureShow = () => {
           loadingColor={PrimaryColor}
           svg={IconDownload}
           // disabled={status === "loading"}
-          containerStyle={tw`bg-white p-1 h-9 px-3 rounded-md z-40`}
+          containerStyle={tw`bg-white  p-1 h-9 px-3 rounded-md `}
           titleStyle={tw`text-primary font-PoppinsRegular`}
           onPress={() => {
             downloadPhoto();
@@ -98,11 +98,13 @@ const PictureShow = () => {
         />
       </View>
       <View style={tw`w-full h-[80%]  z-0`}>
-        <Image
+        {/* <Image
           source={{ uri: link as string }}
           style={tw`w-full h-full  `}
           contentFit="contain"
-        />
+        /> */}
+
+        <ImageZoomer uri={link as string} />
       </View>
     </View>
   );
