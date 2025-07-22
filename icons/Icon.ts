@@ -135,7 +135,7 @@ export const IconActiveLinks = `<svg width="21" height="20" viewBox="0 0 21 20" 
 
 `;
 export const IconOuterArray = `<svg width="34" height="35" viewBox="0 0 34 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect y="0.370117" width="34" height="34" rx="4" fill="white"/>
+<rect y="0.370117" width="34" height="34" rx="4" />
 <path d="M10.843 22.1127L19.0356 13.9201L12.6716 13.9201L12.6716 11.9204H22.4495L22.4495 21.6983L20.4498 21.6983L20.4498 15.3343L12.2572 23.5269L10.843 22.1127Z" fill="#4B5320"/>
 </svg>
 
