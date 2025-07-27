@@ -1,16 +1,16 @@
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 
-import { Alert, Platform, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { Alert, Platform, View } from "react-native";
 
-import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
 import { IconDownload } from "@/icons/Icon";
-import ImageZoomer from "@/lib/imageZoomer/ImageZoomer";
+import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
 import IwtButton from "@/lib/buttons/IwtButton";
+import ImageZoomer from "@/lib/imageZoomer/ImageZoomer";
+import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
 import React from "react";
-import tw from "@/lib/tailwind";
 
 const PictureShow = () => {
   const { link } = useLocalSearchParams();
@@ -89,8 +89,9 @@ const PictureShow = () => {
           isLoading={loading}
           loadingColor={PrimaryColor}
           svg={IconDownload}
+          svgProps={{ width: 10, height: 10 }}
           // disabled={status === "loading"}
-          containerStyle={tw`bg-white  p-1 h-9 px-3 rounded-md `}
+          containerStyle={tw`bg-white p-1 h-8 px-3 rounded-md`}
           titleStyle={tw`text-primary font-PoppinsRegular`}
           onPress={() => {
             downloadPhoto();

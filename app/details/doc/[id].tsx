@@ -1,15 +1,15 @@
-import { ActivityIndicator, Platform, Text, View } from "react-native";
-import React, { useCallback } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useCallback } from "react";
+import { ActivityIndicator, Platform, Text, View } from "react-native";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { IconDownload } from "@/icons/Icon";
 import BackButton from "@/lib/backHeader/BackButton";
 import IButton from "@/lib/buttons/IButton";
-import { IconDownload } from "@/icons/Icon";
-import Pdf from "react-native-pdf";
-import { PrimaryColor } from "@/utils/utils";
-import RNFetchBlob from "react-native-blob-util";
 import tw from "@/lib/tailwind";
+import { PrimaryColor } from "@/utils/utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import RNFetchBlob from "react-native-blob-util";
+import Pdf from "react-native-pdf";
 
 const DocumentDetails = () => {
   const router = useRouter();
@@ -133,8 +133,9 @@ const DocumentDetails = () => {
         {!error && (
           <IButton
             svg={IconDownload}
+            svgProps={{ width: 10, height: 10 }}
             disabled={loading}
-            containerStyle={tw`bg-white self-start p-1 h-9 px-3 rounded-md`}
+            containerStyle={tw`bg-white border border-primary self-start p-1 h-8 px-3 rounded-md`}
             onPress={handleDownload}
           />
         )}

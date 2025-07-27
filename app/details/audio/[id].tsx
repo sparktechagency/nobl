@@ -1,18 +1,18 @@
-import { Platform, ScrollView, Text, View } from "react-native";
 import { PrimaryColor, _HIGHT } from "@/utils/utils";
-import React, { useCallback } from "react";
 import { router, useLocalSearchParams } from "expo-router";
+import React, { useCallback } from "react";
+import { Platform, ScrollView, Text, View } from "react-native";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import AudioCard from "@/components/AudioCard";
 import AudioPlayerCard from "@/components/AudioPlayerCard";
-import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
-import EmptyCard from "@/lib/Empty/EmptyCard";
 import { IconDownload } from "@/icons/Icon";
+import BackWithComponent from "@/lib/backHeader/BackWithCoponent";
 import IwtButton from "@/lib/buttons/IwtButton";
-import RNFetchBlob from "react-native-blob-util";
+import EmptyCard from "@/lib/Empty/EmptyCard";
 import tw from "@/lib/tailwind";
 import { useRelatedAudiosQuery } from "@/redux/apiSlices/user/userApiSlices";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import RNFetchBlob from "react-native-blob-util";
 
 const VideoDetails = () => {
   const { id } = useLocalSearchParams();
@@ -108,8 +108,9 @@ const VideoDetails = () => {
           isLoading={loading}
           loadingColor={PrimaryColor}
           svg={IconDownload}
+          svgProps={{ width: 10, height: 10 }}
           // disabled={status === "loading"}
-          containerStyle={tw`bg-white p-1 h-9 px-3 rounded-md`}
+          containerStyle={tw`bg-white p-1 h-8 px-3 rounded-md`}
           titleStyle={tw`text-primary font-PoppinsRegular`}
           onPress={() => {
             handleDownload();
