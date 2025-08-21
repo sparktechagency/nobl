@@ -116,6 +116,7 @@ const login = () => {
                   <InputText
                     textInputProps={{
                       placeholder: "Enter your email",
+                      placeholderTextColor: tw.color("gray-400"),
                     }}
                     svgFirstIcon={IconEmail}
                     value={values.email}
@@ -127,6 +128,7 @@ const login = () => {
                   <InputText
                     textInputProps={{
                       placeholder: "Enter your password",
+                      placeholderTextColor: tw.color("gray-400"),
                     }}
                     svgFirstIcon={IconPassword}
                     value={values.password}

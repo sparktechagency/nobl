@@ -26,7 +26,7 @@ const BackWithComponent = ({
   return (
     <View
       style={[
-        tw`flex-row items-center justify-between gap-2 px-[4%] `,
+        tw`flex-row items-center justify-between gap-3 px-[4%] `,
         containerStyle,
         {
           paddingTop: Platform.OS === "android" ? 5 : 0,
@@ -39,7 +39,7 @@ const BackWithComponent = ({
           {!offBack ? (
             <TouchableOpacity
               onPress={onPress}
-              style={tw`flex-row items-center gap-2 pr-4`}
+              style={tw`flex-row items-center  `}
             >
               <View
                 style={tw`bg-white w-8 h-8 justify-center items-center rounded-lg`}

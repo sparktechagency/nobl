@@ -1,15 +1,15 @@
 import { IconPlayButton, IconPlayButtonSmall } from "@/icons/Icon";
 import { Text, TouchableOpacity, View } from "react-native";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import IButton from "@/lib/buttons/IButton";
-import { Image } from "expo-image";
 import IwtButton from "@/lib/buttons/IwtButton";
+import tw from "@/lib/tailwind";
+import { _HIGHT } from "@/utils/utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
-import { _HIGHT } from "@/utils/utils";
-import tw from "@/lib/tailwind";
-import { useRouter } from "expo-router";
 
 const VideoCard = ({ tutorial }: { tutorial: any }) => {
   const router = useRouter();
@@ -22,7 +22,7 @@ const VideoCard = ({ tutorial }: { tutorial: any }) => {
         AsyncStorage.setItem("video", JSON.stringify(tutorial));
         router.push(`/details/video/${tutorial?.id}`);
       }}
-      style={tw`bg-deepBlue50 shadow-md overflow-hidden rounded-md `}
+      style={tw`bg-deepBlue50 shadow-md rounded-md `}
     >
       <View>
         <Image

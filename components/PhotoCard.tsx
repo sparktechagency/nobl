@@ -9,10 +9,10 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-import { Image } from "expo-image";
-import React from "react";
-import { router } from "expo-router";
 import tw from "@/lib/tailwind";
+import { Image } from "expo-image";
+import { router } from "expo-router";
+import React from "react";
 
 const PhotoCard = ({
   photo,
@@ -93,7 +93,7 @@ const PhotoCard = ({
     // const newHeight = width * aspectRatio;
   }, [screenWidth]);
 
-  console.log(photo?.photo);
+  // console.log(photo?.photo);
 
   return (
     <TouchableOpacity
@@ -101,6 +101,7 @@ const PhotoCard = ({
         router.push(`/details/photo`, {
           dangerouslySingular(name, params) {
             params.link = photo?.photo;
+            params.title = photo?.title;
             return name;
           },
         });

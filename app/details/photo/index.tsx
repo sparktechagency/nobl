@@ -13,7 +13,7 @@ import { PrimaryColor } from "@/utils/utils";
 import React from "react";
 
 const PictureShow = () => {
-  const { link } = useLocalSearchParams();
+  const { link, title } = useLocalSearchParams();
 
   const [loading, setLoading] = React.useState(false);
   const downloadPhoto = async () => {
@@ -83,7 +83,11 @@ const PictureShow = () => {
           },
         ]}
       >
-        <BackWithComponent onPress={() => router.back()} />
+        <BackWithComponent
+          containerStyle={tw``}
+          title={title !== "null" ? title : "Back"}
+          onPress={() => router.back()}
+        />
         <IwtButton
           title="Download"
           isLoading={loading}
